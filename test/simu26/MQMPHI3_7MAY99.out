@@ -1,0 +1,1771 @@
+Welcome to routine MQM
+Nind= 50
+Nmark= 200
+  0  1  *L11  0 2
+  1  1  *L14  0 8
+  2  1  *L16  0 12
+  3  1  *L18  0 16
+  4  1  *L110  0 20
+  5  1  *L113  0 26
+  6  1  *L115  0 30
+  7  1  *L125  0 50
+  8  1  *L127  0 54
+  9  1  *L132  0 64
+ 10  1  *L134  0 68
+ 11  1  *L139  0 78
+ 12  1  *L152  0 104
+ 13  1  *L155  0 110
+ 14  1  *L161  0 122
+ 15  1  *L162  0 124
+ 16  1  *L175  0 150
+ 17  1  *L179  0 158
+ 18  1  *L181  0 162
+ 19  1  *L184  0 168
+ 20  1  *L186  0 172
+ 21  1  *L187  0 174
+ 22  1  *L188  0 176
+ 23  1  *L191  0 182
+ 24  1  *L195  0 190
+ 25  1  *L196  0 192
+ 26  2  *L24  0 8
+ 27  2  *L213  0 26
+ 28  2  *L214  0 28
+ 29  2  *L216  0 32
+ 30  2  *L220  0 40
+ 31  2  *L222  0 44
+ 32  2  *L223  0 46
+ 33  2  *L231  0 62
+ 34  2  *L239  0 78
+ 35  2  *L242  0 84
+ 36  2  *L245  0 90
+ 37  2  *L250  0 100
+ 38  2  *L251  0 102
+ 39  2  *L259  0 118
+ 40  2  *L266  0 132
+ 41  2  *L269  0 138
+ 42  2  *L279  0 158
+ 43  2  *L280  0 160
+ 44  2  *L282  0 164
+ 45  2  *L287  0 174
+ 46  2  *L297  0 194
+ 47  2  *L298  0 196
+ 48  2  *L2100  0 200
+ 49  3  *L33  0 6
+ 50  3  *L35  0 10
+ 51  3  *L316  0 32
+ 52  3  *L321  0 42
+ 53  3  *L322  0 44
+ 54  3  *L330  0 60
+ 55  3  *L335  0 70
+ 56  3  *L340  0 80
+ 57  3  *L344  0 88
+ 58  3  *L359  0 118
+ 59  3  *L361  0 122
+ 60  3  *L365  0 130
+ 61  3  *L375  0 150
+ 62  3  *L376  0 152
+ 63  3  *L385  0 170
+ 64  3  *L387  0 174
+ 65  3  *L388  0 176
+ 66  3  *L390  0 180
+ 67  3  *L396  0 192
+ 68  3  *L3100  0 200
+ 69  4  *L43  0 6
+ 70  4  *L416  0 32
+ 71  4  *L417  0 34
+ 72  4  *L419  0 38
+ 73  4  *L423  0 46
+ 74  4  *L431  0 62
+ 75  4  *L440  0 80
+ 76  4  *L450  0 100
+ 77  4  *L477  0 154
+ 78  4  *L484  0 168
+ 79  4  *L491  0 182
+ 80  4  *L494  0 188
+ 81  4  *L495  0 190
+ 82  4  *L497  0 194
+ 83  4  *L499  0 198
+ 84  4  *L4101  0 202
+ 85  5  *L54  0 8
+ 86  5  *L55  0 10
+ 87  5  *L515  0 30
+ 88  5  *L529  0 58
+ 89  5  *L531  0 62
+ 90  5  *L541  0 82
+ 91  5  *L543  0 86
+ 92  5  *L552  0 104
+ 93  5  *L554  0 108
+ 94  5  *L563  0 126
+ 95  5  *L566  0 132
+ 96  5  *L574  0 148
+ 97  5  *L578  0 156
+ 98  5  *L581  0 162
+ 99  5  *L584  0 168
+100  5  *L598  0 196
+101  5  *L599  0 198
+102  5  *L5100  0 200
+103  6  *L63  0 6
+104  6  *L65  0 10
+105  6  *L67  0 14
+106  6  *L617  0 34
+107  6  *L623  0 46
+108  6  *L629  0 58
+109  6  *L630  0 60
+110  6  *L631  0 62
+111  6  *L634  0 68
+112  6  *L637  0 74
+113  6  *L639  0 78
+114  6  *L641  0 82
+115  6  *L647  0 94
+116  6  *L648  0 96
+117  6  *L653  0 106
+118  6  *L657  0 114
+119  6  *L664  0 128
+120  6  *L673  0 146
+121  6  *L674  0 148
+122  6  *L676  0 152
+123  6  *L691  0 182
+124  7  *L729  0 58
+125  7  *L731  0 62
+126  7  *L740  0 80
+127  7  *L741  0 82
+128  7  *L744  0 88
+129  7  *L745  0 90
+130  7  *L758  0 116
+131  7  *L764  0 128
+132  7  *L766  0 132
+133  7  *L770  0 140
+134  7  *L786  0 172
+135  7  *L789  0 178
+136  8  *L810  0 20
+137  8  *L819  0 38
+138  8  *L820  0 40
+139  8  *L821  0 42
+140  8  *L825  0 50
+141  8  *L826  0 52
+142  8  *L831  0 62
+143  8  *L850  0 100
+144  8  *L853  0 106
+145  8  *L862  0 124
+146  8  *L864  0 128
+147  8  *L874  0 148
+148  8  *L876  0 152
+149  8  *L879  0 158
+150  8  *L880  0 160
+151  8  *L883  0 166
+152  8  *L884  0 168
+153  8  *L886  0 172
+154  8  *L887  0 174
+155  8  *L895  0 190
+156  8  *L897  0 194
+157  8  *L899  0 198
+158  9  *L94  0 8
+159  9  *L913  0 26
+160  9  *L923  0 46
+161  9  *L927  0 54
+162  9  *L931  0 62
+163  9  *L934  0 68
+164  9  *L940  0 80
+165  9  *L947  0 94
+166  9  *L952  0 104
+167  9  *L966  0 132
+168  9  *L967  0 134
+169  9  *L974  0 148
+170  9  *L975  0 150
+171  9  *L987  0 174
+172  9  *L991  0 182
+173  9  *L997  0 194
+174  9  *L999  0 198
+175  9  *L9100  0 200
+176 10  *L103  0 6
+177 10  *L104  0 8
+178 10  *L105  0 10
+179 10  *L1010  0 20
+180 10  *L1018  0 36
+181 10  *L1026  0 52
+182 10  *L1027  0 54
+183 10  *L1028  0 56
+184 10  *L1037  0 74
+185 10  *L1039  0 78
+186 10  *L1043  0 86
+187 10  *L1056  0 112
+188 10  *L1059  0 118
+189 10  *L1061  0 122
+190 10  *L1065  0 130
+191 10  *L1068  0 136
+192 10  *L1071  0 142
+193 10  *L1072  0 144
+194 10  *L1074  0 148
+195 10  *L1078  0 156
+196 10  *L1081  0 162
+197 10  *L1083  0 166
+198 10  *L1086  0 172
+199 10  *L1088  0 176
+cross= F2
+datafile for markers (F1)= f1.mar
+datafile for markers (F2)= f2.mar
+datafile for phenotypes= f2.qua
+dominance= n
+REMLorML= 0
+Analysis of data of family 0
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=118.636 yvari=47.7513
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3402.67
+residual variance= 47.7513OK ?
+ymean= 118.636 yvari= 47.7513
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 0 finished
+Analysis of data of family 1
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=124.96 yvari=42.7947
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3544.92
+residual variance= 42.7947OK ?
+ymean= 124.96 yvari= 42.7947
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 1 finished
+Analysis of data of family 2
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=118.882 yvari=69.0876
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3600.61
+residual variance= 69.0876OK ?
+ymean= 118.882 yvari= 69.0876
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 2 finished
+Analysis of data of family 3
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=125.246 yvari=24.7242
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3538
+residual variance= 24.7242OK ?
+ymean= 125.246 yvari= 24.7242
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 3 finished
+Analysis of data of family 4
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=125.922 yvari=34.2899
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3757.45
+residual variance= 34.2899OK ?
+ymean= 125.922 yvari= 34.2899
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 4 finished
+Analysis of data of family 5
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=127.108 yvari=43.5979
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3526.68
+residual variance= 43.5979OK ?
+ymean= 127.108 yvari= 43.5979
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 5 finished
+Analysis of data of family 6
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=126.484 yvari=57.381
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3729
+residual variance= 57.381OK ?
+ymean= 126.484 yvari= 57.381
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 6 finished
+Analysis of data of family 7
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=132.218 yvari=57.1313
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3644.58
+residual variance= 57.1313OK ?
+ymean= 132.218 yvari= 57.1313
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 7 finished
+Analysis of data of family 8
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=132.24 yvari=56.6918
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3469.92
+residual variance= 56.6918OK ?
+ymean= 132.24 yvari= 56.6918
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 8 finished
+Analysis of data of family 9
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=130.944 yvari=64.8339
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3784.04
+residual variance= 64.8339OK ?
+ymean= 130.944 yvari= 64.8339
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 9 finished
+Analysis of data of family 10
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=136.686 yvari=52.4935
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3636.44
+residual variance= 52.4935OK ?
+ymean= 136.686 yvari= 52.4935
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 10 finished
+Analysis of data of family 11
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=131.188 yvari=36.7892
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3410.28
+residual variance= 36.7892OK ?
+ymean= 131.188 yvari= 36.7892
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 11 finished
+Analysis of data of family 12
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=129.708 yvari=85.8526
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3848.75
+residual variance= 85.8526OK ?
+ymean= 129.708 yvari= 85.8526
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 12 finished
+Analysis of data of family 13
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=124.338 yvari=118.959
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3621.07
+residual variance= 118.959OK ?
+ymean= 124.338 yvari= 118.959
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 13 finished
+Analysis of data of family 14
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=118.888 yvari=75.5056
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3807.57
+residual variance= 75.5056OK ?
+ymean= 118.888 yvari= 75.5056
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 14 finished
+Analysis of data of family 15
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=119.72 yvari=64.0392
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3623.66
+residual variance= 64.0392OK ?
+ymean= 119.72 yvari= 64.0392
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 15 finished
+Analysis of data of family 16
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=130.348 yvari=46.8613
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3614.11
+residual variance= 46.8613OK ?
+ymean= 130.348 yvari= 46.8613
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 16 finished
+Analysis of data of family 17
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=124.694 yvari=23.463
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3546.05
+residual variance= 23.463OK ?
+ymean= 124.694 yvari= 23.463
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 17 finished
+Analysis of data of family 18
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=131.392 yvari=51.6077
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3688.89
+residual variance= 51.6077OK ?
+ymean= 131.392 yvari= 51.6077
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 18 finished
+Analysis of data of family 19
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=136.42 yvari=54.3747
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3473.22
+residual variance= 54.3747OK ?
+ymean= 136.42 yvari= 54.3747
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 19 finished
+Analysis of data of family 20
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=130.664 yvari=69.1468
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3732.52
+residual variance= 69.1468OK ?
+ymean= 130.664 yvari= 69.1468
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 20 finished
+Analysis of data of family 21
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=130.738 yvari=66.5142
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3510.81
+residual variance= 66.5142OK ?
+ymean= 130.738 yvari= 66.5142
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 21 finished
+Analysis of data of family 22
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=134.524 yvari=23.0668
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3497.64
+residual variance= 23.0668OK ?
+ymean= 134.524 yvari= 23.0668
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 22 finished
+Analysis of data of family 23
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=129.094 yvari=37.3614
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3288.79
+residual variance= 37.3614OK ?
+ymean= 129.094 yvari= 37.3614
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 23 finished
+Analysis of data of family 24
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=130.068 yvari=54.9614
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3479.57
+residual variance= 54.9614OK ?
+ymean= 130.068 yvari= 54.9614
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 24 finished
+Analysis of data of family 25
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=124.838 yvari=48.6457
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3838.72
+residual variance= 48.6457OK ?
+ymean= 124.838 yvari= 48.6457
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 25 finished
+Analysis of data of family 26
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=137.16 yvari=21.8857
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3580.59
+residual variance= 21.8857OK ?
+ymean= 137.16 yvari= 21.8857
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 26 finished
+Analysis of data of family 27
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=131.9 yvari=90.9506
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3411.78
+residual variance= 90.9506OK ?
+ymean= 131.9 yvari= 90.9506
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 27 finished
+Analysis of data of family 28
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=136.6 yvari=29.542
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3587.49
+residual variance= 29.542OK ?
+ymean= 136.6 yvari= 29.542
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 28 finished
+Analysis of data of family 29
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=130.552 yvari=58.4719
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3395.24
+residual variance= 58.4719OK ?
+ymean= 130.552 yvari= 58.4719
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 29 finished
+Analysis of data of family 30
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=135.936 yvari=40.0305
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3457.7
+residual variance= 40.0305OK ?
+ymean= 135.936 yvari= 40.0305
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 30 finished
+Analysis of data of family 31
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=128.742 yvari=67.7862
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3570.99
+residual variance= 67.7862OK ?
+ymean= 128.742 yvari= 67.7862
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 31 finished
+Analysis of data of family 32
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=126.686 yvari=67.1584
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3564.48
+residual variance= 67.1584OK ?
+ymean= 126.686 yvari= 67.1584
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 32 finished
+Analysis of data of family 33
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=137.482 yvari=51.5207
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3259.25
+residual variance= 51.5207OK ?
+ymean= 137.482 yvari= 51.5207
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 33 finished
+Analysis of data of family 34
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=131.102 yvari=36.5455
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3396.83
+residual variance= 36.5455OK ?
+ymean= 131.102 yvari= 36.5455
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 34 finished
+Analysis of data of family 35
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=131.644 yvari=80.2662
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3483.75
+residual variance= 80.2662OK ?
+ymean= 131.644 yvari= 80.2662
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 35 finished
+Analysis of data of family 36
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=140.392 yvari=37.3885
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3658.61
+residual variance= 37.3885OK ?
+ymean= 140.392 yvari= 37.3885
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 36 finished
+Analysis of data of family 37
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=117.636 yvari=66.7868
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3570.73
+residual variance= 66.7868OK ?
+ymean= 117.636 yvari= 66.7868
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 37 finished
+Analysis of data of family 38
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=130.628 yvari=35.1416
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3771.43
+residual variance= 35.1416OK ?
+ymean= 130.628 yvari= 35.1416
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 38 finished
+Analysis of data of family 39
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=131.266 yvari=58.1374
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3499.18
+residual variance= 58.1374OK ?
+ymean= 131.266 yvari= 58.1374
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 39 finished
+Analysis of data of family 40
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=135.87 yvari=58.0017
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3498.58
+residual variance= 58.0017OK ?
+ymean= 135.87 yvari= 58.0017
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 40 finished
+Analysis of data of family 41
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=131.056 yvari=51.9209
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3616.89
+residual variance= 51.9209OK ?
+ymean= 131.056 yvari= 51.9209
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 41 finished
+Analysis of data of family 42
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=131.412 yvari=51.3884
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3321.55
+residual variance= 51.3884OK ?
+ymean= 131.412 yvari= 51.3884
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 42 finished
+Analysis of data of family 43
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=118.908 yvari=40.9363
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3466.97
+residual variance= 40.9363OK ?
+ymean= 118.908 yvari= 40.9363
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 43 finished
+Analysis of data of family 44
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=124.876 yvari=56.0831
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3815.66
+residual variance= 56.0831OK ?
+ymean= 124.876 yvari= 56.0831
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 44 finished
+Analysis of data of family 45
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=123.668 yvari=24.8336
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3488.48
+residual variance= 24.8336OK ?
+ymean= 123.668 yvari= 24.8336
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 45 finished
+Analysis of data of family 46
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=130.988 yvari=64.6219
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3525.57
+residual variance= 64.6219OK ?
+ymean= 130.988 yvari= 64.6219
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 46 finished
+Analysis of data of family 47
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=118.696 yvari=47.2657
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3599.17
+residual variance= 47.2657OK ?
+ymean= 118.696 yvari= 47.2657
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 47 finished
+Analysis of data of family 48
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=125.278 yvari=46.0548
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3711.78
+residual variance= 46.0548OK ?
+ymean= 125.278 yvari= 46.0548
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 48 finished
+Analysis of data of family 49
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=128.946 yvari=57.8001
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3542.26
+residual variance= 57.8001OK ?
+ymean= 128.946 yvari= 57.8001
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 49 finished
+Analysis of data of family 50
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=137.578 yvari=56.7813
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3739.81
+residual variance= 56.7813OK ?
+ymean= 137.578 yvari= 56.7813
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 50 finished
+Analysis of data of family 51
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=124.468 yvari=96.1341
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3617.99
+residual variance= 96.1341OK ?
+ymean= 124.468 yvari= 96.1341
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 51 finished
+Analysis of data of family 52
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=131.138 yvari=40.3285
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3553.83
+residual variance= 40.3285OK ?
+ymean= 131.138 yvari= 40.3285
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 52 finished
+Analysis of data of family 53
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=124.234 yvari=64.1451
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3521.39
+residual variance= 64.1451OK ?
+ymean= 124.234 yvari= 64.1451
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 53 finished
+Analysis of data of family 54
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=123.63 yvari=70.7344
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3076.83
+residual variance= 70.7344OK ?
+ymean= 123.63 yvari= 70.7344
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 54 finished
+Analysis of data of family 55
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=130.942 yvari=57.6809
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3554.04
+residual variance= 57.6809OK ?
+ymean= 130.942 yvari= 57.6809
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 55 finished
+Analysis of data of family 56
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=130.744 yvari=64.8384
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3516.77
+residual variance= 64.8384OK ?
+ymean= 130.744 yvari= 64.8384
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 56 finished
+Analysis of data of family 57
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=125.66 yvari=60.8257
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3602.77
+residual variance= 60.8257OK ?
+ymean= 125.66 yvari= 60.8257
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 57 finished
+Analysis of data of family 58
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=123.858 yvari=119.148
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3744.69
+residual variance= 119.148OK ?
+ymean= 123.858 yvari= 119.148
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 58 finished
+Analysis of data of family 59
+IMPORTANT: trait data are log-transformed !!!
+any triple of non-segregating markers is considered to be the result of: 
+identity-by-descent (IBD) instead of identity-by-state (IBS)
+no (segregating!) cofactors are fitted in such non-segregating IBD regions
+ymean=119.476 yvari=40.35
+maximum Naug=10000
+data augmentation ready
+Nind= 50; Naug= 50
+recombination parameters are not re-estimated
+iem= 1 rdelta= 0
+prob=0.0192459; alfa=0.02
+prob=0.0190813; alfa=0.02
+F(5.85938,1,49)=0.02
+F(4.29688,2,49)=0.02
+log-likelihood of full model= -3790.16
+residual variance= 40.35OK ?
+ymean= 119.476 yvari= 40.35
+
+
+Use all cofactors or selected cofactors in mapQTL ?
+Answer= (1=selected; 0=all)
+
+
+
+Analysis of data of family 59 finished
+-1- 490 0 60
+-2- 
