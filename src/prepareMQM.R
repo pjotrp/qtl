@@ -54,7 +54,7 @@ printMQMin <- function(cross){
 	for(i in 1:n.chr) {
 		n.markers <- length(map[[i]])
 		for(j in 1:n.markers){
-			result <- rbind(result,c(i,row.names(as.matrix(q[[i]]))[j],as.matrix(q[[i]])[j]))
+			result <- rbind(result,c(i,row.names(as.matrix(map[[i]]))[j],as.matrix(map[[i]])[j]))
 		}
 	}
 	result
