@@ -19,6 +19,7 @@
 #include <R_ext/PrtUtil.h>
 #include <R_ext/Applic.h>
 #include <R_ext/Utils.h> 
+#include "MQMdata.h"
  
 /*
  * simuF2 for every individual calculate a random cvariance (y). Next the

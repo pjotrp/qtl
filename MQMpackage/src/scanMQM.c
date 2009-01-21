@@ -20,6 +20,7 @@
 #include <R_ext/PrtUtil.h>
 #include <R_ext/Applic.h>
 #include <R_ext/Utils.h>
+#include "MQMdata.h"
 
 
 /**********************************************************************
