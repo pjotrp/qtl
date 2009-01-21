@@ -20,10 +20,7 @@
 #include <R_ext/PrtUtil.h>
 #include <R_ext/Applic.h>
 #include <R_ext/Utils.h>
-#include "util.h"
-#include "lapackutil.h"
-#include "scanone_imp.h"
-#define TOL 1e-12
+
 
 /**********************************************************************
  * 
@@ -33,7 +30,6 @@
 
 void R_scanMQM(){
 
-  scanMQM();
 } /* end of function R_scanMQM */
 
 
