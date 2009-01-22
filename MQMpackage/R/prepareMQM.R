@@ -86,7 +86,7 @@ RunTest <- function(testset = "T1", exe="V_1.exe"){
  
  shell("del mqm_out.txt", intern=TRUE) 
  #read old output
- v0.output <- read.table(paste("V_0/",testset,"_OUT",sep=""))
+ v0.output <- read.table(paste("V_0/",testset,"_OUT",sep=""),comment.char = ":")
  #setup the In-File for testing
  outcome <- shell(paste("copy V_0\\",testset,"_mqm_in.txt mqm_in.txt",sep=""), intern=TRUE)
  outcome <- shell(exe, intern=TRUE)
