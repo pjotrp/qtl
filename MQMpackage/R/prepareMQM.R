@@ -11,7 +11,7 @@
 #
 ######################################################################
 
-prepareMQM <- function(cross, name){
+prepareMQM <- function(cross, name,cofactors=NULL,dominance='n',RemLorML=0){
 #print files needed by the MQM algorithm (Genotype & Phenotype, also calls 
 #the construction function of the run-input file)
 
@@ -38,11 +38,10 @@ prepareMQM <- function(cross, name){
  filename <- paste(name,"_F2.QUA.TXT",sep="")
  f2qua <- pull.pheno(cross)
  write.table(t(f2qua), file = filename, row.names=FALSE,col.names=FALSE, quote=FALSE)
- MQM_in <- printMQMin(cross,name) 
+ MQM_in <- printMQMin(cross,name,cofactors,dominance,RemLorML) 
 }
 
-
-printMQMin <- function(cross,name){
+printMQMin <- function(cross,name,cofactors=NULL,dominance='n',RemLorML=0){
 #print mqm_in.txt file needed by the MQM algorithm
 	
 	n.individuals <- nind(cross)
@@ -57,15 +56,20 @@ printMQMin <- function(cross,name){
 	
 	# Printing the markers per chromosome
 	n.chr <- nchr(cross)
+	cur.marker <- 0
     map <- pull.map(cross)
 	result <- NULL
 	for(i in 1:n.chr) {
 		n.markers <- length(map[[i]])
 		for(j in 1:n.markers){
-			result <- rbind(result,c(i,row.names(as.matrix(map[[i]]))[j],as.matrix(map[[i]])[j]))
+		    if(cur.marker %in% cofactors){
+				result <- rbind(result,c(i,row.names(as.matrix(map[[i]]))[j],as.matrix(map[[i]])[j],"*"))
+			}else{
+			    result <- rbind(result,c(i,row.names(as.matrix(map[[i]]))[j],as.matrix(map[[i]])[j]," "))
+			}
+			cur.marker <- cur.marker+1
 		}
 	}
-	result
 	write.table(result, file = "mqm_in.txt", append = TRUE, sep = " ",col.names=FALSE,row.names=FALSE, quote=FALSE)
 	
 	settings <- NULL;
@@ -73,8 +77,8 @@ printMQMin <- function(cross,name){
 	settings <- rbind(settings,c("FileF1=","-"))
 	settings <- rbind(settings,c("FileF2=",paste(name,"_F2.MAR.TXT",sep="")))
 	settings <- rbind(settings,c("FileY=",paste(name,"_F2.QUA.TXT",sep="")))
-	settings <- rbind(settings,c("Dominance=","n"))
-	settings <- rbind(settings,c("RemLorML=","0"))
+	settings <- rbind(settings,c("Dominance=",dominance))
+	settings <- rbind(settings,c("RemLorML=",RemLorML))
 	settings <- rbind(settings,c("defset=","y"))
 	settings <- rbind(settings,c("real_simu=","0"))
 	settings <- rbind(settings,c("perm_simu=","1 0"))
@@ -107,7 +111,7 @@ RunTest <- function(testset = "T1", exe="V_1.exe"){
  }
 }
 
-RunPrelimTest <- function(testset = "T1",qtl = NULL){
+RunPrelimTest <- function(testset = "T1",qtl = NULL,cofactors=NULL,dominance='n',RemLorML=0){
 #Runs MQM (original version on a testset)
 #Places files in an "V_0" directory (which should be setup in advance by the user
 
@@ -117,7 +121,7 @@ RunPrelimTest <- function(testset = "T1",qtl = NULL){
    shell("del mqm_out.txt", intern=TRUE)    # make sure the output from the previous runs are gone
    data(map10)
    cross <- sim.cross(map10,qtl,n=100)
-   prepareMQM(cross,testset)
+   prepareMQM(cross,testset,cofactors,dominance,RemLorML)
    outcome <- shell("V_0.exe", intern=TRUE)
    write.table(readMQMout(), file = paste("V_0/",testset,"_OUT",sep=""), row.names=FALSE,col.names=FALSE, quote=FALSE)
    shell(paste("copy mqm_in.txt V_0\\",testset,"_mqm_in.txt",sep=""), intern=TRUE)   #Stores the runFILE & output to a V_0 directory
@@ -131,7 +135,9 @@ GenerateTestSets <- function(){
 #Executes "V_0.exe" to get output for each testfile (so we can compare newer versions)
 
    RunPrelimTest(testset="T1")
+   RunPrelimTest(testset="T1c",cofactors=c(10,50,100))   
    RunPrelimTest(testset="T2",qtl=c(1,30,1,0))
+   RunPrelimTest(testset="T2c",qtl=c(1,30,1,0),cofactors=c(10,50,100))
    RunPrelimTest(testset="T3",qtl=c(19,30,0,1))
    RunPrelimTest(testset="T4",qtl=c(19,500,0,1))
    RunPrelimTest(testset="T5",qtl=rbind(c(19,5,0,1),c(19,45,0,1)))
