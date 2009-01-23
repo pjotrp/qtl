@@ -29,4 +29,17 @@ void R_scanMQM();
 
 void scanMQM();
 
+/**********************************************************************
+ * 
+ * Helper functions
+ *
+ *
+ **********************************************************************/
+
+
+void OK();
+double Lnormal(double residual, double variance);
+double absdouble(double x);
+int mod(int a, int b);
+
 /* end of scanMQM.h */

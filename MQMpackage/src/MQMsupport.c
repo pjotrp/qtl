@@ -11,16 +11,47 @@
  *
  **********************************************************************/
 
+using namespace std;
+
+#include <fstream>
+#include <iostream>
+#include <iomanip>
+#include <stdio.h>
+#include <string.h>
 #include <math.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <R.h>
-#include <Rmath.h>
-#include <R_ext/PrtUtil.h>
-#include <R_ext/Applic.h>
-#include <R_ext/Utils.h> 
+//#include <alloc.h> // for coreleft()
+
 #include "MQMdata.h"
- 
+#include "MQMsupport.h"
+#include "scanMQM.h"
+
+extern double neglect; // eliminate unlikely genotype configurations
+extern int maxNaug; // maximum size of augmented dataset
+extern int imaxNaug; // maximum size of augmented data for individual i
+extern int maxdimX; // maximum size of design matrix in regression
+extern int em; // maximum number of em iterations
+extern double alfa; // alfa used in selection procedure
+extern double windowsize; // used in mapQTL procedure
+extern double stepsize; // size of steps when moving QTL along chromosomes (for output)
+extern double stepmin; // start moving QTL at position stepmin cM (for output)
+extern double stepmax; // move QTL up to stepmax (for output)
+extern long *idum; // for monte carlo simulation or permutation
+
+extern vector mapdistance, r;
+extern matrix XtWX;
+extern cmatrix Xt;
+extern vector XtWY;
+extern ivector chr;
+extern matrix Frun;
+extern vector informationcontent;
+extern int Nfam, Nrun;
+extern int run;
+extern char REMLorML;
+extern char fitQTL;
+extern char perm_simu;
+extern char ok, defset;
+extern char dominance;
 /*
  * simuF2 for every individual calculate a random cvariance (y). Next the
  * markers are walked and depending on type the cvariance is adjusted by +/- 1

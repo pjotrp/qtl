@@ -10,14 +10,16 @@
  * Contains: 
  *
  **********************************************************************/
+using namespace std;
+
+#include <fstream>
+#include <iostream>
+#include <iomanip>
+#include <stdio.h>
+#include <string.h>
 #include <math.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <R.h>
-#include <Rmath.h>
-#include <R_ext/PrtUtil.h>
-#include <R_ext/Applic.h>
-#include <R_ext/Utils.h>
+//#include <alloc.h> // for coreleft()
 #include "MQMdata.h"
 
 vector newvector(int dim)
