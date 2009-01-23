@@ -18,16 +18,17 @@
  * 
  **********************************************************************/
 
-void R_scanMQM();
+void R_scanMQM(int *Nind,int *Nmark,int *Npheno, int *Nfam,int *geno, double *pheno);
+
 
 /**********************************************************************
  * 
  * scanMQM
- * the workhorse function
  *
+ * 
  **********************************************************************/
 
-void scanMQM();
+void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno, double **Pheno);
 
 /**********************************************************************
  * 
