@@ -20,7 +20,6 @@
 #include <R_ext/Lapack.h>
 #include "scanMQM.h"
 #include "MQMdata.h"
-#include "MQMsupport.h"
 
 double neglect=1000; // eliminate unlikely genotype configurations
 int maxNaug=10000; // maximum size of augmented dataset
@@ -116,13 +115,18 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno, int *Nfam,int *geno, double *ph
  **********************************************************************/
 
 void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno, double **Pheno){
+   //ivector f1genotype;
+  // f1genotype = newivector(Nmark);
+
    Rprintf("Printing Genotype matrix\n");
    for(int i=0; i< Nind; i++){
      for(int j=0; j< Nmark; j++){ 
-       Rprintf("%d ",Geno[i][j]);         
+       Rprintf("%d ",Geno[i][j]);
+     //  f1genotype[j] = 12;         
      }
      Rprintf("\n");
    }
+
    Rprintf("Printing Phenotype matrix\n");
    for(int i=0; i< Npheno; i++){
      for(int j=0; j< Nind; j++){
