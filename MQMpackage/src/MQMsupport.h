@@ -45,7 +45,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 /* regression of trait on multiple cofactors
    y=xb+e with weight w   (xtwx)b=(xtw)y   b=inv(xtwx)(xtw)y */
 
-double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector weight, ivector ind, int Naug, double variance, vector Fy, char biasadj);
+double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector weight, ivector ind, int Naug, double *variance, vector Fy, char biasadj);
 
 
 /* backward elimination in regression of trait on multiple cofactors
@@ -53,7 +53,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
    matrices XtWX en Xt van volledig model worden genoemd fullxtwx en fullxt;
    analoog vector XtWY wordt full xtwy genoemd;
 */
-double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector weight, int* ind, int Naug, double logLfull, double variance, double F1, double F2, cvector newcofactor, vector r, cvector position);
+double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector weight, int* ind, int Naug, double logLfull, double variance, double F1, double F2, cvector* newcofactor, vector r, cvector position);
 
 /* mapQTL */
 double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatrix marker, cvector position, vector mapdistance, vector y, vector r, ivector ind, int Naug, double variance, char printoutput);

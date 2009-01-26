@@ -30,13 +30,14 @@ scanMQM <- function(cross){
 	pheno <- cross$pheno
 	n.ind <- nind(cross)
 	n.mark <- ncol(geno)
-	
+	n.ind
+	n.mark
 	result <- .C("R_scanMQM",
 				as.integer(n.ind),
                 as.integer(n.mark),
 				as.integer(1),    # 1 phenotype
 				as.integer(1),    # 1 family
-                as.integer(t(geno)),
+                as.integer(geno),
 				as.double(pheno[,])
 			    )
 }

@@ -103,8 +103,8 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno, double **Pheno
    f1genotype = newivector(Nmark);
 
    //Rprintf("Printing Genotype matrix\n");
-   for(int i=0; i< Nind; i++){
-     for(int j=0; j< Nmark; j++){ 
+   for(int i=0; i< Nmark; i++){
+     for(int j=0; j< Nind; j++){ 
        Rprintf("%d ",Geno[i][j]);
        f1genotype[j] = 12;         
      }
@@ -119,7 +119,8 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno, double **Pheno
     // Rprintf("\n");
    }
    Rprintf("We got all the needed information, so lets start with the MQM\n");
-
+   idum = (long *)R_alloc(1, sizeof(long *));
+   idum[0]=-1;
    cvector cofactor;
    char real_simu;
    real_simu = '0';
