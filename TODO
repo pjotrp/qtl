@@ -1,0 +1,11 @@
+TODO list MQM package
+- Make a V_0_C.exe which uses selected cofactors in stead of em all
+- Extend the testsets (more with selected co-factors)
+- -perhaps: try a family run (F1 and F2 marker data)
+
+- Remove input textfiles between C and R
+- -Send data from R to C (done, need to figure out some odd ends, floats/doubles/longs etc)
+- -Port the AnalyzeF2 Function into the package
+- -Test the port of the analyse F2 in package
+- Push back the QTL-map to the Cross object (so we can use Carls visualizations)
+- Finish testing enviroment
