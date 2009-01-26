@@ -10,77 +10,94 @@
  * Contains: 
  *
  **********************************************************************/
-using namespace std;
-
-#include <fstream>
-#include <iostream>
-#include <iomanip>
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-//#include <alloc.h> // for coreleft()
+#include <R.h>
+#include <Rmath.h>
+#include <R_ext/PrtUtil.h>
+#include <R_ext/Utils.h>
+#include <R_ext/Lapack.h>
 #include "MQMdata.h"
+
+//#include <alloc.h> // for coreleft()
+
 
 vector newvector(int dim)
 {      vector v;
-       v= new double[dim];
-       if (v==NULL) { cout << " not enough memory for new vector of dimension " << (dim+1); exit(1); }
+       v = (double *)R_alloc(dim, sizeof(double));
+       if (v==NULL) { 
+         Rprintf("Not enough memory for new vector of dimension %d",(dim+1));
+         exit(1); 
+       }
        return v;
 }
 
 ivector newivector(int dim)
 {      ivector v;
-       v= new int[dim];
-       if (v==NULL) { cout << " not enough memory for new vector of dimension " << (dim+1); exit(1); }
+       v = (int *)R_alloc(dim, sizeof(int));
+       if (v==NULL) { 
+         Rprintf("Not enough memory for new vector of dimension %d",(dim+1));
+         exit(1); 
+       }
        return v;
 }
 
 cvector newcvector(int dim)
 {      cvector v;
-       v= new char[dim];
-       if (v==NULL) { cout << " not enough memory for new char vector of dimension " << (dim+1); exit(1); }
+       v = (char *)R_alloc(dim, sizeof(char));
+       if (v==NULL) { 
+         Rprintf("Not enough memory for new vector of dimension %d",(dim+1));
+         exit(1); 
+       }
        return v;
 }
 
 matrix newmatrix(int rows, int cols)
 {      matrix m;
-       m=new double*[rows];
-       if (m==NULL) { cout << " not enough memory for new double matrix"; exit(1); }
+       m = (double **)R_alloc(rows, sizeof(double *));
+       if (m==NULL) { 
+         Rprintf("Not enough memory for new double matrix");
+         exit(1); 
+       }
        for (int i=0; i<rows; i++) m[i]= newvector(cols);
        return m;
 }
 
 void   printmatrix(matrix m, int rows, int cols)
 {      for (int r=0; r<rows; r++)
-       {   for (int c=0; c<cols; c++) cout << setw(5) << m[r][c] << " ";
-           cout << endl;
+       {   for (int c=0; c<cols; c++) Rprintf("%d",m[r][c]);
+           Rprintf("\n");
        }
 }
 
 void   printcmatrix(cmatrix m, int rows, int cols)
 {      for (int r=0; r<rows; r++)
-       {   for (int c=0; c<cols; c++) cout << setw(2) << m[r][c];
-           cout << endl;
+       {   for (int c=0; c<cols; c++) Rprintf("%c",m[r][c]);
+           Rprintf("\n");
        }
 }
 
 cmatrix newcmatrix(int rows, int cols)
 {      cmatrix m;
-       m=new char*[rows];
-       if (m==NULL) { cout << " not enough memory for new char matrix"; exit(1); }
+       m = (char **)R_alloc(rows, sizeof(char *));
+       if (m==NULL) { 
+         Rprintf("Not enough memory for new char matrix");
+         exit(1); 
+       }
        for (int i=0; i<rows; i++) m[i]= newcvector(cols);
        return m;
 }
 
 void delmatrix(matrix m, int rows)
-{      for (int i=0; i<rows; i++) delete[] m[i];
-       delete[] m;
+{      
+      // R does the allocation now
+      // for (int i=0; i<rows; i++) delete[] m[i];
+      // delete[] m;
 }
 
 void delcmatrix(cmatrix m, int rows)
-{      for (int i=0; i<rows; i++) delete[] m[i];
-       delete[] m;
+{     
+      // R does the allocation now
+      // for (int i=0; i<rows; i++) delete[] m[i];
+      // delete[] m;
 }
 
 void copyvector(vector vsource, vector vdestination, int dim)

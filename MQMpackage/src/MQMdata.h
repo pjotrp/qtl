@@ -34,5 +34,5 @@ cmatrix newcmatrix(int rows, int cols);
 void delmatrix(matrix m, int rows);
 void delcmatrix(cmatrix m, int rows);
 void copyvector(vector vsource, vector vdestination, int dim);
-
+void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype);
 /* end of MQMdata.h */

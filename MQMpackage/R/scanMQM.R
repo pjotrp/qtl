@@ -17,7 +17,11 @@
 #
 ######################################################################
 
-scanMWM <- function(cross){
+scanMQM <- function(cross){
+    setwd("D:/")
+    library(qtl)
+	dyn.load("scanMQM.dll")
+    cross <- sim.cross(map10,n=300)
     n.chr <- nchr(cross)
 	geno <- NULL
 	for(i in 1:n.chr) {
@@ -32,7 +36,7 @@ scanMWM <- function(cross){
                 as.integer(n.mark),
 				as.integer(1),    # 1 phenotype
 				as.integer(1),    # 1 family
-                as.integer(geno),
+                as.integer(t(geno)),
 				as.double(pheno[,])
 			    )
 }
