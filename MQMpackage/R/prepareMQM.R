@@ -20,6 +20,9 @@ prepareMQM <- function(cross, name,cofactors=NULL,dominance='n',RemLorML=0){
  for(i in 1:dim(f2mar)[1]) {
    f1mar <- rbind(f1mar,12)
    for(j in 1:dim(f2mar)[2]) {
+    if(is.na(f2mar[i,j])){
+	     f2mar[i,j] <- '-'
+	}
 	if(as.character(f2mar[i,j]) == '1'){
         f2mar[i,j] <- 'A'
     }
@@ -29,7 +32,13 @@ prepareMQM <- function(cross, name,cofactors=NULL,dominance='n',RemLorML=0){
     if(as.character(f2mar[i,j]) == '3'){
         f2mar[i,j] <- 'H'
     }
-   }
+    if(as.character(f2mar[i,j]) == '4'){
+        f2mar[i,j] <- 'C'
+    }
+    if(as.character(f2mar[i,j]) == '5'){
+        f2mar[i,j] <- 'D'
+    }	
+	}
  }
  rownames(f1mar) = rownames(f2mar)
  filename <- paste(name,"_F2.MAR.TXT", sep="")
@@ -145,16 +154,18 @@ GenerateTestSets <- function(){
 
 }
 
-readMQMout <- function(cross = NULL, file = "mqm_out.txt", plot = FALSE){
+readMQMout <- function(cross = NULL, file = "mqm_out.txt", plot = FALSE,chr = 1){
 #reads the output from the MQM algorithm
-
    data <-read.table(file, quote=":")
    data <-data[-dim(data)[1],]
    if(plot){
-     plot(rownames(data),data[,3],xlab="markers",ylab="QTL",main="MQM", type='n')
-     lines(rownames(data),data[,3],col="red",cex=0.5,pch=20)
-     lines(rownames(data),data[,4],col="blue",cex=0.5,pch=20)   
+       plot(rownames(data),data[,1]/1.5,xlab="Markers",ylab="QTL",main="MQM", type='n')
+       lines(rownames(data),data[,3],col="red",cex=0.5,pch=20)
+       lines(rownames(data),data[,4],col="blue",cex=0.5,pch=20)  
    }
+   rownames(data) <- paste(data[,1],data[,2])
+   data <- data[,-4]
+   colnames(data) <- c("chr","pos","lod")
    data
    #should be pushed to the cross object
 }
