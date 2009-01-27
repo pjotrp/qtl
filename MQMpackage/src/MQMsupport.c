@@ -125,23 +125,21 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
             if (((mapdistance[j]-mapdistance[j-2])<20)&&(mod(f1genotype[j-2],11)!=0)) dropj='n';
          }
          if (dropj=='n')
-         {  marker[jj]= marker[j];
+         {  
+            Rprintf("Dropj was N\n");
+            marker[jj]= marker[j];
             cofactor[jj]= cofactor[j];
             mapdistance[jj]= mapdistance[j];
             chr[jj]= chr[j];
             r[jj]= r[j];
             position[jj]= position[j];
             jj++;
-         }
-         else if (cofactor[j]=='1')
-         {  
+         }else if (cofactor[j]=='1'){  
             Rprintf("cofactor at chr %d is dropped\n",chr[j]);
-            OK();
          }
      }
-
+     Rprintf("%d\n",jj);     
      Nmark= jj;
-
      for (int j=0; j<Nmark; j++)
      {   r[j]= 999.0;
          if (j==0)

@@ -1,5 +1,10 @@
 TODO list MQM package
 - Make a V_0_C.exe which uses selected cofactors in stead of em all
+
+- Carl's book, make some plots about the listeria dataset
+- Use MQM with co-factors on Listeria set 
+- Use better thresholds for the listeria dataset (will require recompilation of MQM)
+
 - Extend the testsets (more with selected co-factors)
 - -perhaps: try a family run (F1 and F2 marker data)
 

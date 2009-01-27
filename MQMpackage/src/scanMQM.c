@@ -98,17 +98,22 @@ void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno)
  * 
  **********************************************************************/
 
-void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno, double **Pheno){
+void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, double **Pheno){
    ivector f1genotype;
    f1genotype = newivector(Nmark);
 
    //Rprintf("Printing Genotype matrix\n");
-   for(int i=0; i< Nmark; i++){
-     for(int j=0; j< Nind; j++){ 
+   for(int i=0; i< Nind; i++){
+     for(int j=0; j< Nmark; j++){ 
        Rprintf("%d ",Geno[i][j]);
        f1genotype[j] = 12;         
      }
      Rprintf("\n");
+   }
+
+   //Rprintf("Printing Chromosome matrix\n");
+   for(int i=0; i< Nmark; i++){
+      Rprintf("%d ",Chromo[1][i]);         
    }
 
    //Rprintf("Printing Phenotype matrix\n");
@@ -117,7 +122,7 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno, double **Pheno
   //     Rprintf("%f ",Pheno[i][j]);         
      }
     // Rprintf("\n");
-   }
+   }   
    Rprintf("We got all the needed information, so lets start with the MQM\n");
    idum = (long *)R_alloc(1, sizeof(long *));
    idum[0]=-1;
@@ -147,14 +152,16 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno, double **Pheno
  * 
  **********************************************************************/
 
-void R_scanMQM(int *Nind,int *Nmark,int *Npheno, int *Nfam,int *geno, double *pheno){
+void R_scanMQM(int *Nind,int *Nmark,int *Npheno, int *Nfam,int *geno,int *chromo, double *pheno){
    int **Geno;
+   int **Chromo;
    double **Pheno;   
    reorg_geno(*Nind,*Nmark,geno,&Geno);
+   reorg_pheno(*Nind,*Nmark,chromo,&Chromo);   
    reorg_pheno(*Nind,*Npheno,pheno,&Pheno);
    //Done with reorganising lets start executing the main loop
    
-   scanMQM(*Nind,*Nmark,*Npheno, *Nfam,Geno,Pheno);
+   scanMQM(*Nind,*Nmark,*Npheno, *Nfam,Geno,Chromo,Pheno);
 } /* end of function R_scanMQM */
 
 
