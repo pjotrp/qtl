@@ -126,7 +126,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
          }
          if (dropj=='n')
          {  
-            Rprintf("Dropj was N\n");
+           // Rprintf("Dropj was N\n");
             marker[jj]= marker[j];
             cofactor[jj]= cofactor[j];
             mapdistance[jj]= mapdistance[j];
@@ -721,8 +721,12 @@ void rmixture(cmatrix marker, vector weight, vector r,
                }
             }
      }
+     
 /*   print new estimates of recombination frequencies */
      Rprintf("iem= %d rdelta= %d\n",iem,rdelta);
+     for (i=0; i<Naug; i++){ 
+             Rprintf("I:%d,Weight:%d\n",i,weight[i]);
+     }
      if (rknown=='n')
      {  
         for (j=0; j<Nmark; j++){
@@ -883,7 +887,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position, ve
            iem+=1;
            if (varknown=='n') *variance=-1.0;
            logL= regression(Nind, Nloci, cofactor, loci, y,
-                 (*weight), ind, Naug, variance, Fy, biasadj);
+                 weight, ind, Naug, variance, Fy, biasadj);
            logL=0.0;
            Rprintf("regression ready\n");
            for (i=0; i<Nind; i++) indL[i]= 0.0;
@@ -923,7 +927,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position, ve
      {  (*variance)=-1.0;
         biasadj='y';
         logL= regression(Nind, Nloci, cofactor, loci, y,
-              (*weight), ind, Naug, variance, Fy, biasadj);
+              weight, ind, Naug, variance, Fy, biasadj);
         logL=0.0;
         for (int _i=0; _i<Nind; _i++) indL[_i]= 0.0;
         if (fitQTL=='n')
@@ -959,7 +963,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position, ve
            }
         }
      }
-     Rprintf("iem= %d; delta= %d; variance= %d\n", iem, delta, variance);
+     Rprintf("Naug:%d,iem= %d; delta= %d; variance= %d\n",Naug, iem, delta, variance);
      Rprintf("logL= %f\n",logL);
     // delete[] Fy;
     // delete[] Ploci;
@@ -984,6 +988,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      */
      int dimx=1, j, jj;
      for (j=0; j<Nmark; j++)
+     Rprintf("J:%d,COF:%d,WEIGHT:%f\n",j,cofactor[j],weight[j]);
      if ((cofactor[j]=='1')||(cofactor[j]=='3')) dimx+= (dominance=='y' ? 2 : 1);
      cvector xtQTL; // '0'=mu; '1'=cofactor; '2'=QTL (additive); '3'= QTL (dominance);
      xtQTL= newcvector(dimx);
@@ -1087,7 +1092,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      ivector indx;
      indx= newivector(dimx);
      //MATRIX XtWX contains a 0 on [0,0] 
-     
+     Rprintf("XtWX:");
      ludcmp(XtWX,dimx,indx,&d);
      lusolve(XtWX,dimx,indx,XtWY);
      // luinvert(xtwx, inv, dimx, indx);
@@ -1102,7 +1107,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      vector fit, resi;
      fit= newvector(newNaug);
      resi= newvector(newNaug);
-     // cout << "Calculate residuals" << endl;
+     Rprintf("Calculate residuals\n");
      if (*variance<0)
      {    *variance= 0.0;
           if (fitQTL=='n')

@@ -21,7 +21,7 @@ scanMQM <- function(cross){
     setwd("D:/")
     library(qtl)
 	dyn.load("scanMQM.dll")
-    cross <- sim.cross(map10,c(3,15,5,8),n=300)
+    cross <- sim.cross(map10,c(3,15,7,8),n=10)
     n.chr <- nchr(cross)
 	geno <- NULL
 	chr <- NULL
@@ -34,6 +34,7 @@ scanMQM <- function(cross){
 	n.mark <- ncol(geno)
 	n.ind
 	n.mark
+	geno[1:5,1:5]
 	result <- .C("R_scanMQM",
 				as.integer(n.ind),
                 as.integer(n.mark),
