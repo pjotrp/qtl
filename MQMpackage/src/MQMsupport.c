@@ -234,20 +234,13 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      Rprintf("log-likelihood of full model= %f\n",logLfull);
      Rprintf("residual variance= %d",variance);
      Rprintf("ymean= %d yvari= %d\n",ymean,yvari);
-     OK();
      Rprintf("\n");
-     Rprintf("Use all cofactors or selected cofactors in mapQTL ?\n");
-     Rprintf("Answer= (1=selected; 0=all)\n");
-     OK();
-     Rprintf("\n");
-
      if (ok=='1')    // use only selected cofactors
          logLfull= backward(Nind, Nmark, cofactor, marker, y, weight, ind, Naug, logLfull,
                     variance, F1, F2, &selcofactor, r, position);
      else if (ok=='0') // use all cofactors
          logLfull= mapQTL(Nind, Nmark, cofactor, cofactor, marker, position,
                   mapdistance, y, r, ind, Naug, variance, 'n'); // printout=='n'
-     OK();
 
      //long *idum;
      //idum= new long[1];
@@ -724,9 +717,6 @@ void rmixture(cmatrix marker, vector weight, vector r,
      
 /*   print new estimates of recombination frequencies */
      Rprintf("iem= %d rdelta= %d\n",iem,rdelta);
-     for (i=0; i<Naug; i++){ 
-             Rprintf("I:%d,Weight:%d\n",i,weight[i]);
-     }
      if (rknown=='n')
      {  
         for (j=0; j<Nmark; j++){
@@ -740,8 +730,11 @@ void rmixture(cmatrix marker, vector weight, vector r,
 
 /* ML estimation of parameters in mixture model via EM;
 */
-double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position, vector y, ivector ind, int Nind, int Naug, int Nloci, double* variance, int em, vector* weight)
-{    Rprintf("QTLmixture function called\n");
+double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
+              vector y, ivector ind, int Nind, int Naug,
+              int Nloci,
+              double *variance, int em, vector *weight)
+{    Rprintf("QTLMIX\n");
 
      int iem= 0, newNaug, i, j;
      char varknown, biasadj='n';
@@ -752,10 +745,9 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position, ve
      Ploci= newvector(newNaug);
      Fy= newvector(newNaug);
      logP= Nloci*log(Pscale); // only for computational accuracy
-     varknown= (((*variance)==-1.0) ? 'n' : 'y' );
-     if ((REMLorML=='0')&&(varknown=='n')){
-        Rprintf("variance is being estimated and bias adjusted\n");
-     }
+     varknown= ((*variance==-1.0) ? 'n' : 'y' );
+     
+//     if ((REMLorML=='0')&&(varknown=='n')) cout << "variance is being estimated and bias adjusted" << endl;
      if (REMLorML=='1') { varknown='n'; biasadj='n'; }
 
      /* calculate weights (= conditional genotype probabilities) given
@@ -883,13 +875,14 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position, ve
 
      indL= newvector(Nind);
      while ((iem<em)&&(delta>1.0e-5))
-     {     Rprintf("EM algorithm, cycle %d\n",iem);
+     {     // cout << "EM algorithm, cycle " << iem << endl;
            iem+=1;
            if (varknown=='n') *variance=-1.0;
+           Rprintf("Checkpoint_b\n");           
            logL= regression(Nind, Nloci, cofactor, loci, y,
-                 weight, ind, Naug, variance, Fy, biasadj);
+                 *weight, ind, Naug, variance, Fy, biasadj);
            logL=0.0;
-           Rprintf("regression ready\n");
+           // cout << "regression ready" << endl;
            for (i=0; i<Nind; i++) indL[i]= 0.0;
            if (fitQTL=='n') // no QTL fitted
            for (i=0; i<Naug; i++)
@@ -921,13 +914,15 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position, ve
            delta= absdouble(logL-oldlogL);
            oldlogL= logL;
      }
-     Rprintf("EM finished\n");
+     // cout << "EM finished" << endl;
      // bias adjustment after finished ML estimation via EM
      if ((REMLorML=='0')&&(varknown=='n'))
-     {  (*variance)=-1.0;
+     {  
+        Rprintf("Checkpoint_c\n");
+        *variance=-1.0;
         biasadj='y';
         logL= regression(Nind, Nloci, cofactor, loci, y,
-              weight, ind, Naug, variance, Fy, biasadj);
+              (*weight), ind, Naug, variance, Fy, biasadj);
         logL=0.0;
         for (int _i=0; _i<Nind; _i++) indL[_i]= 0.0;
         if (fitQTL=='n')
@@ -957,18 +952,19 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position, ve
                indweight[ind[i]]+=(*weight)[i+2*Naug];
            }
            for (i=0; i<Naug; i++)
-           {  (*weight)[i]       /=indweight[ind[i]];
-              (*weight)[i+Naug]  /=indweight[ind[i]];
-              (*weight)[i+2*Naug]/=indweight[ind[i]];
+           {   (*weight)[i]       /=indweight[ind[i]];
+               (*weight)[i+Naug]  /=indweight[ind[i]];
+               (*weight)[i+2*Naug]/=indweight[ind[i]];
            }
         }
      }
-     Rprintf("Naug:%d,iem= %d; delta= %d; variance= %d\n",Naug, iem, delta, variance);
-     Rprintf("logL= %f\n",logL);
-    // delete[] Fy;
-    // delete[] Ploci;
-    // delete[] indweight;
-    // delete[] indL;
+     // cout << "; iem=" << iem << "; delta=" << delta << "; variance=" << variance;
+     // cout << "; logL=" << setprecision(8) << logL << endl;
+     // cout << "QTLmixture OUT" << endl;
+     //delete[] Fy;
+     //delete[] Ploci;
+     //delete[] indweight;
+     //delete[] indL;
      return logL;
 }
 
@@ -988,7 +984,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      */
      int dimx=1, j, jj;
      for (j=0; j<Nmark; j++)
-     Rprintf("J:%d,COF:%d,WEIGHT:%f\n",j,cofactor[j],weight[j]);
+     Rprintf("J:%d,COF:%d,VAR:%f,WEIGHT:%f\n",j,cofactor[j],*variance,weight[j]);
      if ((cofactor[j]=='1')||(cofactor[j]=='3')) dimx+= (dominance=='y' ? 2 : 1);
      cvector xtQTL; // '0'=mu; '1'=cofactor; '2'=QTL (additive); '3'= QTL (dominance);
      xtQTL= newcvector(dimx);
