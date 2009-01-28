@@ -98,7 +98,7 @@ void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno)
  * 
  **********************************************************************/
 
-void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, double **Pheno){
+void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, double **Dist, double **Pheno){
    ivector f1genotype;
    f1genotype = newivector(Nmark);
    //Rprintf("Printing Genotype matrix\n");
@@ -131,13 +131,17 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, d
    cmatrix markername;
    
    markername= newcmatrix(Nmark,20);
-   cofactor= newcvector(Nmark);   
+   cofactor= newcvector(Nmark);  
    mapdistance= newvector(Nmark);
-
+   
    chr= newivector(Nmark);        
    for(int i=0; i< Nmark; i++){
       //Filling chromosome information in the MQM style
-      chr[i] = Chromo[0][i];         
+      chr[i] = Chromo[0][i];
+      cofactor[i] = 0;  //SET all cofactors to 0, we should receive these from R
+      mapdistance[i]=999.0;
+	  mapdistance[i]=Dist[0][i];
+	//  Rprintf("Mapdist %d: %f <-> %f\n",i,mapdistance[i],Dist[0][i]);
    }
    if (real_simu=='1'){
      simuF2(Nind, Nmark, cofactor, Geno, Pheno[0]);
@@ -154,16 +158,18 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, d
  * 
  **********************************************************************/
 
-void R_scanMQM(int *Nind,int *Nmark,int *Npheno, int *Nfam,int *geno,int *chromo, double *pheno){
+void R_scanMQM(int *Nind,int *Nmark,int *Npheno, int *Nfam,int *geno,int *chromo,double *dist, double *pheno){
    int **Geno;
    int **Chromo;
+   double **Dist;  
    double **Pheno;   
    reorg_geno(*Nind,*Nmark,geno,&Geno);
    reorg_pheno(*Nmark,1,chromo,&Chromo);   
+   reorg_pheno(*Nmark,1,dist,&Dist);
    reorg_pheno(*Nind,*Npheno,pheno,&Pheno);
    //Done with reorganising lets start executing the main loop
    
-   scanMQM(*Nind,*Nmark,*Npheno, *Nfam,Geno,Chromo,Pheno);
+   scanMQM(*Nind,*Nmark,*Npheno, *Nfam,Geno,Chromo,Dist,Pheno);
 } /* end of function R_scanMQM */
 
 

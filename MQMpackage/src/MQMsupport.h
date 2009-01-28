@@ -32,7 +32,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position);
  * marker data. Phenotype checking is done in the EM step.
  */
 
-void augmentdata(cmatrix marker, vector y, cmatrix* augmarker, vector* augy, ivector* augind, int Nind, int* Naug, int Nmark, cvector position, vector r);
+void augmentdata(cmatrix marker, vector y, cmatrix *augmarker, vector *augy, ivector *augind, int *Nind, int *Naug, int Nmark, cvector position, vector r);
 
 /* ML estimation of recombination frequencies via EM;  calculation of multilocus genotype probabilities;  ignorance of unlikely genotypes*/
 void rmixture(cmatrix marker, vector weight, vector r, cvector position, ivector ind, int Nind, int Naug, int Nmark);
@@ -40,7 +40,7 @@ void rmixture(cmatrix marker, vector weight, vector r, cvector position, ivector
 /* ML estimation of parameters in mixture model via EM;
 */
 double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
-              vector y, ivector ind, int Nind, int Naug, int Nloci, double* variance, int em, vector* weight);
+              vector y, ivector ind, int Nind, int Naug, int Nloci, double *variance, int em, vector *weight);
 
 /* regression of trait on multiple cofactors
    y=xb+e with weight w   (xtwx)b=(xtw)y   b=inv(xtwx)(xtw)y */
