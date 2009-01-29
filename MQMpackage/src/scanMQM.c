@@ -87,6 +87,17 @@ void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno)
     (*Pheno)[i] = (*Pheno)[i-1] + n_ind;
 }
 
+void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno)
+{
+  int i;
+
+  *Pheno = (int **)R_alloc(n_mar, sizeof(int *));
+
+  (*Pheno)[0] = pheno;
+  for(i=1; i< n_mar; i++) 
+    (*Pheno)[i] = (*Pheno)[i-1] + n_ind;
+}
+
 /**********************************************************************
  * 
  * scanMQM
@@ -94,7 +105,7 @@ void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno)
  * 
  **********************************************************************/
 
-void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, double **Dist, double **Pheno){
+void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, double **Dist, double **Pheno, int **Cofactors, int Backwards){
    ivector f1genotype;
    f1genotype = newivector(Nmark);
    cmatrix markers;
@@ -113,9 +124,9 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, d
 		 markers[i][j] = '1';
 		}
 		
-		Rprintf("%d ",markers[i][j]);
+	//	Rprintf("%d ",markers[i][j]);
      }
-     Rprintf("\n");
+   //  Rprintf("\n");
    }
 
    //Rprintf("Printing Chromosome matrix\n");
@@ -130,24 +141,37 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, d
      }
     // Rprintf("\n");
    }   
-   Rprintf("We got all the needed information, so lets start with the MQM\n");
+
    idum = (long *)R_alloc(1, sizeof(long *));
    idum[0]=-1;
    cvector cofactor;
    char real_simu;
    real_simu = '0';
    cmatrix markername;
-
    
    markername= newcmatrix(Nmark,20);
    cofactor= newcvector(Nmark);  
    mapdistance= newvector(Nmark);
    
-   chr= newivector(Nmark);        
+   chr= newivector(Nmark);
+   int cnt=0;   
    for(int i=0; i< Nmark; i++){
       //Filling chromosome information in the MQM style
       chr[i] = Chromo[0][i];
-      cofactor[i] = 0;  //SET all cofactors to 0, we should receive these from R
+	  cofactor[i] = '0';
+	  if(Cofactors[0][i] == 1){
+        cofactor[i] = '1';
+		cnt++;
+	  }
+	  if(Cofactors[0][i] == 2){
+	    cofactor[i] = '2';
+		cnt++;
+	  }
+	  if(cnt > (Nmark/2)){
+	    Rprintf("ERROR: More than half of the markers are to be cofactors, this is not allowed\n");
+		return;
+	  }
+	//  Rprintf("Cofactor %d : %c\n",i,cofactor[i]);
       mapdistance[i]=999.0;
 	  mapdistance[i]=Dist[0][i];
 	//  Rprintf("Mapdist %d: %f <-> %f\n",i,mapdistance[i],Dist[0][i]);
@@ -155,7 +179,8 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, d
    if (real_simu=='1'){
      simuF2(Nind, Nmark, cofactor, markers, Pheno[0]);
    }
-   analyseF2(Nind, Nmark, cofactor, markers, Pheno[0], f1genotype);
+   Rprintf("We got all the needed information, so lets start with the MQM\n");   
+   analyseF2(Nind, Nmark, cofactor, markers, Pheno[0], f1genotype, Backwards);
    return;
 }  /* end of function scanMQM */
 
@@ -167,18 +192,20 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, d
  * 
  **********************************************************************/
 
-void R_scanMQM(int *Nind,int *Nmark,int *Npheno, int *Nfam,int *geno,int *chromo,double *dist, double *pheno){
+void R_scanMQM(int *Nind,int *Nmark,int *Npheno, int *Nfam,int *geno,int *chromo,double *dist, double *pheno, int *cofactors, int *backwards){
    int **Geno;
    int **Chromo;
    double **Dist;  
    double **Pheno;   
+   int **Cofactors;
    reorg_geno(*Nind,*Nmark,geno,&Geno);
-   reorg_pheno(*Nmark,1,chromo,&Chromo);   
+   reorg_int(*Nmark,1,chromo,&Chromo);   
    reorg_pheno(*Nmark,1,dist,&Dist);
    reorg_pheno(*Nind,*Npheno,pheno,&Pheno);
+   reorg_int(*Nmark,1,cofactors,&Cofactors);  
    //Done with reorganising lets start executing the main loop
    
-   scanMQM(*Nind,*Nmark,*Npheno, *Nfam,Geno,Chromo,Dist,Pheno);
+   scanMQM(*Nind,*Nmark,*Npheno, *Nfam,Geno,Chromo,Dist,Pheno,Cofactors,*backwards);
 } /* end of function R_scanMQM */
 
 

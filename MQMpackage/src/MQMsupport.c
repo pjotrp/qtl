@@ -69,14 +69,14 @@ void simuF2(int Nind, int Nmark, cvector cofactor,
  * analyseF2 - analyse one F2 family
  *
  */
-void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype)
+void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards)
 {    
      Rprintf("Starting analyseF2\n");
      int Naug;
      cvector position;
      r= newvector(Nmark);
      position= newcvector(Nmark);
-    // Rprintf("Gonna make positions from the markers\n");
+     Rprintf("Gonna make positions from the markers\n");
      for (int j=0; j<Nmark; j++)
      {   r[j]= 999.0;
          if (j==0)
@@ -92,10 +92,10 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      {   if ((position[j]=='L')||(position[j]=='M'))
          r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
      }
-	 for (int j=0; j<Nmark; j++){
+	// for (int j=0; j<Nmark; j++){
 	//   Rprintf("Mark:%d CHR:%d MAP:%f POS:%c REC:%f\n",j,chr[j],mapdistance[j],position[j],r[j]);
-	 }
-	 	// ---- Initialize Frun and informationcontent to 0.0
+	// }
+	Rprintf("Initialize Frun and informationcontent to 0.0\n");	// ---- Initialize Frun and informationcontent to 0.0
 	int Nsteps;
 	Nsteps= chr[Nmark-1]*((stepmax-stepmin)/stepsize+1);	
     Frun= newmatrix(Nsteps,Nrun+1);
@@ -103,8 +103,6 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
     for (int i=0; i<Nrun+1; i++)
       for (int ii=0; ii<Nsteps; ii++) Frun[ii][i]= 0.0;
       for (int ii=0; ii<Nsteps; ii++) informationcontent[ii]= 0.0;
-
-	 
 
      char dropj='y';
      int jj=0;
@@ -169,7 +167,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
          {  Rprintf("error: recombination frequency is negative\n");
             Rprintf("chr=%d mapdistance=%d\n",chr[j],mapdistance[j]); 
             Rprintf("position=%d r[j]=%d\n",position[j], r[j]);
-            exit(1);
+            return;
          }
      }
 
@@ -246,10 +244,10 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      Rprintf("residual variance= %f\n",variance);
      Rprintf("ymean= %f yvari= %f\n",ymean,yvari);
 
-     if (ok=='1')    // use only selected cofactors
+     if (Backwards==1)    // use only selected cofactors
          logLfull= backward(Nind, Nmark, cofactor, marker, y, weight, ind, Naug, logLfull,
                     variance, F1, F2, &selcofactor, r, position);
-     else if (ok=='0') // use all cofactors
+     if (Backwards==0) // use all cofactors
          logLfull= mapQTL(Nind, Nmark, cofactor, cofactor, marker, position,
                   mapdistance, y, r, ind, Naug, variance, 'n'); // printout=='n'
 
@@ -330,7 +328,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 
   for (int ii=0; ii<Nsteps; ii++)
   {   
-    Rprintf("%d %f %f %f\n",chrnumber,moveQTL,Frun[ii][Nrun],((informationcontent[ii]/Nfam)/(Nrun+1)));
+   // Rprintf("%d %f %f %f\n",chrnumber,moveQTL,Frun[ii][Nrun],((informationcontent[ii]/Nfam)/(Nrun+1)));
     if (moveQTL+stepsize<=stepmax){
 		moveQTL+= stepsize;
 	} else { 
@@ -649,7 +647,7 @@ void augmentdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ive
                    {       
                       Rprintf("warning in augmentation routine: dataset too large after augmentation\n");
                       Rprintf("recall procedure with larger value for parameter neglect or maxNaug\n");
-                      exit(1);
+                      return;
                    }
                }
              if ((iaug-saveiaug+1)>imaxNaug)
@@ -1303,12 +1301,12 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
            if  ( ((*newcofactor)[dropj]=='1') && ( F2> 2.0*(savelogL-maxlogL)) )
            {   savelogL= maxlogL;
                (*newcofactor)[dropj]= '0'; Ncof-=1;
-               Rprintf("marker %d is dropped; logL of reduced model = %d\n",dropj,savelogL);
+               Rprintf("marker %d is dropped; logL of reduced model = %f\n",dropj,savelogL);
            }
            else if  ( ((*newcofactor)[dropj]=='2') && (F1> 2.0*(savelogL-maxlogL)) )
            {   savelogL= maxlogL;
                (*newcofactor)[dropj]= '0'; Ncof-=1;
-               Rprintf("marker &d is dropped; logL of reduced model = %d\n",dropj,savelogL);
+               Rprintf("marker &d is dropped; logL of reduced model = %f\n",dropj,savelogL);
            }
            else /* ready */
            {   finished='y';
