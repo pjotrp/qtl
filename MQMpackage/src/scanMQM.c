@@ -14,10 +14,6 @@
 
 
 #include <R.h>
-#include <Rmath.h>
-#include <R_ext/PrtUtil.h>
-#include <R_ext/Utils.h>
-#include <R_ext/Lapack.h>
 #include "MQMdata.h"
 #include "MQMsupport.h"
 
@@ -40,14 +36,14 @@ vector XtWY;
 ivector chr;
 matrix Frun;
 vector informationcontent;
-int Nfam, Nrun=0;
+int Nfam=1, Nrun=0;
 int run=-1;
 char REMLorML='0';
 char fitQTL='n';
 char dominance='n';
-char perm_simu='0';
+char perm_simu='1';
 
-char ok, defset;
+char ok='0', defset='1';
 
 void OK()
 {    ok='0';
@@ -101,13 +97,25 @@ void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno)
 void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, double **Dist, double **Pheno){
    ivector f1genotype;
    f1genotype = newivector(Nmark);
+   cmatrix markers;
+   markers= newcmatrix(Nmark,Nind);
    //Rprintf("Printing Genotype matrix\n");
    for(int i=0; i< Nmark; i++){
      f1genotype[i] = 12;
      for(int j=0; j< Nind; j++){ 
-       // Rprintf("%d ",Geno[i][j]);
+	    if(Geno[i][j] == 1){
+		 markers[i][j] = '0';
+		}
+	    if(Geno[i][j] == 2){
+		 markers[i][j] = '2';
+		}
+	    if(Geno[i][j] == 3){
+		 markers[i][j] = '1';
+		}
+		
+		Rprintf("%d ",markers[i][j]);
      }
-    // Rprintf("\n");
+     Rprintf("\n");
    }
 
    //Rprintf("Printing Chromosome matrix\n");
@@ -129,6 +137,7 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, d
    char real_simu;
    real_simu = '0';
    cmatrix markername;
+
    
    markername= newcmatrix(Nmark,20);
    cofactor= newcvector(Nmark);  
@@ -144,9 +153,9 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, d
 	//  Rprintf("Mapdist %d: %f <-> %f\n",i,mapdistance[i],Dist[0][i]);
    }
    if (real_simu=='1'){
-     simuF2(Nind, Nmark, cofactor, Geno, Pheno[0]);
+     simuF2(Nind, Nmark, cofactor, markers, Pheno[0]);
    }
-   analyseF2(Nind, Nmark, cofactor, Geno, Pheno[0], f1genotype);
+   analyseF2(Nind, Nmark, cofactor, markers, Pheno[0], f1genotype);
    return;
 }  /* end of function scanMQM */
 

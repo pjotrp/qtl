@@ -45,7 +45,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 /* regression of trait on multiple cofactors
    y=xb+e with weight w   (xtwx)b=(xtw)y   b=inv(xtwx)(xtw)y */
 
-double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector weight, ivector ind, int Naug, double *variance, vector Fy, char biasadj);
+double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector* weight, ivector ind, int Naug, double *variance, vector Fy, char biasadj);
 
 
 /* backward elimination in regression of trait on multiple cofactors

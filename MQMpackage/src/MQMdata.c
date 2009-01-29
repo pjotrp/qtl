@@ -11,10 +11,6 @@
  *
  **********************************************************************/
 #include <R.h>
-#include <Rmath.h>
-#include <R_ext/PrtUtil.h>
-#include <R_ext/Utils.h>
-#include <R_ext/Lapack.h>
 #include "MQMdata.h"
 
 //#include <alloc.h> // for coreleft()

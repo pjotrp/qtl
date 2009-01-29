@@ -11,10 +11,7 @@
  *
  **********************************************************************/
 #include <R.h>
-#include <Rmath.h>
-#include <R_ext/PrtUtil.h>
-#include <R_ext/Utils.h>
-#include <R_ext/Lapack.h>
+#include <math.h>
 #include "scanMQM.h"
 #include "MQMdata.h"
 #include "MQMsupport.h"
@@ -138,7 +135,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
          }
          if (dropj=='n')
          {  
-           // Rprintf("Dropj was N\n");
+          //	  Rprintf("Dropj was N\n");
             marker[jj]= marker[j];
             cofactor[jj]= cofactor[j];
             mapdistance[jj]= mapdistance[j];
@@ -150,6 +147,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
             Rprintf("cofactor at chr %d is dropped\n",chr[j]);
          }
      }
+  //   Rprintf("%d\n",jj);     
   //   Rprintf("%d\n",jj);     
      Nmark= jj;
      for (int j=0; j<Nmark; j++)
@@ -245,10 +243,9 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      weight[0]= -1.0;
      logLfull= QTLmixture(marker,cofactor,r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight);
      Rprintf("log-likelihood of full model= %f\n",logLfull);
-     Rprintf("residual variance= %f",variance);
+     Rprintf("residual variance= %f\n",variance);
      Rprintf("ymean= %f yvari= %f\n",ymean,yvari);
-     Rprintf("\n");
-	 printf("OK:%d\n",ok);
+
      if (ok=='1')    // use only selected cofactors
          logLfull= backward(Nind, Nmark, cofactor, marker, y, weight, ind, Naug, logLfull,
                     variance, F1, F2, &selcofactor, r, position);
@@ -298,6 +295,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
                   mapdistance, y, r, ind, Naug, variance, 'n');
             // cout << "run " << run <<" ready; maxF= " << maxF[run] << endl;
         }
+	}
         /* if (Nfam==1)
         {  sort1(Nrun,maxF);
            cout << endl;
@@ -315,22 +313,46 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
            }
            fff.close();
         } */
-      //  delete[] urand;
-     //   delete[] indorder;
-     //   delete[] yoriginal;
-     //   delete[] maxF;
-        run= -1;
-     }
-   //  delete[] position;
-   //  delete[] weight;
-   //  delete[] ind;
+		
+  Rprintf("Analysis of data finished\n");
+    // ---- Write output file
+  double moveQTL= stepmin;
+  int chrnumber=1;
+  Rprintf("-1- %d %d %d\n",Nsteps,Nrun,Nfam);
+  // chr pos Frun    information 
+  // 1  -20  97.4561 0.677204
+  // 1  -15 103.29   0.723067
+  // 1  -10 108.759  0.777696
+  // 1   -5 113.737  0.842778
+  // 1    0 118.112  0.920356
+  // 1    5 120.051  0.928594
+  // 1   10 114.469  0.959548
+
+  for (int ii=0; ii<Nsteps; ii++)
+  {   
+    Rprintf("%d %f %f %f\n",chrnumber,moveQTL,Frun[ii][Nrun],((informationcontent[ii]/Nfam)/(Nrun+1)));
+    if (moveQTL+stepsize<=stepmax){
+		moveQTL+= stepsize;
+	} else { 
+	    moveQTL= stepmin; 
+		chrnumber++; 
+	}
+  }
+    //  delete[] urand;
+    //   delete[] indorder;
+    //   delete[] yoriginal;
+    //   delete[] maxF;
+    //  delete[] position;
+    //  delete[] weight;
+    //  delete[] ind;
      delcmatrix(marker,Nmark);
-   //  delete[] y;
-   //  delete[] selcofactor;
+    //  delete[] y;
+    //  delete[] selcofactor;
      delmatrix(XtWX,dimx+2);
      delcmatrix(Xt,dimx+2);
-   //  delete[] XtWY;
-     //delete[] idum;
+    //  delete[] XtWY;
+    //delete[] idum;
+	return;
 }
 
 double probleft(char c, int jloc, cvector imarker, vector r, cvector position)
@@ -400,7 +422,8 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position)
  */
 
 void augmentdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector* augind, int *Nind, int* Naug, int Nmark, cvector position, vector r)
-{    int jj;
+{    Rprintf("augmentdata called\n");
+	 int jj;
      int newNind=(*Nind);
      (*Naug)= maxNaug; /* maximum size of augmented dataset */
      cmatrix newmarker;
@@ -750,8 +773,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
               vector y, ivector ind, int Nind, int Naug,
               int Nloci,
               double *variance, int em, vector *weight)
-{    Rprintf("QTLmixture called\n");
-
+{  //  Rprintf("QTLmixture called\n");
      int iem= 0, newNaug, i, j;
      char varknown, biasadj='n';
 	 double Nrecom, oldlogL=-10000, delta=1.0, calc_i, logP=0.0, Pscale=1.75;
@@ -761,32 +783,41 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
      Ploci= newvector(newNaug);
      Fy= newvector(newNaug);
      logP= Nloci*log(Pscale); // only for computational accuracy
-     varknown= ((*variance==-1.0) ? 'n' : 'y' );
-//     if ((REMLorML=='0')&&(varknown=='n')) cout << "variance is being estimated and bias adjusted" << endl;
+	// Rprintf("LogP:%f %f\n",logP,log(Pscale));
+     varknown= (((*variance)==-1.0) ? 'n' : 'y' );
+     if ((REMLorML=='0')&&(varknown=='n')) Rprintf("variance is being estimated and bias adjusted\n");
      if (REMLorML=='1') { varknown='n'; biasadj='n'; }
-     for (i=0; i<newNaug; i++) Ploci[i]= 1.0;
-     if (fitQTL=='n')
+     for (i=0; i<newNaug; i++){ Ploci[i]= 1.0;}
+     if (fitQTL=='n'){
 	 for (j=0; j<Nloci; j++)
-     {    for (i=0; i<Naug; i++)
-              Ploci[i]*= Pscale; // only for computational accuracy; see use of logP
-          if ((position[j]=='L')||(position[j]=='U'))
+     {    for (i=0; i<Naug; i++) 
+			Ploci[i]*= Pscale;
+		//	Rprintf("A %f\n",Ploci[1]);
+          if ((position[j]=='L')||(position[j]=='U')){
           for (i=0; i<Naug; i++) Ploci[i]*= (loci[j][i]=='1' ? 0.5 : 0.25);
+		  }
+		 // Rprintf("B %f\n",Ploci[1]);
           if ((position[j]=='L')||(position[j]=='M'))
           {  for (i=0; i<Naug; i++)
              {  Nrecom= absdouble((double)loci[j][i]-(double)loci[j+1][i]);
-                if ((loci[j][i]=='1')&&(loci[j+1][i]=='1'))
-                   calc_i= (r[j]*r[j]+(1.0-r[j])*(1.0-r[j]));
-                else if (Nrecom==0) calc_i= (1.0-r[j])*(1.0-r[j]);
-                else if (Nrecom==1) calc_i= ((loci[j+1][i]=='1')
-                        ? 2.0*r[j]*(1.0-r[j]) : r[j]*(1.0-r[j]));
-                else calc_i= r[j]*r[j];
+			    if ((loci[j][i]=='1')&&(loci[j+1][i]=='1')){
+                   calc_i= (r[j]*r[j]+(1.0-r[j])*(1.0-r[j]));}
+                else if (Nrecom==0) {calc_i= (1.0-r[j])*(1.0-r[j]);}
+                else if (Nrecom==1) {calc_i= ((loci[j+1][i]=='1')
+                        ? 2.0*r[j]*(1.0-r[j]) : r[j]*(1.0-r[j]));}
+                else {calc_i= r[j]*r[j];}
+				//Rprintf("calc_i: %f\n",calc_i);
                 Ploci[i]*= calc_i;
              }
           }
-		 //  Rprintf("Done! i=%d j=%d\n",i,j);
+		//  Rprintf("C %f\n",Ploci[1]);
+		//   Rprintf("Done! i=%d j=%d\n",i,j);
      }
+	// for (j=0; j<Naug; j++){
+	//   Rprintf("%d,%f",j,Ploci[j]);
+	// }
 	 //   Rprintf("For loop done !!!!!");
-     else
+     }else{
 	// Rprintf("fitQTL=y\n");
      for (j=0; j<Nloci; j++)
      {    for (i=0; i<Naug; i++)
@@ -870,6 +901,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
              }
           }
 	 }
+	 }
 //	 Rprintf("fitQTL's done\n");
      if ((*weight)[0]== -1.0)
      {  for (i=0; i<Nind; i++) indweight[i]= 0.0;
@@ -886,12 +918,13 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
            }
         }
      }
-	// Rprintf("Weights done\n");	 
+	// Rprintf("Weights done\n");
+    // Rprintf("Individual->trait->cofactor->weight\n");
+     for (int j=0; j<Nind; j++){
+	//    Rprintf("%d->%f,%d,%f\n",j,y[j],cofactor[j],(*weight)[j]);
+	 }	
      double logL=0;
      vector indL;
-	 for (int j=0; j<Naug; j++){
-    //   Rprintf("Ind:%d WEIGHT:%f\n",j,(*weight)[j]);   
-	 }
      indL= newvector(Nind);
      while ((iem<em)&&(delta>1.0e-5))
      {     // cout << "EM algorithm, cycle " << iem << endl;
@@ -899,14 +932,14 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
            if (varknown=='n') *variance=-1.0;
         //   Rprintf("Checkpoint_b\n");           
            logL= regression(Nind, Nloci, cofactor, loci, y,
-                 (*weight), ind, Naug, &(*variance), Fy, biasadj);
+                 weight, ind, Naug, variance, Fy, biasadj);
            logL=0.0;
            // cout << "regression ready" << endl;
            for (i=0; i<Nind; i++) indL[i]= 0.0;
            if (fitQTL=='n') // no QTL fitted
            for (i=0; i<Naug; i++)
            {   (*weight)[i]= Ploci[i]*Fy[i];
-               indL[ind[i]]+=(*weight)[i];
+               indL[ind[i]]= indL[ind[i]] + (*weight)[i];
            }
            else // QTL moved along the chromosomes
            for (i=0; i<Naug; i++)
@@ -941,7 +974,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
         *variance=-1.0;
         biasadj='y';
         logL= regression(Nind, Nloci, cofactor, loci, y,
-              (*weight), ind, Naug, variance, Fy, biasadj);
+              weight, ind, Naug, variance, Fy, biasadj);
         logL=0.0;
         for (int _i=0; _i<Nind; _i++) indL[_i]= 0.0;
         if (fitQTL=='n')
@@ -984,7 +1017,8 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
      //delete[] Ploci;
      //delete[] indweight;
      //delete[] indL;
-	 printf("LogLikelyhood QTLmixture: %f",logL);
+	// for (i=0; i<Nind; i++) Rprintf("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n",i,Ploci[i],Fy[i],indL[i],log(indL[i]),log(indL[i])-logP);
+	// Rprintf("LogLikelyhood QTLmixture: %f\n",logL);
      return logL;
 }
 
@@ -992,9 +1026,10 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
    y=xb+e with weight w
    (xtwx)b=(xtw)y
    b=inv(xtwx)(xtw)y */
-
-double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector weight, ivector ind, int Naug, double *variance, vector Fy, char biasadj)
-{   // Rprintf("regression starting\n");
+double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
+                vector *weight, ivector ind, int Naug,
+                double *variance, vector Fy, char biasadj)
+{    // cout << "regression IN" << endl;
      /*
      cofactor[j] at locus j:
      '0': no cofactor at locus j
@@ -1002,9 +1037,11 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      '2': QTL at locus j, but QTL effect is not included in the model
      '3': QTL at locu j and QTL effect is included in the model
      */
+	// for (int j=0; j<Naug; j++){
+	//   Rprintf("J:%d,COF:%d,VAR:%f,WEIGHT:%f,Trait:%f,IND[j]:%d\n",j,cofactor[j],*variance,(*weight)[j],y[j],ind[j]);
+    // }
      int dimx=1, j, jj;
      for (j=0; j<Nmark; j++)
-     Rprintf("J:%d,COF:%d,VAR:%f,WEIGHT:%f\n",j,cofactor[j],*variance,weight[j]);
      if ((cofactor[j]=='1')||(cofactor[j]=='3')) dimx+= (dominance=='y' ? 2 : 1);
      cvector xtQTL; // '0'=mu; '1'=cofactor; '2'=QTL (additive); '3'= QTL (dominance);
      xtQTL= newcvector(dimx);
@@ -1052,7 +1089,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      if (fitQTL=='n')
      for (int i=0; i<Naug; i++)
      {  yi= y[i];
-        wi= weight[i];
+        wi= (*weight)[i];
         for (j=0; j<dimx; j++)
         {   xtwj= ((double)Xt[j][i]-48.0)*wi;
             XtWY[j]+= xtwj*yi;
@@ -1061,7 +1098,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      }
      else // QTL is moving along the chromosomes
      for (int i=0; i<Naug; i++)
-     {   wi= weight[i]+ weight[i+Naug]+ weight[i+2*Naug];
+     {   wi= (*weight)[i]+ (*weight)[i+Naug]+ (*weight)[i+2*Naug];
          yi= y[i];
          for (j=0; j<=dimx; j++)
          if (xtQTL[j]<='1')
@@ -1071,27 +1108,27 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
             if (xtQTL[jj]<='1') XtWX[j][jj]+= xtwj*((double)Xt[jj][i]-48.0);
             else if (xtQTL[jj]=='2') // QTL: additive effect if QTL='0' or '2'
             {  // QTL=='0'
-               XtWX[j][jj]+= ((double)(Xt[j][i]-48.0))*weight[i]*(47.0-48.0);
+               XtWX[j][jj]+= ((double)(Xt[j][i]-48.0))*(*weight)[i]*(47.0-48.0);
                // QTL=='2'
-               XtWX[j][jj]+= ((double)(Xt[j][i]-48.0))*weight[i+2*Naug]*(49.0-48.0);
+               XtWX[j][jj]+= ((double)(Xt[j][i]-48.0))*(*weight)[i+2*Naug]*(49.0-48.0);
             }
             else // (xtQTL[jj]=='3')  QTL: dominance effect only if QTL='1'
             {  // QTL=='1'
-               XtWX[j][jj]+= ((double)(Xt[j][i]-48.0))*weight[i+Naug]*(49.0-48.0);
+               XtWX[j][jj]+= ((double)(Xt[j][i]-48.0))*(*weight)[i+Naug]*(49.0-48.0);
             }
          }
          else if (xtQTL[j]=='2') // QTL: additive effect if QTL='0' or '2'
-         {  xtwj= -1.0*weight[i]; // QTL=='0'
+         {  xtwj= -1.0*(*weight)[i]; // QTL=='0'
             XtWY[j]+= xtwj*yi;
             for (jj=0; jj<j; jj++) XtWX[j][jj]+= xtwj*((double)Xt[jj][i]-48.0);
             XtWX[j][j]+= xtwj*-1.0;
-            xtwj= 1.0*weight[i+2*Naug]; // QTL=='2'
+            xtwj= 1.0*(*weight)[i+2*Naug]; // QTL=='2'
             XtWY[j]+= xtwj*yi;
             for (jj=0; jj<j; jj++) XtWX[j][jj]+= xtwj*((double)Xt[jj][i]-48.0);
             XtWX[j][j]+= xtwj*1.0;
          }
          else // (xtQTL[j]=='3') QTL: dominance effect only if QTL='1'
-         {  xtwj= 1.0*weight[i+Naug]; // QTL=='1'
+         {  xtwj= 1.0*(*weight)[i+Naug]; // QTL=='1'
             XtWY[j]+= xtwj*yi;
             // j-1 is for additive effect, which is orthogonal to dominance effect
             for (jj=0; jj<j-1; jj++) XtWX[j][jj]+= xtwj*((double)Xt[jj][i]-48.0);
@@ -1103,40 +1140,35 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
 
      /* solve equations */
      // cout << "solve equations" << endl;
-
+     // printmatrix(XtWX,dimx,dimx);
      int d;
      ivector indx;
      indx= newivector(dimx);
-     //MATRIX XtWX contains a 0 on [0,0] 
-     //Rprintf("XtWX:");
      ludcmp(XtWX,dimx,indx,&d);
      lusolve(XtWX,dimx,indx,XtWY);
      // luinvert(xtwx, inv, dimx, indx);
      // cout << "Parameter estimates" << endl;
      // for (jj=0; jj<dimx; jj++) cout << jj << " " << XtWY[jj] << endl;
 
-     long double *indL;
-   //  indL= new long double[Nind];
-     indL = (long double *)R_alloc(Nind, sizeof(long double));
+     //long double *indL;
+     long double indL[Nind];
      int newNaug;
      newNaug= (fitQTL=='n' ? Naug : 3*Naug);
      vector fit, resi;
      fit= newvector(newNaug);
      resi= newvector(newNaug);
-   //  Rprintf("Calculate residuals\n");
-     if ((*variance)<0)
-     {    //Rprintf("Variance < 0\n");
-	      *variance= 0.0;
-          if (fitQTL=='n'){
-	//	  Rprintf("fitQTL=n\n");
+     // cout << "Calculate residuals" << endl;
+     if (*variance<0)
+     {    *variance= 0.0;
+          if (fitQTL=='n')
           for (int i=0; i<Naug; i++)
           {   fit[i]= 0.0;
               for (j=0; j<dimx; j++)
               fit[i]+=((double)Xt[j][i]-48.0)*XtWY[j];
               resi[i]= y[i]-fit[i];
-              *variance+=weight[i]*pow(resi[i],2.0);
+              *variance += (*weight)[i]*pow(resi[i],2.0);
           }
-          }else{
+          else
           for (int i=0; i<Naug; i++)
           {   fit[i]= 0.0; fit[i+Naug]= 0.0; fit[i+2*Naug]= 0.0;
               for (j=0; j<dimx; j++)
@@ -1149,29 +1181,26 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
                   fit[i+2*Naug]+=1.0*XtWY[j];
               }
               else
-                  fit[i+Naug]+=1.0*XtWY[j];
+              fit[i+Naug]+=1.0*XtWY[j];
               resi[i]= y[i]-fit[i];
               resi[i+Naug]= y[i]-fit[i+Naug];
               resi[i+2*Naug]= y[i]-fit[i+2*Naug];
-              *variance+=weight[i]*pow(resi[i],2.0);
-              *variance+=weight[i+Naug]*pow(resi[i+Naug],2.0);
-              *variance+=weight[i+2*Naug]*pow(resi[i+2*Naug],2.0);
+              *variance +=(*weight)[i]*pow(resi[i],2.0);
+              *variance +=(*weight)[i+Naug]*pow(resi[i+Naug],2.0);
+              *variance +=(*weight)[i+2*Naug]*pow(resi[i+2*Naug],2.0);
           }
-		  }
-          (*variance) /= (biasadj=='n' ? Nind : Nind-dimx); // to compare results with Johan; variance/=Nind;
+          *variance/= (biasadj=='n' ? Nind : Nind-dimx); // to compare results with Johan; variance/=Nind;
           if (fitQTL=='n')
           for (int i=0; i<Naug; i++) Fy[i]= Lnormal(resi[i],*variance);
           else
           for (int i=0; i<Naug; i++)
-          {   // Rprintf("Gonna do Fy stuff\n");
-		      Fy[i]       = Lnormal(resi[i],*variance);
+          {   Fy[i]       = Lnormal(resi[i],*variance);
               Fy[i+Naug]  = Lnormal(resi[i+Naug],*variance);
               Fy[i+2*Naug]= Lnormal(resi[i+2*Naug],*variance);
           }
      }
      else
-     {   // Rprintf("Variance > 0\n");
-	      if (fitQTL=='n')
+     {    if (fitQTL=='n')
           for (int i=0; i<Naug; i++)
           {   fit[i]= 0.0;
               for (j=0; j<dimx; j++)
@@ -1201,32 +1230,32 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
               Fy[i+2*Naug]= Lnormal(resi[i+2*Naug],*variance);
           }
      }
-  //   delete[] fit;
-  //   delete[] resi;
+     //delete[] fit;
+     //delete[] resi;
 
      /* calculation of logL */
      // cout << "calculate logL" << endl;
      long double logL=0.0;
      for (int i=0; i<Nind; i++) indL[i]= 0.0;
-     if (fitQTL=='n'){
-     for (int i=0; i<Naug; i++) indL[ind[i]]+=weight[i]*Fy[i];
-	 }else{
-     for (int i=0; i<Naug; i++){
-        // Rprintf("Gonna do indL stuff\n");  
-	     indL[ind[i]]+=weight[i]*       Fy[i];
-         indL[ind[i]]+=weight[i+Naug]*  Fy[i+Naug];
-         indL[ind[i]]+=weight[i+2*Naug]*Fy[i+2*Naug];
+     if (fitQTL=='n')
+     for (int i=0; i<Naug; i++) indL[ind[i]]+=(*weight)[i]*Fy[i];
+     else
+     for (int i=0; i<Naug; i++)
+     {   indL[ind[i]]+=(*weight)[i]*       Fy[i];
+         indL[ind[i]]+=(*weight)[i+Naug]*  Fy[i+Naug];
+         indL[ind[i]]+=(*weight)[i+2*Naug]*Fy[i+2*Naug];
      }
-	 }
-    // Rprintf("Done with indL stuff\n");  
-     for (int i=0; i<Nind; i++) logL+= log(indL[i]);
+  //   for (int i=0; i<Nind; i++){
+//	   Rprintf("IND: %d,LOGLike:%f\n",i,log(indL[i]));
+//	   logL+= log(indL[i]);
+//	 }
+
      // if (biasadj=='y') cout << "Nind= " << Nind << " Degrees of Freedom (df)= " << (Nind-dimx) << endl;
      // cout << "regression OUT" << endl;
-  //   delete[] indL;
-  //   delete[] indx;
-  //   delete[] xtQTL;
-   //  Rprintf("Done with Regression LogL:%f\n",logL);  
-	 return (double)logL;
+     //delete[] indL;
+     //delete[] indx;
+     //delete[] xtQTL;
+     return (double)logL;
 }
 
 
@@ -1365,7 +1394,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor,
        cvector QTLposition;
        QTLposition= newcvector(Nloci);
        cmatrix QTLloci;
-       QTLloci = (char **)R_alloc(Nloci, sizeof(char *));
+	   QTLloci = (char **)R_alloc(Nloci, sizeof(char *));
        double moveQTL= stepmin;
        char nextinterval= 'n', firsttime='y';
        double maxF=0.0, savebaseNoQTLModel=0.0;
@@ -1533,8 +1562,9 @@ double mapQTL(int Nind, int Nmark, cvector cofactor,
               if ((position[j]=='L')&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= '3';
               else QTLcofactor[j+1]= '3';
               if (REMLorML=='1') weight[0]= -1.0;
-              QTLlikelihood+=2.0*QTLmixture(QTLloci,QTLcofactor,QTLr,QTLposition,y,ind,Nind,Naug,Nloci,&variance,em,&weight);
-              if (QTLlikelihood<-0.05) { Rprintf("error QTLlikelihood=%f\n",QTLlikelihood); return;}
+              QTLlikelihood+=2.0*
+			  QTLmixture(QTLloci,QTLcofactor,QTLr,QTLposition,y,ind,Nind,Naug,Nloci,&variance,em,&weight);
+              if (QTLlikelihood<-0.05) { Rprintf("error QTLlikelihood=%f\n",QTLlikelihood); return 0;}
               maxF= (maxF<QTLlikelihood ? QTLlikelihood : maxF);
               if (run>=0) Frun[step][run]+= QTLlikelihood;
               else Frun[step][Nrun]+= QTLlikelihood;
