@@ -18,13 +18,13 @@
 ######################################################################
 setwd("D:/")
 library(qtl)
+dyn.load("scanMQM.dll")
 cross <- read.cross("csv","","Test.csv")
 
 scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
 					step.min=-20.0,step.max=220.0){
     library(qtl)
-	dyn.load("scanMQM.dll")
 	if(is.null(cross)){
       print(paste("Error: No cross file. Please supply a valid cross object."))
 	  return 

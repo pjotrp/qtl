@@ -1,0 +1,120 @@
+<html><head><title>scanMQM - Multiple qtl mapping for F2 crosses</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>scanMQM(MQMpackage)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   scanMQM">
+<param name="keyword" value=" scanMQM - Multiple qtl mapping for F2 crosses">
+</object>
+
+
+<h2>scanMQM - Multiple qtl mapping for F2 crosses</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Main multiQTL scanning function for the R/qtl package (for use with F2 populations)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+scanMQM(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>cross</code></td>
+<td>
+Cross object from R/QTL </td></tr>
+<tr valign="top"><td><code>cofactors</code></td>
+<td>
+List of cofactors (0:no cofactor, 1 cofactor, 2 sexfactor </td></tr>
+<tr valign="top"><td><code>REMLorML</code></td>
+<td>
+Reduced maximum likelyhood (0) or Maximum likelyhood (1) </td></tr>
+<tr valign="top"><td><code>alfa</code></td>
+<td>
+Global p-value (0&lt;= alfa &lt;= 1) </td></tr>
+<tr valign="top"><td><code>em.iter</code></td>
+<td>
+Max itterations of the EM algorithm </td></tr>
+<tr valign="top"><td><code>windowsize</code></td>
+<td>
+Window size when mappingQTL locations </td></tr>
+<tr valign="top"><td><code>step.size</code></td>
+<td>
+Step.size used for the generation of output QTL. </td></tr>
+<tr valign="top"><td><code>step.min</code></td>
+<td>
+Begin this many Cm before the chromosome </td></tr>
+<tr valign="top"><td><code>step.max</code></td>
+<td>
+Maximum length in Cm </td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Using ML or Reduced ML the algorithm employs a forward- or backward selection strategy to identify QTL hotspot.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+No return value, the cross object will be updated with the new information.</p>
+
+<h3>Support</h3>
+
+<p>
+If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
+</p>
+
+
+<h3>Note</h3>
+
+<p>
+~~further notes~~ 
+section{Warning}{ }
+section{Support}{
+If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
+}
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Danny Arends
+</p>
+
+
+<h3>References</h3>
+
+<p>
+R.C. Janssen, K. Brohman, Danny Arends
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+        library(qtl)
+        qtl &lt;- c(3,15,3,7)                                                      # QTL at chromosome 3
+        data(map10)                                                                     # Mouse genome
+        cross &lt;- sim.cross(map10,qtl,n=100)                     # Simulate a Cross
+        result &lt;- scanMQM(cross)                                        # Do a forward MQM model selection
+</pre>
+
+
+
+<hr><div align="center">[Package <em>MQMpackage</em> version 1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

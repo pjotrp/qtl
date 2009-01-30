@@ -1,46 +1,48 @@
 \name{scanMQM}
 \alias{scanMQM}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ scanMQM - Multiple qtl mapping }
+\title{ scanMQM - Multiple qtl mapping for F2 crosses }
 \description{
-  Function for the R/qtl package
+  Main multiQTL scanning function for the R/qtl package (for use with F2 populations)
 }
 \usage{
 scanMQM(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{cross}{ Cross object from R/QTL }
   \item{cofactors}{ List of cofactors (0:no cofactor, 1 cofactor, 2 sexfactor }
   \item{REMLorML}{ Reduced maximum likelyhood (0) or Maximum likelyhood (1) }
-  \item{alfa}{ P-value (0<= alfa <= 1 }
+  \item{alfa}{ Global p-value (0<= alfa <= 1) }
   \item{em.iter}{ Max itterations of the EM algorithm }
   \item{windowsize}{ Window size when mappingQTL locations }
-  \item{step.size}{ Stepsize used for the generation of output QTL }
+  \item{step.size}{ Step.size used for the generation of output QTL. }
   \item{step.min}{ Begin this many Cm before the chromosome }
   \item{step.max}{ Maximum length in Cm }
 }
 \details{
-  ~~ If necessary, more details than the description above ~~
+  Using ML or Reduced ML the algorithm employs a forward- or backward selection strategy to identify QTL hotspot.
 }
 \value{
-  No return value, the cross objkect will be updated with the new information
+  No return value, the cross object will be updated with the new information.
 }
-\references{ R.C. Janssen, C. Brohman, Danny Arends }
-\author{ ~~who you are~~ }
+\references{ R.C. Janssen, K. Brohman, Danny Arends }
+\author{ Danny Arends }
 \note{ ~~further notes~~ 
-
- ~Make other sections like Warning with \section{Warning }{....} ~
+\section{Warning}{ }
+\section{Support}{
+ If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
+ }
 }
 \seealso{  }
 \examples{
 	library(qtl)
-	qtl <- c(3,15,+3,+7)							# QTL at chromosome 3
-	map10 <- data(map10)							# Mouse genome
-	cross <- sim.cross(map10,qtl,n=100)				# Simulate a Cross
-	result <- scanMQM(cross)
+	qtl <- c(3,15,3,7)							# QTL at chromosome 3
+	data(map10)									# Mouse genome
+	cross <- sim.cross(map10,qtl,n=100)			# Simulate a Cross
+	result <- scanMQM(cross)					# Do a forward MQM model selection
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ QTL }
+\keyword{ Mapping }
+\keyword{ Selection }

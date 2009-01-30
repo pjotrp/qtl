@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HEAD></HEAD><HTML><BODY>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package MQMpackage:  Contents">
+<param name="Local" value="00Index.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package MQMpackage:  R objects">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="scanMQM">
+<param name="Local" value="scanMQM.html">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package MQMpackage:  Titles">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="scanMQM - Multiple qtl mapping for F2 crosses ">
+<param name="Local" value="scanMQM.html">
+</OBJECT>
+</UL>
+</UL>
+</BODY></HTML>
