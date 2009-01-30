@@ -1,0 +1,9 @@
+Package: MQMpackage
+Version: 1.0
+Date: 30 January 2009
+Title: Tool for analyzing MQM experiments
+Author: R.C. Janssen <> ; Danny Arends <Danny.Arends@gmail.com>
+Maintainer: Danny Arends <Danny.Arends@gmail.com>
+Depends: R (>= 1.8.0), qtl
+Description: Analysis of experimental crosses to identify QTLs contributing to variation in quantitative traits.
+License: GPL version 2 or later

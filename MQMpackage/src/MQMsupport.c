@@ -1314,7 +1314,7 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
            else if  ( ((*newcofactor)[dropj]=='2') && (F1> 2.0*(savelogL-maxlogL)) )
            {   savelogL= maxlogL;
                (*newcofactor)[dropj]= '0'; Ncof-=1;
-               Rprintf("marker &d is dropped; logL of reduced model = %f\n",dropj,savelogL);
+               Rprintf("marker %d is dropped; logL of reduced model = %f\n",dropj,savelogL);
            }
            else /* ready */
            {   finished='y';
@@ -1609,7 +1609,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor,
        if (printoutput=='y')
      //  fff << ":" << endl; // genstat code for end of data
     //   fff.close();
-       OK();
+	
        fitQTL='n';
     //   delete[] info0;
     //   delete[] info1;
@@ -1630,13 +1630,9 @@ double mapQTL(int Nind, int Nmark, cvector cofactor,
  
  
  
- /* LU decomposition (from Johan via Numerical Recipes in C)
-   Given an n x n matrix a[1..n][1..n], this routine replaces it by the LU
-   decomposition of a rowwise permutation of itself.
-   A and n are input.
-   a is output. indx[1..n] is an output vector which records the row
-   permutation effected by the partial pivoting; d is output as +-1
-   depending on whether the number of row interchanges was even or odd,
+ /* LU decomposition (from Johan via Numerical Recipes in C) Given an n x n matrix a[1..n][1..n], this routine replaces it by the LU
+   decomposition of a rowwise permutation of itself.   A and n are input.  a is output. indx[1..n] is an output vector which records the row
+   permutation effected by the partial pivoting; d is output as +-1 depending on whether the number of row interchanges was even or odd,
    respectively. This routine is used in combination with lusolve to solve
    linear equations or to invert a matrix.
 */
