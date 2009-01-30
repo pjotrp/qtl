@@ -1,16 +1,18 @@
 TODO list MQM package
-- Make a V_0_C.exe which uses selected cofactors in stead of em all
+- Make a V_0_C.exe which uses selected cofactors in stead of em all -DONE-
 
-- Carl's book, make some plots about the listeria dataset
-- Use MQM with co-factors on Listeria set 
-- Use better thresholds for the listeria dataset (will require recompilation of MQM)
+- Carl's book, make some plots about the listeria dataset -DONE-
+- - We need a working dataset of carl with 2 qtls to show we have increased power in MQM
+- Use MQM with co-factors on Listeria set  -DONE-
+- - Same goes here, show that using cofactors we can increase detection power of other QTLs
+- Use better thresholds for the listeria dataset (will require recompilation of MQM) -DONE-
+- -As above
 
 - Extend the testsets (more with selected co-factors)
 - -perhaps: try a family run (F1 and F2 marker data)
 
-- Remove input textfiles between C and R
-- -Send data from R to C (done, need to figure out some odd ends, floats/doubles/longs etc)
-- -Port the AnalyzeF2 Function into the package
+- Remove input textfiles between C and R -DONE-
+- -Not yet all input variables are send to C from R, we should choose defaults for all of em set them in R and send them to C
 - -Test the port of the analyse F2 in package
 - Push back the QTL-map to the Cross object (so we can use Carls visualizations)
 - Finish testing enviroment
