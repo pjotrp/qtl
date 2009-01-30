@@ -76,7 +76,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      cvector position;
      r= newvector(Nmark);
      position= newcvector(Nmark);
-     Rprintf("Gonna make positions from the markers\n");
+     Rprintf("Getting relative positions from the markers\n");
      for (int j=0; j<Nmark; j++)
      {   r[j]= 999.0;
          if (j==0)
@@ -704,7 +704,9 @@ void rmixture(cmatrix marker, vector weight, vector r,
         if (ok=='1') rknown='n';
      }
      while ((iem<100)&&(rdelta>0.001))
-     {     iem+=1;
+     {     
+	       R_CheckUserInterrupt(); /* check for ^C */
+		   iem+=1;
            rdelta= 0.0;
            /* calculate weights = conditional genotype probabilities */
            for (i=0; i<Naug; i++) weight[i]=1.0;
@@ -926,6 +928,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
      indL= newvector(Nind);
      while ((iem<em)&&(delta>1.0e-5))
      {     // cout << "EM algorithm, cycle " << iem << endl;
+	       R_CheckUserInterrupt(); /* check for ^C */
            iem+=1;
            if (varknown=='n') *variance=-1.0;
         //   Rprintf("Checkpoint_b\n");           

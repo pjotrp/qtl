@@ -84,16 +84,14 @@ cmatrix newcmatrix(int rows, int cols)
 
 void delmatrix(matrix m, int rows)
 {      
-      // R does the allocation now
-      // for (int i=0; i<rows; i++) delete[] m[i];
-      // delete[] m;
+	  for (int i=0; i<rows; i++) free((void*)m[i]);
+      free((void*)m);
 }
 
 void delcmatrix(cmatrix m, int rows)
 {     
-      // R does the allocation now
-      // for (int i=0; i<rows; i++) delete[] m[i];
-      // delete[] m;
+	  for (int i=0; i<rows; i++) free((void*)m[i]);
+      free((void*)m);
 }
 
 void copyvector(vector vsource, vector vdestination, int dim)

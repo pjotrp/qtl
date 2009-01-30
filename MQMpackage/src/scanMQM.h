@@ -18,7 +18,11 @@
  * 
  **********************************************************************/
 
-void R_scanMQM(int *Nind,int *Nmark,int *Npheno, int *Nfam,int *geno,int *chromo, double *dist, double *pheno, int *cofactors, int *backwards);
+void R_scanMQM(int *Nind,int *Nmark,int *Npheno, int *Nfam,
+			   int *geno,int *chromo, double *dist, double *pheno, 
+			   int *cofactors, int *backwards, int *RMLorML,double *alfa,int *emiter,
+			   double *windowsize,double *steps,
+			   double *stepmi,double *stepma);
 
 
 /**********************************************************************
@@ -28,7 +32,10 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno, int *Nfam,int *geno,int *chromo
  * 
  **********************************************************************/
 
-void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **chromo, double **dist, double **Pheno, int **Cofactors, int Backwards);
+void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, 
+			 double **Dist, double **Pheno, int **Cofactors, int Backwards, int RMLorML,double Alfa,int Emiter,
+			 double Windowsize,double Steps,
+			 double Stepmi,double Stepma);
 
 /**********************************************************************
  * 
