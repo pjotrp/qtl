@@ -103,3 +103,5 @@ if(class(cross)[1] == "f2"){
 }
 
 # end of scanMQM.R
+
+scanMQM(cross)

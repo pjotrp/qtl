@@ -17,7 +17,7 @@
 #include "MQMdata.h"
 #include "MQMsupport.h"
 
-double neglect=1000; // eliminate unlikely genotype configurations
+double neglect=100; // eliminate unlikely genotype configurations
 int maxNaug=10000; // maximum size of augmented dataset
 int imaxNaug=1000; // maximum size of augmented data for individual i
 int maxdimX=50; // maximum size of design matrix in regression
@@ -188,7 +188,10 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo,
    stepsize=Steps; // size of steps when moving QTL along chromosomes (for output)
    stepmin=Stepmi; // start moving QTL at position stepmin cM (for output)
    stepmax=Stepma; // move QTL up to stepmax (for output)
-   REMLorML=RMLorML;
+   REMLorML='0';
+   if(RMLorML == 1){
+		REMLorML='1';
+   }
    em=Emiter; // maximum number of em iterations
    alfa=Alfa; // alfa used in selection procedure
    Rprintf("We got all the needed information, so lets start with the MQM\n");   
@@ -214,6 +217,7 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno, int *Nfam,
    double **Dist;  
    double **Pheno;   
    int **Cofactors;
+   //Reorganise the pointers into arrays, ginletons are just cast into the function
    reorg_geno(*Nind,*Nmark,geno,&Geno);
    reorg_int(*Nmark,1,chromo,&Chromo);   
    reorg_pheno(*Nmark,1,dist,&Dist);
