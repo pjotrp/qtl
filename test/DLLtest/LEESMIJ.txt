@@ -1,0 +1,22 @@
+V_0.exe 			- Origineel
+V_0_C.exe		- Origineel (cofactoren)
+Test.csv		- Cross filetype Testset met 1 qtl op chromosoom 3
+Test_f2.MAR.TXT	- markers Testset voor origineel
+Test_f2.QUA.TXT	- Traits Testset voor origineel
+mqm_in.txt	- invoer voor V_0 / V_0_C
+mqm_out.txt	- output van V_0 / V_0_C
+
+ScanMQM.R (in de MQMpackage/R directory alles selecteren en in R inladen)
+
+scanMQM(cross) is vergelijkbaar met V_0
+
+Ook kun je cofactoren aangeven met:
+a <- rep(0,nMark)  	# cofactoren init op 0 met lengte nMarkers
+a[15] <- 1	#  marker 15 cofactor
+a[5] <- 1		#  marker 5 cofactor
+a[115] <- 1	#  marker 115 cofactor
+a[51] <- 1	#  marker 51 cofactor
+a[55] <- 1	#  marker 55 cofactor
+
+Om deze nu te gebruiken:
+scanMQM(cross,a)
