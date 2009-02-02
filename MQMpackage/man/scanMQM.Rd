@@ -25,14 +25,14 @@ scanMQM(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 100
 \value{
   Returns a matrix with QTL for each location on the chromosome, which can be plotted using the plot.scanone function of R/QTL
 }
-\references{ R.C. Janssen, K. Brohman, Danny Arends }
+\references{ R.C. Janssen, K. Brohman, D. Arends }
 \author{ Danny Arends }
 \note{
 	If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }
 \seealso{  }
 \examples{
-	library(qtl)
+	library(MQMpackage)
 	qtl <- c(3,15,3,7)							# QTL at chromosome 3
 	data(map10)									# Mouse genome
 	cross <- sim.cross(map10,qtl,n=100)			# Simulate a Cross

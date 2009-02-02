@@ -21,14 +21,14 @@ makeCofList(cross = NULL, cofactors = NULL, sexfactors = NULL)
   An formatted list of cofactors to be used with the scanMQM algorithm
 }
 \references{ ~put references to the literature/web site here ~ }
-\author{ ~~who you are~~ }
+\author{ D. Arends }
 \note{ ~~further notes~~ 
 
  ~Make other sections like Warning with \section{Warning }{....} ~
 }
 \seealso{ ~~objects to See Also as \code{\link{help}}, ~~~ }
 \examples{
-	library(qtl)
+	library(MQMpackage)
 	qtl <- c(3,15,3,7)									# QTL at chromosome 3
 	data(map10)											# Mouse genome
 	cross <- sim.cross(map10,qtl,n=100)					# Simulate a Cross

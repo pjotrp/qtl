@@ -107,7 +107,7 @@ void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno)
 void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, 
 			 double **Dist, double **Pheno, int **Cofactors, int Backwards, int RMLorML,double Alfa,int Emiter,
 			 double Windowsize,double Steps,
-			 double Stepmi,double Stepma, double **QTL){
+			 double Stepmi,double Stepma,int NRUN, double **QTL){
    ivector f1genotype;
    f1genotype = newivector(Nmark);
    cmatrix markers;
@@ -183,6 +183,7 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo,
    stepsize=Steps; // size of steps when moving QTL along chromosomes (for output)
    stepmin=Stepmi; // start moving QTL at position stepmin cM (for output)
    stepmax=Stepma; // move QTL up to stepmax (for output)
+   Nrun = NRUN;
    REMLorML='0';
    if(RMLorML == 1){
 		REMLorML='1';
@@ -206,7 +207,7 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno, int *Nfam,
 			   int *geno,int *chromo, double *dist, double *pheno, 
 			   int *cofactors, int *backwards, int *RMLorML,double *alfa,int *emiter,
 			   double *windowsize,double *steps,
-			   double *stepmi,double *stepma, double *qtl){
+			   double *stepmi,double *stepma, int *nRun, double *qtl){
    int **Geno;
    int **Chromo;
    double **Dist;  
@@ -223,7 +224,7 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno, int *Nfam,
    reorg_int(*Nmark,1,cofactors,&Cofactors);  
    //Done with reorganising lets start executing the main loop
    
-   scanMQM(*Nind,*Nmark,*Npheno, *Nfam,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,QTL);
+   scanMQM(*Nind,*Nmark,*Npheno, *Nfam,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,QTL);
 } /* end of function R_scanMQM */
 
 

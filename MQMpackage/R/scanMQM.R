@@ -23,7 +23,7 @@ cross <- read.cross("csv","","Test.csv")
 
 scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0){
+					step.min=-20.0,step.max=220.0,n.run=0){
     library(qtl)
 	if(is.null(cross)){
 		print(paste("Error: No cross file. Please supply a valid cross object."))
@@ -96,6 +96,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 				as.double(step.size),
 				as.double(step.min),
 				as.double(step.max),
+				as.integer(n.run),
 				QTL=as.double(rep(0,n.chr*qtlAchromo))
 			    )
 		# initialize output object

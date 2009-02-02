@@ -208,8 +208,8 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      double F1, F2;
      F1= inverseF(1,Nind-dimx,alfa);
      F2= inverseF(2,Nind-dimx,alfa);
-     Rprintf("F(%f,1,%d)=0.02\n",F1,(Nind-dimx));
-     Rprintf("F(%f,2,%d)=0.02\n",F2,(Nind-dimx));
+     Rprintf("F(%f,1,%d)=%f\n",F1,(Nind-dimx),alfa);
+     Rprintf("F(%f,2,%d)=%f\n",F2,(Nind-dimx),alfa);
      F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
      XtWX= newmatrix(dimx+2,dimx+2);
@@ -249,7 +249,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
         for (run=0; run<Nrun; run++)
         {   
 		    R_CheckUserInterrupt(); /* check for ^C */
-			Rprintf("run= %d\n",run);
+			Rprintf("Run = %d\n",run);
             if (perm_simu=='0')
             {  for (int i=0; i<Nind; i++) indorder[i]= i;
                for (int i=0; i<Nind; i++) urand[i]= ran2(idum);
@@ -275,29 +275,21 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
             // cout << "run " << run <<" ready; maxF= " << maxF[run] << endl;
         }
 	}
-        /* if (Nfam==1)
-        {  sort1(Nrun,maxF);
-           cout << endl;
-           cout << "Cumulative distribution of maximum test statistic value in "
-                << Nrun << " permutations or simulations" << endl;
-           ofstream fff("mqm.out", ios::out | ios::app);
-           fff << endl;
-           fff << "Cumulative distribution of maximum test statistic value in "
-               << Nrun << " permutations or simulations" << endl;
-           for (i=1; i<Nrun+1; i++)
-           {   cout << setprecision(8) << ( (double)i/( (double)Nrun+1.0) )
-                    << " " << setprecision(8) << maxF[i-1] << endl;
-               fff << setprecision(8) << ( (double)i/( (double)Nrun+1.0) )
-                   << " " << setprecision(8) << maxF[i-1] << endl;
-           }
-           fff.close();
-        } */
-		
-  Rprintf("Analysis of data finished\n");
-    // ---- Write output file
-  double moveQTL= stepmin;
-  int chrnumber=1;
-  Rprintf("-1- %d %d %d\n",Nsteps,Nrun,Nfam);
+    if (Nfam==1 && Nrun > 0){
+		sort1(Nrun,maxF);
+		Rprintf("Cumulative distribution of maximum test statistic value in %d permutations or simulations\n",Nrun);
+		for (int i=1; i<Nrun+1; i++){   
+			Rprintf(" %f %f\n",( (double)i/( (double)Nrun+1.0) ),maxF[i-1]);
+			R_ProcessEvents();
+			R_FlushConsole();
+        }
+    }	
+	Rprintf("Analysis of data finished\n");
+  // ---- Write output / send it back to R
+	double moveQTL= stepmin;
+	int chrnumber=1;
+  
+	Rprintf("-1- %d %d %d\n",Nsteps,Nrun,Nfam);
   // chr pos Frun    information 
   // 1  -20  97.4561 0.677204
   // 1  -15 103.29   0.723067
@@ -308,20 +300,16 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
   // 1   10 114.469  0.959548
   
   //Printout output
-  for (int ii=0; ii<Nsteps; ii++)
-  {   
-    //Rprintf("%d %f %f %f\n",chrnumber,moveQTL,Frun[ii][Nrun],((informationcontent[ii]/Nfam)/(Nrun+1)));
-	QTL[0][ii] = Frun[ii][Nrun];
-	//QTL[1][ii] = moveQTL; 
-	//QTL[2][ii] = Frun[ii][Nrun]; 
-	//QTL[3][ii] = ((informationcontent[ii]/Nfam)/(Nrun+1)); 
-    if (moveQTL+stepsize<=stepmax){
-		moveQTL+= stepsize;
-	} else { 
-	    moveQTL= stepmin; 
-		chrnumber++; 
-	}
-  }
+	for (int ii=0; ii<Nsteps; ii++){   
+		//Rprintf("%d %f %f %f\n",chrnumber,moveQTL,Frun[ii][Nrun],((informationcontent[ii]/Nfam)/(Nrun+1)));
+		QTL[0][ii] = Frun[ii][Nrun];
+		if (moveQTL+stepsize<=stepmax){
+			moveQTL+= stepsize;
+		} else { 
+			moveQTL= stepmin; 
+			chrnumber++; 
+		}
+    }
 	Free(urand);
 	Free(indorder);
 	Free(yoriginal);
@@ -688,6 +676,8 @@ void rmixture(cmatrix marker, vector weight, vector r,
     }
      while ((iem<100)&&(rdelta>0.001))
      {     R_CheckUserInterrupt(); /* check for ^C */
+		   R_ProcessEvents(); /* do some windows/C stuff so R doesn't look so unresponsive */
+		  // R_FlushConsole();
 		   iem+=1;
            rdelta= 0.0;
            /* calculate weights = conditional genotype probabilities */
@@ -908,7 +898,10 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
      vector indL;
      indL= newvector(Nind);
      while ((iem<em)&&(delta>1.0e-5))
-     {     R_CheckUserInterrupt(); /* check for ^C */
+     {  
+		R_CheckUserInterrupt(); /* check for ^C */
+		R_ProcessEvents();
+		//R_FlushConsole();
            iem+=1;
            if (varknown=='n') *variance=-1.0;
         //   Rprintf("Checkpoint_b\n");           
