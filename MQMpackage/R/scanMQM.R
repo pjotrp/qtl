@@ -113,10 +113,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 	
 		#return QTL
 		qtl
-	}
-	if(class(cross)[1] == "BC"){
-		print(paste("Error: Currently only f2 crosses can be analyzed by MQM."))
-		return 
+	
 	}else{
 		print(paste("Error: Currently only f2 crosses can be analyzed by MQM."))
 		return 

@@ -37,7 +37,7 @@ scanMQM(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 100
 	data(map10)									# Mouse genome
 	cross <- sim.cross(map10,qtl,n=100)			# Simulate a Cross
 	result <- scanMQM(cross)					# Do a MQM scan of the genome
-	plot(result)								#plot the results of the genome scan
+	plot(result)								# Plot the results of the genome scan
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

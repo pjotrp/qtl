@@ -1378,7 +1378,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor,
 
       // ofstream fff("mqm_out.txt", ios::out | ios::app);
       // cout << endl << endl;
-
+	//   Rprintf("DEBUG testing_1");
        /* fit QTL on top of markers (full ML)
           fit QTL between markers (full ML) */
        // cout << "please wait (mixture calculus may take quite a lot of time)" << endl;
@@ -1397,7 +1397,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor,
        vector weight0;
        weight0= newvector(newNaug);
        weight0[0]= -1.0;
-
+    //   Rprintf("DEBUG testing_2");
 //       augmentdataforQTL(marker);
        vector QTLr, QTLmapdistance;
        QTLr= newvector(Nloci);
@@ -1410,7 +1410,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor,
        char nextinterval= 'n', firsttime='y';
        double maxF=0.0, savebaseNoQTLModel=0.0;
        int baseNoQTLModel=0, step=0;
-
+	 //  Rprintf("DEBUG testing_3");
        for (j=0; j<Nmark; j++)
        {   /* fit a QTL in two steps:
               1. move QTL along marker interval j -> j+1 with steps
@@ -1422,6 +1422,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor,
          nextinterval= 'n';
          while (nextinterval=='n')
          { // step 1:
+		//   Rprintf("DEBUG testing STEP 1");
            if (position[j]=='L')
            {  if (moveQTL<=mapdistance[j])
               {  QTLposition[j]= position[j];
@@ -1511,6 +1512,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor,
                   QTLcofactor[jj+1]= selcofactor[jj];
               }
               // step 2:
+			//  Rprintf("DEBUG testing STEP 2");
               if ((position[j]=='L')&&((moveQTL-stepsize)<=mapdistance[j]))
               {  QTLcofactor[j]= '0';
                  QTLcofactor[j+1]=
@@ -1611,7 +1613,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor,
            }
          }
        }
-       if (printoutput=='y')
+       if (printoutput=='y'){}
      //  fff << ":" << endl; // genstat code for end of data
     //   fff.close();
 	
