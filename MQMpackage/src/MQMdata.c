@@ -20,8 +20,7 @@ vector newvector(int dim)
 {      vector v;
        v = (double *)Calloc(dim, double);
        if (v==NULL) { 
-         Rprintf("Not enough memory for new vector of dimension %d",(dim+1));
-         exit(1); 
+         warning("Not enough memory for new vector of dimension %d",(dim+1)); 
        }
        return v;
 }
@@ -30,8 +29,7 @@ ivector newivector(int dim)
 {      ivector v;
        v = (int *)Calloc(dim, int);
        if (v==NULL) { 
-         Rprintf("Not enough memory for new vector of dimension %d",(dim+1));
-         exit(1); 
+         warning("Not enough memory for new vector of dimension %d",(dim+1));
        }
        return v;
 }
@@ -40,8 +38,7 @@ cvector newcvector(int dim)
 {      cvector v;
        v = (char *)Calloc(dim, char);
        if (v==NULL) { 
-         Rprintf("Not enough memory for new vector of dimension %d",(dim+1));
-         exit(1); 
+         warning("Not enough memory for new vector of dimension %d",(dim+1));
        }
        return v;
 }
@@ -50,8 +47,7 @@ matrix newmatrix(int rows, int cols){
     matrix m;
     m = (double **)Calloc(rows, double*);
     if (m==NULL) { 
-        Rprintf("Not enough memory for new double matrix");
-        exit(1); 
+        warning("Not enough memory for new double matrix");
     }
     for (int i=0; i<rows; i++){
 		m[i]= newvector(cols);
@@ -83,8 +79,7 @@ cmatrix newcmatrix(int rows, int cols){
     cmatrix m;
     m = (char **)Calloc(rows, char*);
     if (m==NULL) {
-		Rprintf("Not enough memory for new char matrix");
-		exit(1);
+		warning("Not enough memory for new char matrix");
 	}
     for (int i=0; i<rows; i++){
 		m[i]= newcvector(cols);

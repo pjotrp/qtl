@@ -1612,7 +1612,7 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d)
   //  Rprintf("dim: %d, d: %d\n",dim,*d);
     for (r=0; r<dim; r++)
     {   for (max=0.0, c=0; c<dim; c++) if ((temp=fabs(m[r][c])) > max) max=temp;
-        if (max==0.0) {Rprintf("singular matrix"); exit(1);}
+        if (max==0.0) {warning("Singular matrix.");}
         scale[r]=1.0/max;
     }
     for (c=0; c<dim; c++)
@@ -1625,7 +1625,7 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d)
             m[r][c]=sum;
             if ((temp=scale[r]*fabs(sum)) > max) { max=temp; rowmax=r; }
         }
-        if (max==0.0) {Rprintf("singular matrix"); exit(1);}
+        if (max==0.0) {warning("singular matrix"); }
         if (rowmax!=c)
         {  swap=m[rowmax]; m[rowmax]=m[c]; m[c]=swap;
            scale[rowmax]=scale[c]; (*d)= -(*d);
@@ -1700,13 +1700,13 @@ double betacf(double a, double b, double x)
           bz=1.0;
           if ( absdouble((az-aold)/az)  < 3.0e-7) return az;
       }
-      Rprintf("a or b too big or max number of iterations too small\n");
-      exit(1); return 0.0;
+      warning("a or b too big or max number of iterations too small\n");
+      return 0.0;
 }
 
 double betai(double a, double b, double x)
 {     double bt;
-      if (x<0.0 || x>1.0) { Rprintf("x not between 0 and 1\n"); exit(1); }
+      if (x<0.0 || x>1.0) { warning("x not between 0 and 1\n");}
       if (x==0.0 || x==1.0) bt=0.0;
       else bt=exp(gammln(a+b)-gammln(a)-gammln(b)+a*log(x)+b*log(1.0-x));
       if (x<(a+1.0)/(a+b+2.0)) return bt*betacf(a,b,x)/a;
