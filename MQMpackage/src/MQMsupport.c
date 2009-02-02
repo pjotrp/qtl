@@ -12,7 +12,9 @@
  **********************************************************************/
 #include <R.h>
 #include <math.h>
-//#include <alloc.h> // for alloc,free & coreleft()
+#include <R_ext/PrtUtil.h>
+#include <R_ext/RS.h> /* for Calloc, Realloc */
+#include <R_ext/Utils.h>
 #include "scanMQM.h"
 #include "MQMdata.h"
 #include "MQMsupport.h"
@@ -41,36 +43,8 @@ extern int run;
 extern char REMLorML;
 extern char fitQTL;
 extern char perm_simu;
-extern char ok, defset;
+extern char defset;
 extern char dominance;
-/*
- * simuF2 for every individual calculate a random cvariance (y). Next the
- * markers are walked and depending on type the cvariance is adjusted by +/- 1
- */
-void simuF2(int Nind, int Nmark, cvector cofactor,
-       cmatrix marker, vector y)
-{    //long *idum;
-     //idum= new long[1];
-     //idum[0]=-1;
-     for (int i=0; i<Nind; i++)
-     {  
-		y[i]= pow(5,0.5)*randomnormal(idum);
-         for (int j=0; j<Nmark; j++){
-           if (cofactor[j]=='1'){
-				if (marker[j][i]=='0'){ 
-					y[i] -= 1.0;
-				}else if (marker[j][i]=='2'){
-					y[i] += 1.0;
-				}
-			}
-		}
-         /*else if (marker[j][i]!='1')
-         {  cout << "Marker score is missing..." << marker[j][i]; exit(1); }
-          family is not segregating for marker[j], i.e. QTL has only a
-          family effect, which can be ignored in analysis per family */
-     }
-     //delete[] idum;
-}
 
 /*
  * analyseF2 - analyse one F2 family
@@ -140,7 +114,6 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
          }
          if (dropj=='n')
          {  
-          //	  Rprintf("Dropj was N\n");
             marker[jj]= marker[j];
             cofactor[jj]= cofactor[j];
             mapdistance[jj]= mapdistance[j];
@@ -152,8 +125,6 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
             Rprintf("cofactor at chr %d is dropped\n",chr[j]);
          }
      }
-  //   Rprintf("%d\n",jj);     
-  //   Rprintf("%d\n",jj);     
      Nmark= jj;
      for (int j=0; j<Nmark; j++)
      {   r[j]= 999.0;
@@ -195,7 +166,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      /* eliminate individuals with missing trait values */
      int oldNind=Nind;
      for (int i=0; i<oldNind; i++) Nind-= ((y[i]==999.0) ? 1 : 0);
-    // delete[] y;
+   //  Free(y);
      int oldNaug=Naug;
      for (int i=0; i<oldNaug; i++) Naug-= ((newy[i]==999.0) ? 1 : 0);
      vector weight;
@@ -220,9 +191,9 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
          for (int ii=i+1; ii<Naug; ii++) ind[ii]=ind[ii]-diff+1;
      }
      delcmatrix(newmarker,Nmark);
-  //   delete[] newy;
-  //   delete[] newind;
-  //   delete[] newweight;
+   // Free(newy);
+  //  Free(newind);
+   // Free(newweight);
 
  //    vector Fy;
  //    Fy= newvector(Naug);
@@ -240,7 +211,6 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      Rprintf("F(%f,1,%d)=0.02\n",F1,(Nind-dimx));
      Rprintf("F(%f,2,%d)=0.02\n",F2,(Nind-dimx));
      F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
-     OK();
 
      XtWX= newmatrix(dimx+2,dimx+2);
      Xt= newcmatrix(dimx+2,Naug); // 3*Naug);  --- there is note it should be 3x
@@ -265,6 +235,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 	 double savevariance= variance;
      double *urand;
      vector maxF;
+	 maxF= newvector(Nrun);
      ivector indorder; // individu 0...Nind-1; order will be permuted
      vector yoriginal;
      indorder= newivector(Nind);
@@ -273,7 +244,6 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      if (Nrun>0)
      {  urand= newvector(Naug);
         urand[0]= ran2(idum);
-        maxF= newvector(Nrun);
         for (int i=0; i<Naug; i++) yoriginal[ind[i]]= y[i];
 
         for (run=0; run<Nrun; run++)
@@ -352,20 +322,20 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 		chrnumber++; 
 	}
   }
-//	free((void*)urand);
-//	free((void*)indorder);
-//	free((void*)yoriginal);
-////	free((void*)maxF);
-//	free((void*)position);
-//	free((void*)weight);
-//	free((void*)ind);
- //   delcmatrix(marker,Nmark);
-//	free((void*)y);
-//	free((void*)selcofactor);
-//    delmatrix(XtWX,dimx+2);
-//    delcmatrix(Xt,dimx+2);
-//	free((void*)XtWY);
-//	free((void*)idum);
+	//Free(urand);
+	//Free(indorder);
+	//Free(yoriginal);
+	//Free(maxF);
+	//Free(position);
+	//Free(weight);
+	//Free(ind);
+	delcmatrix(marker,Nmark);
+	//Free(y);
+	//Free(selcofactor);
+	delmatrix(XtWX,dimx+2);
+	delcmatrix(Xt,dimx+2);
+	//Free(XtWY);
+	//Free(idum);
 	return;
 }
 
@@ -459,7 +429,6 @@ void augmentdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ive
      newprob= newvector(*Naug);
      newprobmax= newvector(*Naug);
      Rprintf("maximum Naug= %d\n",(*Naug));
-     OK();
      // ---- foreach individual create one in the newmarker matrix
      for (int i=0; i<(*Nind); i++)
      {   newind[iaug]=i-((*Nind)-newNind);  // index of individuals
@@ -716,8 +685,6 @@ void rmixture(cmatrix marker, vector weight, vector r,
      if (r[j]!=999.0) rknown='y';
      if (rknown=='y')
      {  Rprintf("recombination parameters are not re-estimated\n");
-        OK();
-        if (ok=='1') rknown='n';
      }
      while ((iem<100)&&(rdelta>0.001))
      {     R_CheckUserInterrupt(); /* check for ^C */
@@ -1161,8 +1128,9 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      // cout << "Parameter estimates" << endl;
      // for (jj=0; jj<dimx; jj++) cout << jj << " " << XtWY[jj] << endl;
 
-     //long double *indL;
-     long double indL[Nind];
+     long double *indL;
+    // long double indL[Nind];
+	 indL = (long double *)Calloc(Nind, long double);
      int newNaug;
      newNaug= (fitQTL=='n' ? Naug : 3*Naug);
      vector fit, resi;
@@ -1241,21 +1209,21 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
               Fy[i+2*Naug]= Lnormal(resi[i+2*Naug],*variance);
           }
      }
-     //delete[] fit;
-     //delete[] resi;
+	Free(fit);
+    Free(resi);
 
-     /* calculation of logL */
-     // cout << "calculate logL" << endl;
-     long double logL=0.0;
-     for (int i=0; i<Nind; i++) indL[i]= 0.0;
-     if (fitQTL=='n')
-     for (int i=0; i<Naug; i++) indL[ind[i]]+=(*weight)[i]*Fy[i];
-     else
-     for (int i=0; i<Naug; i++)
-     {   indL[ind[i]]+=(*weight)[i]*       Fy[i];
-         indL[ind[i]]+=(*weight)[i+Naug]*  Fy[i+Naug];
-         indL[ind[i]]+=(*weight)[i+2*Naug]*Fy[i+2*Naug];
-     }
+    /* calculation of logL */
+    // cout << "calculate logL" << endl;
+    long double logL=0.0;
+    for (int i=0; i<Nind; i++) indL[i]= 0.0;
+    if (fitQTL=='n')
+    for (int i=0; i<Naug; i++) indL[ind[i]]+=(*weight)[i]*Fy[i];
+    else
+    for (int i=0; i<Naug; i++)
+    {   indL[ind[i]]+=(*weight)[i]*       Fy[i];
+        indL[ind[i]]+=(*weight)[i+Naug]*  Fy[i+Naug];
+        indL[ind[i]]+=(*weight)[i+2*Naug]*Fy[i+2*Naug];
+    }
   //   for (int i=0; i<Nind; i++){
 //	   Rprintf("IND: %d,LOGLike:%f\n",i,log(indL[i]));
 //	   logL+= log(indL[i]);
@@ -1263,10 +1231,10 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
 
      // if (biasadj=='y') cout << "Nind= " << Nind << " Degrees of Freedom (df)= " << (Nind-dimx) << endl;
      // cout << "regression OUT" << endl;
-     //delete[] indL;
-     //delete[] indx;
-     //delete[] xtQTL;
-     return (double)logL;
+	Free(indL);
+    Free(indx);
+    Free(xtQTL);
+    return (double)logL;
 }
 
 
@@ -1325,7 +1293,6 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
            {   finished='y';
                for (int j=0; j<Nmark; j++)
                if ((*newcofactor)[j]=='1') Rprintf("marker %d is selected\n",j);
-               OK();
            }
      }
      for (int j=0; j<Nmark; j++)
@@ -1334,7 +1301,7 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
      maxF= mapQTL(Nind, Nmark, cofactor, (*newcofactor), marker, position,
            mapdistance, y, r, ind, Naug, variance, 'n'); // printoutput='n'
      Rprintf("backward selection finished\n");
-     // delete[] logL;
+     Free(logL);
      return maxF;
 }
 
@@ -1617,21 +1584,22 @@ double mapQTL(int Nind, int Nmark, cvector cofactor,
      //  fff << ":" << endl; // genstat code for end of data
     //   fff.close();
 	
-       fitQTL='n';
-    //   delete[] info0;
-    //   delete[] info1;
-    //   delete[] info2;
-    //   delete[] weight;
-    //   delete[] weight0;
-   //    delete[] QTLr;
-    //   delete[] QTLposition;
-   //    delete[] Fy;
-  //     delete[] newcofactor;
-   //    delete[] QTLcofactor;
-  //     delete[] cumdistance;
-  //     delete[] QTLmapdistance;
-       //Rprintf("MapQTL finished\n");
-       return maxF; //QTLlikelihood;
+    fitQTL='n';
+	
+	Free(info0);
+    Free(info1);
+    Free(info2);
+    Free(weight);
+    Free(weight0);
+	Free(QTLr);
+    Free(QTLposition);
+	Free(Fy);
+	Free(newcofactor);
+    Free(QTLcofactor);
+	Free(cumdistance);
+	Free(QTLmapdistance);
+    //Rprintf("MapQTL finished\n");
+    return maxF; //QTLlikelihood;
 }
 
  
@@ -1674,7 +1642,7 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d)
         temp=1.0/m[c][c];
         for (r=c+1; r<dim; r++) m[r][c]*=temp;
     }
-  //  delete[] scale;
+    Free(scale);
 }
 
 /* Solve the set of n linear equations AX=B.

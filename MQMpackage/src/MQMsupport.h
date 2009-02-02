@@ -10,13 +10,8 @@
  * Contains: 
  *
  **********************************************************************/
-/*
------------------------------------------------------------------------
-subroutines from book 'Numerical Recipees in C' for calculating F-probabilities and 
-for generating randomly permuted trait data for other tasks
------------------------------------------------------------------------*/
 
-/*
+ /*
  * simuF2 for every individual calculate a random cvariance (y). Next the * markers are walked and depending on type the cvariance is adjusted by +/- 1
  */
 void simuF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y);
@@ -57,6 +52,13 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
 
 /* mapQTL */
 double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatrix marker, cvector position, vector mapdistance, vector y, vector r, ivector ind, int Naug, double variance, char printoutput);
+
+
+/*
+-----------------------------------------------------------------------
+subroutines from book 'Numerical Recipees in C' for calculating F-probabilities and 
+for generating randomly permuted trait data for other tasks
+-----------------------------------------------------------------------*/
 
 void ludcmp(matrix m, int dim, ivector ndx, int *d);
 void lusolve(matrix lu, int dim, ivector ndx, vector b);

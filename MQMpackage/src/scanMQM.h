@@ -45,7 +45,6 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo,
  **********************************************************************/
 
 
-void OK();
 double Lnormal(double residual, double variance);
 double absdouble(double x);
 int mod(int a, int b);

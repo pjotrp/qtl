@@ -14,7 +14,9 @@
 
 
 #include <R.h>
-//#include <alloc.h> // for alloc,free & coreleft()
+#include <R_ext/PrtUtil.h>
+#include <R_ext/RS.h> /* for Calloc, Realloc */
+#include <R_ext/Utils.h>
 #include "MQMdata.h"
 #include "MQMsupport.h"
 
@@ -44,11 +46,7 @@ char fitQTL='n';
 char dominance='n';
 char perm_simu='1';
 
-char ok='0', defset='1';
-
-void OK()
-{    ok='0';
-}
+char defset='1';
 
 double Lnormal(double residual, double variance)
 {      double Likelihood;
@@ -150,8 +148,6 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo,
    idum = (long *)R_alloc(1, sizeof(long *));
    idum[0]=-1;
    cvector cofactor;
-   char real_simu;
-   real_simu = '0';
    cmatrix markername;
    
    markername= newcmatrix(Nmark,20);
@@ -181,9 +177,7 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo,
 	  mapdistance[i]=Dist[0][i];
 	//  Rprintf("Mapdist %d: %f <-> %f\n",i,mapdistance[i],Dist[0][i]);
    }
-   if (real_simu=='1'){
-     simuF2(Nind, Nmark, cofactor, markers, Pheno[0]);
-   }
+
    //SETTING UP GLOBAL VARIABLES
    windowsize=Windowsize; // used in mapQTL procedure
    stepsize=Steps; // size of steps when moving QTL along chromosomes (for output)
