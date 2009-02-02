@@ -12,8 +12,7 @@
  **********************************************************************/
 #include <R.h>
 #include "MQMdata.h"
-
-//#include <alloc.h> // for coreleft()
+//#include <alloc.h> // for alloc,free & coreleft()
 
 
 vector newvector(int dim)

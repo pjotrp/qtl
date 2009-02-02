@@ -12,6 +12,7 @@
  **********************************************************************/
 #include <R.h>
 #include <math.h>
+//#include <alloc.h> // for alloc,free & coreleft()
 #include "scanMQM.h"
 #include "MQMdata.h"
 #include "MQMsupport.h"

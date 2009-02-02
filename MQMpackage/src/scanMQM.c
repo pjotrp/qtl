@@ -14,6 +14,7 @@
 
 
 #include <R.h>
+//#include <alloc.h> // for alloc,free & coreleft()
 #include "MQMdata.h"
 #include "MQMsupport.h"
 
