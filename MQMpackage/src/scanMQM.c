@@ -145,7 +145,7 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo,
     // Rprintf("\n");
    }   
 
-   idum = (long *)R_alloc(1, sizeof(long *));
+   idum = (long *)Calloc(1, long*);
    idum[0]=-1;
    cvector cofactor;
    cmatrix markername;

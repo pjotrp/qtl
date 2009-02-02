@@ -191,9 +191,9 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
          for (int ii=i+1; ii<Naug; ii++) ind[ii]=ind[ii]-diff+1;
      }
      delcmatrix(newmarker,Nmark);
-   // Free(newy);
-  //  Free(newind);
-   // Free(newweight);
+    Free(newy);
+    Free(newind);
+    Free(newweight);
 
  //    vector Fy;
  //    Fy= newvector(Naug);
@@ -240,9 +240,9 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      vector yoriginal;
      indorder= newivector(Nind);
      yoriginal= newvector(Nind);
+	 urand= newvector(Naug);
 	// printf("Gonna start bootstrapping??? Nrun:%d\n",Nrun);
-     if (Nrun>0)
-     {  urand= newvector(Naug);
+     if (Nrun>0){  
         urand[0]= ran2(idum);
         for (int i=0; i<Naug; i++) yoriginal[ind[i]]= y[i];
 
@@ -322,20 +322,20 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 		chrnumber++; 
 	}
   }
-	//Free(urand);
-	//Free(indorder);
-	//Free(yoriginal);
-	//Free(maxF);
-	//Free(position);
-	//Free(weight);
-	//Free(ind);
+	Free(urand);
+	Free(indorder);
+	Free(yoriginal);
+	Free(maxF);
+	Free(position);
+	Free(weight);
+	Free(ind);
 	delcmatrix(marker,Nmark);
-	//Free(y);
-	//Free(selcofactor);
+	Free(y);
+	Free(selcofactor);
 	delmatrix(XtWX,dimx+2);
 	delcmatrix(Xt,dimx+2);
-	//Free(XtWY);
-	//Free(idum);
+	Free(XtWY);
+	Free(idum);
 	return;
 }
 
@@ -661,11 +661,11 @@ void augmentdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ive
          (*augind)[i]= newind[i];
          for (int j=0; j<Nmark; j++) (*augmarker)[j][i]= newmarker[j][i];
      }
-	//free((void*)newy);
-	//free((void*)newind);
-	//free((void*)newprob);
-	//free((void*)newprobmax);
-	//free((void*)imarker);
+	Free(newy);
+	Free(newind);
+	Free(newprob);
+	Free(newprobmax);
+	Free(imarker);
 }
 
 
@@ -674,18 +674,18 @@ void augmentdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ive
    ignorance of unlikely genotypes*/
 void rmixture(cmatrix marker, vector weight, vector r,
               cvector position, ivector ind,
-              int Nind, int Naug, int Nmark)
-{    int i,j;
-     int iem= 0;
-     double Nrecom, oldr=0.0, newr, rdelta=1.0;
-     vector indweight;
-     indweight = newvector(Nind);
-     char rknown='n';
-     for (j=0; j<Nmark; j++)
-     if (r[j]!=999.0) rknown='y';
-     if (rknown=='y')
-     {  Rprintf("recombination parameters are not re-estimated\n");
-     }
+              int Nind, int Naug, int Nmark){   
+	int i,j;
+    int iem= 0;
+    double Nrecom, oldr=0.0, newr, rdelta=1.0;
+    vector indweight;
+    indweight = newvector(Nind);
+    char rknown='n';
+    for (j=0; j<Nmark; j++)
+    if (r[j]!=999.0) rknown='y';
+    if (rknown=='y'){
+		Rprintf("recombination parameters are not re-estimated\n");
+    }
      while ((iem<100)&&(rdelta>0.001))
      {     R_CheckUserInterrupt(); /* check for ^C */
 		   iem+=1;
@@ -737,15 +737,14 @@ void rmixture(cmatrix marker, vector weight, vector r,
      }
      
 /*   print new estimates of recombination frequencies */
-     Rprintf("iem= %d rdelta= %d\n",iem,rdelta);
-     if (rknown=='n')
-     {  
+    Rprintf("iem= %d rdelta= %d\n",iem,rdelta);
+    if (rknown=='n'){  
         for (j=0; j<Nmark; j++){
-          if ((position[j]=='L')||(position[j]=='M'))
-          Rprintf("r(%d)= %f\n",j,r[j]);
-        }
-     }
-	//free((void*)indweight);
+			if ((position[j]=='L')||(position[j]=='M'))
+				Rprintf("r(%d)= %f\n",j,r[j]);
+		}
+    }
+	Free(indweight);
 }
 
 
@@ -993,10 +992,10 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
         }
      }
 	// for (i=0; i<Nind; i++) Rprintf("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n",i,Ploci[i],Fy[i],indL[i],log(indL[i]),log(indL[i])-logP);
-	//free((void*)Fy);
-	//free((void*)Ploci);
-	//free((void*)indweight);
-	//free((void*)indL);
+	Free(Fy);
+	Free(Ploci);
+	Free(indweight);
+	Free(indL);
     return logL;
 }
 
