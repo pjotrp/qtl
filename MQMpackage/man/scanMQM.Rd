@@ -10,7 +10,7 @@ scanMQM(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 100
 }
 \arguments{
   \item{cross}{ Cross object from R/QTL }
-  \item{cofactors}{ List of cofactors (0:no cofactor, 1 cofactor, 2 sexfactor }
+  \item{cofactors}{ List of cofactors with length marker (0:no cofactor, 1 cofactor, 2 sexfactor }
   \item{REMLorML}{ Reduced maximum likelyhood (0) or Maximum likelyhood (1) }
   \item{alfa}{ Global p-value (0<= alfa <= 1) }
   \item{em.iter}{ Max itterations of the EM algorithm }
@@ -23,15 +23,12 @@ scanMQM(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 100
   Using ML or Reduced ML the algorithm employs a forward- or backward selection strategy to identify QTL hotspot.
 }
 \value{
-  No return value, the cross object will be updated with the new information.
+  Returns a matrix with QTL for each location on the chromosome, which can be plotted using the plot.scanone function of R/QTL
 }
 \references{ R.C. Janssen, K. Brohman, Danny Arends }
 \author{ Danny Arends }
-\note{ ~~further notes~~ 
-\section{Warning}{ }
-\section{Support}{
- If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
- }
+\note{
+	If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }
 \seealso{  }
 \examples{
@@ -39,7 +36,8 @@ scanMQM(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 100
 	qtl <- c(3,15,3,7)							# QTL at chromosome 3
 	data(map10)									# Mouse genome
 	cross <- sim.cross(map10,qtl,n=100)			# Simulate a Cross
-	result <- scanMQM(cross)					# Do a forward MQM model selection
+	result <- scanMQM(cross)					# Do a MQM scan of the genome
+	plot(result)								#plot the results of the genome scan
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -20,70 +20,65 @@ setwd("D:/")
 library(qtl)
 dyn.load("scanMQM.dll")
 cross <- read.cross("csv","","Test.csv")
-cof = rep(0,187)
-cof[1:10] = 1
-cof[150:180] = 1
 
 scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
 					step.min=-20.0,step.max=220.0){
     library(qtl)
 	if(is.null(cross)){
-      print(paste("Error: No cross file. Please supply a valid cross object."))
-	  return 
+		print(paste("Error: No cross file. Please supply a valid cross object."))
+		return 
 	}
-	
-if(class(cross)[1] == "f2"){
-    print(paste("INFO: Received an F2 cross."))
-	n.ind <- nind(cross)
-	n.chr <- nchr(cross)
-	print(paste("INFO: Number of individuals:",n.ind))
-	print(paste("INFO: Number of chr:",n.chr))
-	geno <- NULL
-	chr <- NULL
-	dist <- NULL
-    out.qtl <- NULL	
-	for(i in 1:n.chr) {
-      geno <- cbind(geno,cross$geno[[i]]$data)
-	  chr <- c(chr,rep(i,dim(cross$geno[[i]]$data)[2]))
-	  dist <- c(dist,cross$geno[[i]]$map)
-	}
-	if(alfa <=0 || alfa >= 1){
-      print(paste("Error: Alfa must be between 0 and 1."))
-	  return	
-	}
-	pheno <- cross$pheno
-	n.mark <- ncol(geno)
-	print(paste("INFO: Number of markers:",n.mark))
-	for(i in 1:n.ind) {
-	  for(j in 1:n.mark) {
-	    if(is.na(geno[i,j])){
-	      geno[i,j] <- 9;
-	    }
-	  }
-	}
-	backward <- 0;
-	if(is.null(cofactors)){
-	 print(paste("INFO: No cofactors, setting cofactors to 0"))
-	 cofactors = rep(0,n.mark)
-	}else{
-	  if(length(cofactors) != n.mark){
-	    print("Error: # Cofactors != # Markers")		
-	  }else{
-	    print(paste("INFO:#",length(cofactors),"Cofactors received"))
-		if(sum(cofactors) > 0){
-		  print(paste("INFO: Doing backward elimination of selected cofactors."))
-		  backward <- 1;
-		}else{
-		  backward <- 0;
-		  print(paste("Error: Are u trying to give an empty cofactor list ???"))
+	if(class(cross)[1] == "f2"){
+		print(paste("INFO: Received an F2 cross."))
+		n.ind <- nind(cross)
+		n.chr <- nchr(cross)
+		print(paste("INFO: Number of individuals:",n.ind))
+		print(paste("INFO: Number of chr:",n.chr))
+		geno <- NULL
+		chr <- NULL
+		dist <- NULL
+		out.qtl <- NULL	
+		for(i in 1:n.chr) {
+			geno <- cbind(geno,cross$geno[[i]]$data)
+			chr <- c(chr,rep(i,dim(cross$geno[[i]]$data)[2]))
+			dist <- c(dist,cross$geno[[i]]$map)
 		}
-	  }
-	}
-	
-	qtlAchromo <- length(seq(step.min,step.max,step.size))
-    print(paste("Number of locations per chromosome:",out.qtl))
-	result <- .C("R_scanMQM",
+		if(alfa <=0 || alfa >= 1){
+			print(paste("Error: Alfa must be between 0 and 1."))
+			return	
+		}
+		pheno <- cross$pheno
+		n.mark <- ncol(geno)
+		print(paste("INFO: Number of markers:",n.mark))
+		for(i in 1:n.ind) {
+			for(j in 1:n.mark) {
+				if(is.na(geno[i,j])){
+					geno[i,j] <- 9;
+				}
+			}
+		}
+		backward <- 0;
+		if(is.null(cofactors)){
+			print(paste("INFO: No cofactors, setting cofactors to 0"))
+			cofactors = rep(0,n.mark)
+		}else{
+			if(length(cofactors) != n.mark){
+				print("Error: # Cofactors != # Markers")		
+			}else{
+				print(paste("INFO:#",length(cofactors),"Cofactors received"))
+				if(sum(cofactors) > 0){
+					print(paste("INFO: Doing backward elimination of selected cofactors."))
+					backward <- 1;
+				}else{
+					backward <- 0;
+					print(paste("Error: Are u trying to give an empty cofactor list ???"))
+				}
+			}
+		}
+		qtlAchromo <- length(seq(step.min,step.max,step.size))
+		print(paste("Number of locations per chromosome:",out.qtl))
+		result <- .C("R_scanMQM",
 				as.integer(n.ind),
                 as.integer(n.mark),
 				as.integer(1),    # 1 phenotype
@@ -103,30 +98,29 @@ if(class(cross)[1] == "f2"){
 				as.double(step.max),
 				QTL=as.double(rep(0,n.chr*qtlAchromo))
 			    )
-	# initialize output object
-	qtl <- NULL
-	names <- NULL
-	for(i in 1:(n.chr*qtlAchromo)) {
-	  qtl <- rbind(qtl,c(ceiling(i/qtlAchromo),rep(seq(step.min,step.max,step.size),n.chr)[i],result$QTL[i]))
-	  names <- c(names,paste("C",ceiling(i/qtlAchromo),"L",rep(seq(step.min,step.max,step.size),n.chr)[i],sep=""))
+		# initialize output object
+		qtl <- NULL
+		names <- NULL
+		for(i in 1:(n.chr*qtlAchromo)) {
+			qtl <- rbind(qtl,c(ceiling(i/qtlAchromo),rep(seq(step.min,step.max,step.size),n.chr)[i],result$QTL[i]))
+			names <- c(names,paste("C",ceiling(i/qtlAchromo),"L",rep(seq(step.min,step.max,step.size),n.chr)[i],sep=""))
+		}
+		rownames(qtl) <- names
+		colnames(qtl) = c("chr","pos (Cm)","QTL")
+		
+		#So we can use carls plotting routines
+		class(qtl) <- c(class(qtl),"scanone") 
+	
+		#return QTL
+		qtl
 	}
-	rownames(qtl) <- names
-	colnames(qtl) = c("chr","pos (Cm)","QTL")
-	
-	#So we can use carls plotting routines
-	class(qtl) <- c(class(qtl),"scanone") 
-	
-	#return QTL
-    qtl
-}
-if(class(cross)[1] == "BC"){
-    print(paste("Error: Currently only f2 crosses can be analyzed by MQM."))
-	return 
-}else{
-    print(paste("Error: Currently only f2 crosses can be analyzed by MQM."))
-	return 
-}
-				
+	if(class(cross)[1] == "BC"){
+		print(paste("Error: Currently only f2 crosses can be analyzed by MQM."))
+		return 
+	}else{
+		print(paste("Error: Currently only f2 crosses can be analyzed by MQM."))
+		return 
+	}			
 }
 
 # end of scanMQM.R
