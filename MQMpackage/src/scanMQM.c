@@ -109,7 +109,7 @@ void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno)
 void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo, 
 			 double **Dist, double **Pheno, int **Cofactors, int Backwards, int RMLorML,double Alfa,int Emiter,
 			 double Windowsize,double Steps,
-			 double Stepmi,double Stepma){
+			 double Stepmi,double Stepma, double **QTL){
    ivector f1genotype;
    f1genotype = newivector(Nmark);
    cmatrix markers;
@@ -196,7 +196,7 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo,
    em=Emiter; // maximum number of em iterations
    alfa=Alfa; // alfa used in selection procedure
    Rprintf("We got all the needed information, so lets start with the MQM\n");   
-   analyseF2(Nind, Nmark, cofactor, markers, Pheno[0], f1genotype, Backwards);
+   analyseF2(Nind, Nmark, cofactor, markers, Pheno[0], f1genotype, Backwards,QTL);
    return;
 }  /* end of function scanMQM */
 
@@ -212,21 +212,24 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno, int *Nfam,
 			   int *geno,int *chromo, double *dist, double *pheno, 
 			   int *cofactors, int *backwards, int *RMLorML,double *alfa,int *emiter,
 			   double *windowsize,double *steps,
-			   double *stepmi,double *stepma){
+			   double *stepmi,double *stepma, double *qtl){
    int **Geno;
    int **Chromo;
    double **Dist;  
    double **Pheno;   
+   double **QTL;   
    int **Cofactors;
+   
    //Reorganise the pointers into arrays, ginletons are just cast into the function
    reorg_geno(*Nind,*Nmark,geno,&Geno);
    reorg_int(*Nmark,1,chromo,&Chromo);   
    reorg_pheno(*Nmark,1,dist,&Dist);
+   reorg_pheno((*chromo) * (( (*stepmi)+(*stepma))/ (*steps)),1,qtl,&QTL);
    reorg_pheno(*Nind,*Npheno,pheno,&Pheno);
    reorg_int(*Nmark,1,cofactors,&Cofactors);  
    //Done with reorganising lets start executing the main loop
    
-   scanMQM(*Nind,*Nmark,*Npheno, *Nfam,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma);
+   scanMQM(*Nind,*Nmark,*Npheno, *Nfam,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,QTL);
 } /* end of function R_scanMQM */
 
 

@@ -20,6 +20,9 @@ setwd("D:/")
 library(qtl)
 dyn.load("scanMQM.dll")
 cross <- read.cross("csv","","Test.csv")
+cof = rep(0,187)
+cof[1:10] = 1
+cof[150:180] = 1
 
 scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
@@ -29,6 +32,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
       print(paste("Error: No cross file. Please supply a valid cross object."))
 	  return 
 	}
+	
 if(class(cross)[1] == "f2"){
     print(paste("INFO: Received an F2 cross."))
 	n.ind <- nind(cross)
@@ -38,6 +42,7 @@ if(class(cross)[1] == "f2"){
 	geno <- NULL
 	chr <- NULL
 	dist <- NULL
+    out.qtl <- NULL	
 	for(i in 1:n.chr) {
       geno <- cbind(geno,cross$geno[[i]]$data)
 	  chr <- c(chr,rep(i,dim(cross$geno[[i]]$data)[2]))
@@ -75,7 +80,9 @@ if(class(cross)[1] == "f2"){
 		}
 	  }
 	}
-
+	
+	qtlAchromo <- length(seq(step.min,step.max,step.size))
+    print(paste("Number of locations per chromosome:",out.qtl))
 	result <- .C("R_scanMQM",
 				as.integer(n.ind),
                 as.integer(n.mark),
@@ -93,8 +100,28 @@ if(class(cross)[1] == "f2"){
 				as.double(windowsize),
 				as.double(step.size),
 				as.double(step.min),
-				as.double(step.max)
+				as.double(step.max),
+				QTL=as.double(rep(0,n.chr*qtlAchromo))
 			    )
+	# initialize output object
+	qtl <- NULL
+	names <- NULL
+	for(i in 1:(n.chr*qtlAchromo)) {
+	  qtl <- rbind(qtl,c(ceiling(i/qtlAchromo),rep(seq(step.min,step.max,step.size),n.chr)[i],result$QTL[i]))
+	  names <- c(names,paste("C",ceiling(i/qtlAchromo),"L",rep(seq(step.min,step.max,step.size),n.chr)[i],sep=""))
+	}
+	rownames(qtl) <- names
+	colnames(qtl) = c("chr","pos (Cm)","QTL")
+	
+	#So we can use carls plotting routines
+	class(qtl) <- c(class(qtl),"scanone") 
+	
+	#return QTL
+    qtl
+}
+if(class(cross)[1] == "BC"){
+    print(paste("Error: Currently only f2 crosses can be analyzed by MQM."))
+	return 
 }else{
     print(paste("Error: Currently only f2 crosses can be analyzed by MQM."))
 	return 
@@ -104,4 +131,5 @@ if(class(cross)[1] == "f2"){
 
 # end of scanMQM.R
 
-scanMQM(cross)
+res <- scanMQM(cross)
+plot(res)

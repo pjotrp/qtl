@@ -23,7 +23,7 @@ void simuF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y);
 
 /* analyseF2 - analyse one F2 family */
 
-void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards);
+void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, double **QTL);
 double probleft(char c, int jloc, cvector imarker, vector r, cvector position);
 double probright(char c, int jloc, cvector imarker, vector r, cvector position);
 

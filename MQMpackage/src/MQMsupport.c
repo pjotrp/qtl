@@ -76,7 +76,7 @@ void simuF2(int Nind, int Nmark, cvector cofactor,
  * analyseF2 - analyse one F2 family
  *
  */
-void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards)
+void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, double **QTL)
 {    
      Rprintf("Starting analyseF2\n");
      int Naug;
@@ -113,9 +113,9 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 
      char dropj='y';
      int jj=0;
-     Rprintf("any triple of non-segregating markers is considered to be the result of:\n");
-     Rprintf("identity-by-descent (IBD) instead of identity-by-state (IBS)\n");
-     Rprintf("no (segregating!) cofactors are fitted in such non-segregating IBD regions\n");
+   //  Rprintf("any triple of non-segregating markers is considered to be the result of:\n");
+   //  Rprintf("identity-by-descent (IBD) instead of identity-by-state (IBS)\n");
+  //   Rprintf("no (segregating!) cofactors are fitted in such non-segregating IBD regions\n");
      for (int j=0; j<Nmark; j++)
      {   // if ((f1genotype[j]==12)||(f1genotype[j]==21)) dropj='n';
          if (mod(f1genotype[j],11)!=0) dropj='n';
@@ -340,7 +340,11 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
   //Printout output
   for (int ii=0; ii<Nsteps; ii++)
   {   
-    Rprintf("%d %f %f %f\n",chrnumber,moveQTL,Frun[ii][Nrun],((informationcontent[ii]/Nfam)/(Nrun+1)));
+    //Rprintf("%d %f %f %f\n",chrnumber,moveQTL,Frun[ii][Nrun],((informationcontent[ii]/Nfam)/(Nrun+1)));
+	QTL[0][ii] = Frun[ii][Nrun];
+	//QTL[1][ii] = moveQTL; 
+	//QTL[2][ii] = Frun[ii][Nrun]; 
+	//QTL[3][ii] = ((informationcontent[ii]/Nfam)/(Nrun+1)); 
     if (moveQTL+stepsize<=stepmax){
 		moveQTL+= stepsize;
 	} else { 
