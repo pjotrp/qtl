@@ -82,7 +82,6 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 				as.integer(n.ind),
                 as.integer(n.mark),
 				as.integer(1),    # 1 phenotype
-				as.integer(1),    # 1 family
                 as.integer(geno),
 				as.integer(chr),
 				as.double(dist),

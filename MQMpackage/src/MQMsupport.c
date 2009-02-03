@@ -31,31 +31,29 @@ extern double stepmin; // start moving QTL at position stepmin cM (for output)
 extern double stepmax; // move QTL up to stepmax (for output)
 extern long *idum; // for monte carlo simulation or permutation
 
-extern vector mapdistance, r;
-extern matrix XtWX;
-extern cmatrix Xt;
-extern vector XtWY;
+extern vector r;
+
 extern ivector chr;
 extern matrix Frun;
-extern vector informationcontent;
-extern int Nfam, Nrun;
+extern int Nrun;
 extern int run;
 extern char REMLorML;
 extern char fitQTL;
 extern char perm_simu;
-extern char defset;
 extern char dominance;
 
 /*
  * analyseF2 - analyse one F2 family
  *
  */
-void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, double **QTL)
+void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, double **QTL,vector *mapdistance)
 {    
      Rprintf("Starting analyseF2\n");
      int Naug;
      cvector position;
-     r= newvector(Nmark);
+	 vector informationcontent;
+    
+	 r= newvector(Nmark);
      position= newcvector(Nmark);
      Rprintf("Gonna make positions from the markers\n");
      for (int j=0; j<Nmark; j++)
@@ -71,7 +69,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      }
      for (int j=0; j<Nmark; j++)
      {   if ((position[j]=='L')||(position[j]=='M'))
-         r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
+         r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
      }
 	// for (int j=0; j<Nmark; j++){
 	//   Rprintf("Mark:%d CHR:%d MAP:%f POS:%c REC:%f\n",j,chr[j],mapdistance[j],position[j],r[j]);
@@ -97,26 +95,26 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
          else if (position[j]=='L') // (cofactor[j]!='0') cofactor at non-segregating marker
          // test whether next segregating marker is nearby (<20cM)
          {  dropj='y';
-            if (((mapdistance[j+1]-mapdistance[j])<20)&&(mod(f1genotype[j+1],11)!=0)) dropj='n';
+            if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+1],11)!=0)) dropj='n';
             else if (position[j+1]!='R')
-            if (((mapdistance[j+2]-mapdistance[j])<20)&&(mod(f1genotype[j+2],11)!=0)) dropj='n';
+            if ((((*mapdistance)[j+2]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+2],11)!=0)) dropj='n';
          }
          else if (position[j]=='M')
          {  dropj='y';
-            if (((mapdistance[j]-mapdistance[j-1])<20)&&(mod(f1genotype[j-1],11)!=0)) dropj='n';
-            else if (((mapdistance[j+1]-mapdistance[j])<20)&&(mod(f1genotype[j+1],11)!=0)) dropj='n';
+            if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)&&(mod(f1genotype[j-1],11)!=0)) dropj='n';
+            else if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+1],11)!=0)) dropj='n';
          }
          else if (position[j]=='R')
          {  dropj='y';
-            if (((mapdistance[j]-mapdistance[j-1])<20)&&(mod(f1genotype[j-1],11)!=0)) dropj='n';
+            if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)&&(mod(f1genotype[j-1],11)!=0)) dropj='n';
             else if (position[j-1]!='L')
-            if (((mapdistance[j]-mapdistance[j-2])<20)&&(mod(f1genotype[j-2],11)!=0)) dropj='n';
+            if ((((*mapdistance)[j]-(*mapdistance)[j-2])<20)&&(mod(f1genotype[j-2],11)!=0)) dropj='n';
          }
          if (dropj=='n')
          {  
             marker[jj]= marker[j];
             cofactor[jj]= cofactor[j];
-            mapdistance[jj]= mapdistance[j];
+            (*mapdistance)[jj]= (*mapdistance)[j];
             chr[jj]= chr[j];
             r[jj]= r[j];
             position[jj]= position[j];
@@ -139,11 +137,11 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      }
      for (int j=0; j<Nmark; j++)
      {   if ((position[j]=='L')||(position[j]=='M'))
-         r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
+         r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
          // cout << "r(" << setw(2) << j << ")=" << r[j] << endl;
          if (r[j]<0)
          {  Rprintf("error: recombination frequency is negative\n");
-            Rprintf("chr=%d mapdistance=%d\n",chr[j],mapdistance[j]); 
+            Rprintf("chr=%d mapdistance=%d\n",chr[j],(*mapdistance)[j]); 
             Rprintf("position=%d r[j]=%d\n",position[j], r[j]);
             return;
          }
@@ -212,9 +210,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      Rprintf("F(%f,2,%d)=%f\n",F2,(Nind-dimx),alfa);
      F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
-     XtWX= newmatrix(dimx+2,dimx+2);
-     Xt= newcmatrix(dimx+2,Naug); // 3*Naug);  --- there is note it should be 3x
-     XtWY= newvector(dimx+2);
+
      weight[0]= -1.0;
      logLfull= QTLmixture(marker,cofactor,r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight);
      Rprintf("log-likelihood of full model= %f\n",logLfull);
@@ -223,10 +219,10 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 
      if (Backwards==1)    // use only selected cofactors
          logLfull= backward(Nind, Nmark, cofactor, marker, y, weight, ind, Naug, logLfull,
-                    variance, F1, F2, &selcofactor, r, position);
+                    variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance);
      if (Backwards==0) // use all cofactors
          logLfull= mapQTL(Nind, Nmark, cofactor, cofactor, marker, position,
-                  mapdistance, y, r, ind, Naug, variance, 'n'); // printout=='n'
+                  (*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent); // printout=='n'
 
 	 //long *idum;
      //idum= new long[1];
@@ -266,16 +262,16 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
             // logLfull= QTLmixture(marker,cofactor,r,position,y,ind,Nind,Naug,Nmark,variance,em,weight);
 			if (Backwards==1){ 
                   maxF[run]= backward(Nind, Nmark, cofactor, marker, y, weight, ind, Naug, logLfull,
-                    variance, F1, F2, &selcofactor, r, position);
+                    variance, F1, F2, &selcofactor, r, position,&informationcontent, mapdistance);
 			}
 			if (Backwards==0){
                   maxF[run]= mapQTL(Nind, Nmark, cofactor, cofactor, marker, position,
-                  mapdistance, y, r, ind, Naug, variance, 'n');
+                  (*mapdistance), y, r, ind, Naug, variance, 'n',&informationcontent);
 			}
             // cout << "run " << run <<" ready; maxF= " << maxF[run] << endl;
         }
 	}
-    if (Nfam==1 && Nrun > 0){
+    if (Nrun > 0){
 		sort1(Nrun,maxF);
 		Rprintf("Cumulative distribution of maximum test statistic value in %d permutations or simulations\n",Nrun);
 		for (int i=1; i<Nrun+1; i++){   
@@ -289,19 +285,18 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 	double moveQTL= stepmin;
 	int chrnumber=1;
   
-	Rprintf("-1- %d %d %d\n",Nsteps,Nrun,Nfam);
-  // chr pos Frun    information 
-  // 1  -20  97.4561 0.677204
-  // 1  -15 103.29   0.723067
-  // 1  -10 108.759  0.777696
-  // 1   -5 113.737  0.842778
-  // 1    0 118.112  0.920356
-  // 1    5 120.051  0.928594
-  // 1   10 114.469  0.959548
+	Rprintf("-1- %d %d\n",Nsteps,Nrun);
+	// chr pos Frun    information 
+	// 1  -20  97.4561 0.677204
+	// 1  -15 103.29   0.723067
+	// 1  -10 108.759  0.777696
+	// 1   -5 113.737  0.842778
+	// 1    0 118.112  0.920356
+	// 1    5 120.051  0.928594
+	// 1   10 114.469  0.959548
   
-  //Printout output
+	//Printout output to QTL for usage in R
 	for (int ii=0; ii<Nsteps; ii++){   
-		//Rprintf("%d %f %f %f\n",chrnumber,moveQTL,Frun[ii][Nrun],((informationcontent[ii]/Nfam)/(Nrun+1)));
 		QTL[0][ii] = Frun[ii][Nrun];
 		if (moveQTL+stepsize<=stepmax){
 			moveQTL+= stepsize;
@@ -320,9 +315,6 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 	delcmatrix(marker,Nmark);
 	Free(y);
 	Free(selcofactor);
-	delmatrix(XtWX,dimx+2);
-	delcmatrix(Xt,dimx+2);
-	Free(XtWY);
 	Free(idum);
 	return;
 }
@@ -1010,8 +1002,16 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
 	// for (int j=0; j<Naug; j++){
 	//   Rprintf("J:%d,COF:%d,VAR:%f,WEIGHT:%f,Trait:%f,IND[j]:%d\n",j,cofactor[j],*variance,(*weight)[j],y[j],ind[j]);
     // }
-     int dimx=1, j, jj;
-     for (j=0; j<Nmark; j++)
+    int dimx=1, j, jj;
+	matrix XtWX;
+	cmatrix Xt;
+	vector XtWY;
+	
+	XtWX= newmatrix(dimx+2,dimx+2);
+    Xt= newcmatrix(dimx+2,Naug);
+	XtWY= newvector(dimx+2);
+	
+	for (j=0; j<Nmark; j++)
      if ((cofactor[j]=='1')||(cofactor[j]=='3')) dimx+= (dominance=='y' ? 2 : 1);
      cvector xtQTL; // '0'=mu; '1'=cofactor; '2'=QTL (additive); '3'= QTL (dominance);
      xtQTL= newcvector(dimx);
@@ -1226,7 +1226,11 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
 	Free(indL);
     Free(indx);
     Free(xtQTL);
-    return (double)logL;
+	delmatrix(XtWX,dimx+2);
+	delcmatrix(Xt,dimx+2);
+	Free(XtWY);
+    
+	return (double)logL;
 }
 
 
@@ -1235,7 +1239,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
    matrices XtWX en Xt van volledig model worden genoemd fullxtwx en fullxt;
    analoog vector XtWY wordt full xtwy genoemd;
 */
-double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector weight, int* ind, int Naug, double logLfull, double variance, double F1, double F2, cvector* newcofactor, vector r, cvector position)
+double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector weight, int* ind, int Naug, double logLfull, double variance, double F1, double F2, cvector* newcofactor, vector r, cvector position, vector *informationcontent, vector *mapdistance)
 {    int dropj=0, Ncof=0;
      double maxlogL, savelogL, maxF=0.0; //, minlogL=logLfull, maxFtest=0.0;
      char finished='n'; //, biasadj='n';
@@ -1291,7 +1295,7 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
      if ((*newcofactor)[j]!='0') Rprintf("marker %d is in final model\n",j);
 
      maxF= mapQTL(Nind, Nmark, cofactor, (*newcofactor), marker, position,
-           mapdistance, y, r, ind, Naug, variance, 'n'); // printoutput='n'
+           (*mapdistance), y, r, ind, Naug, variance, 'n', informationcontent); // printoutput='n'
      Rprintf("backward selection finished\n");
      Free(logL);
      return maxF;
@@ -1301,7 +1305,7 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
 double mapQTL(int Nind, int Nmark, cvector cofactor,
        cvector selcofactor, cmatrix marker, cvector position, vector mapdistance,
        vector y, vector r, ivector ind, int Naug, double variance,
-       char printoutput)
+       char printoutput, vector *informationcontent)
 {      
        Rprintf("mapQTL function called\n");
        int Nloci, j, jj, jjj=0;
@@ -1561,7 +1565,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor,
               for (int i=0; i<Nind; i++)
               if (info0[i]<info1[i]) infocontent+= (info1[i]<info2[i] ? info2[i] : info1[i]);
               else infocontent+= (info0[i]<info2[i] ? info2[i] : info0[i]);
-              informationcontent[step]+=infocontent/Nind;
+              (*informationcontent)[step]+=infocontent/Nind;
               step++;
           //    if (printoutput=='y')
             //  {  cout << j << " " << chr[j] << " " << setprecision(0) << (moveQTL-stepsize) << " "

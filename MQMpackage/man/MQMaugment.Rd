@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ MQMaugment - Missing data augmentation routine for MQM }
 \description{
-  ~~ A concise (1-5 lines) description of what the function does. ~~
+  
 }
 \usage{
 MQMaugment(cross = NULL, maxaug = 10000, maxiaug = 100, neglect = 10)
