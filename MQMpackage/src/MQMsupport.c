@@ -22,7 +22,6 @@
 extern double neglect; // eliminate unlikely genotype configurations
 extern int maxNaug; // maximum size of augmented dataset
 extern int imaxNaug; // maximum size of augmented data for individual i
-extern int maxdimX; // maximum size of design matrix in regression
 extern int em; // maximum number of em iterations
 extern double alfa; // alfa used in selection procedure
 extern double windowsize; // used in mapQTL procedure

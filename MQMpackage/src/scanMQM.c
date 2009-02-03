@@ -23,7 +23,6 @@
 double neglect=100; // eliminate unlikely genotype configurations
 int maxNaug=10000; // maximum size of augmented dataset
 int imaxNaug=1000; // maximum size of augmented data for individual i
-int maxdimX=50; // maximum size of design matrix in regression
 int em=1000; // maximum number of em iterations
 double alfa=0.02; // alfa used in selection procedure
 double windowsize=25.0; // used in mapQTL procedure
