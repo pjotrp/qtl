@@ -1,3 +1,5 @@
 makeCofList             makeCofList - Helper function to create
                         cofactors to be used with scanMQM
+MQMaugment              MQMaugment - Missing data augmentation routine
+                        for MQM
 scanMQM                 scanMQM - Multiple qtl mapping for F2 crosses

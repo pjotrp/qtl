@@ -21,6 +21,14 @@ typedef char**   cmatrix;
 typedef char*    cvector;
 typedef int*  ivector;
 
+/*
+Data augmentation routing
+*/
+
+void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,int *neglect);
+
+void augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector* augind, int *Nind, int* Naug, int Nmark, cvector position, vector r,int maxNaug,int imaxNaug,int neglect);
+
 /*------------------------------------------------------------------------
 Basic routines for matrix and vector calculus
 ------------------------------------------------------------------------ */

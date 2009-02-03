@@ -48,5 +48,8 @@ void scanMQM(int Nind, int Nmark,int Npheno, int Nfam,int **Geno,int **Chromo,
 double Lnormal(double residual, double variance);
 double absdouble(double x);
 int mod(int a, int b);
+void reorg_geno(int n_ind, int n_pos, int *geno, int ***Geno);
+void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno);
+void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno);
 
 /* end of scanMQM.h */
