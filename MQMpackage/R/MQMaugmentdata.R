@@ -30,12 +30,12 @@ MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=100,neglect=10){
 		return 
 	}
 	if(class(cross)[1] == "f2"){
-		print(paste("INFO: Received an F2 cross."))
+		#print(paste("INFO: Received an F2 cross."))
 		n.ind <- nind(cross)
 		n.chr <- nchr(cross)
 		n.aug <- maxaug
-		print(paste("INFO: Number of individuals:",n.ind))
-		print(paste("INFO: Number of chr:",n.chr))
+		#print(paste("INFO: Number of individuals:",n.ind))
+		#print(paste("INFO: Number of chr:",n.chr))
 		geno <- NULL
 		chr <- NULL
 		dist <- NULL
@@ -47,7 +47,7 @@ MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=100,neglect=10){
 		}
 		pheno <- cross$pheno
 		n.mark <- ncol(geno)
-		print(paste("INFO: Number of markers:",n.mark))
+		#print(paste("INFO: Number of markers:",n.mark))
 		for(i in 1:n.ind) {
 			for(j in 1:n.mark) {
 				if(is.na(geno[i,j])){
@@ -71,7 +71,7 @@ MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=100,neglect=10){
 				as.integer(neglect)
 			    )
 		n.aug = result[[7]]
-		print(paste("INFO: Number of individuals:",n.aug))		
+		#print(paste("INFO: Number of individuals:",n.aug))		
 		markONchr <- 0
 		markdone <- 0
 		for(c in 1:n.chr){

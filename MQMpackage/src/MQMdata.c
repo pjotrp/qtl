@@ -61,7 +61,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	    mapdistance[i]=Dist[0][i];
 	}
 
-    Rprintf("Gonna make positions from the markers\n");
+    Rprintf("Calculating relative genomepositions of the markers\n");
     for (int j=0; j<*Nmark; j++)
     {   
         if (j==0)
@@ -103,23 +103,23 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 }
 
 void augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector* augind, int *Nind, int *Naug, int Nmark, cvector position, vector r,int maxNaug,int imaxNaug,int neglect){
-	Rprintf("augmentdata called\n");
+	//Rprintf("augmentdata called\n");
 	int jj;
-	Rprintf("starting poiunter stuff\n");
+	//Rprintf("starting poiunter stuff\n");
     int newNind=(*Nind);
-	Rprintf("starting poiunter stuff:%d %d\n",(*Naug),maxNaug);
+	//Rprintf("starting poiunter stuff:%d %d\n",(*Naug),maxNaug);
     (*Naug)= maxNaug; /* maximum size of augmented dataset */
     Rprintf(" poiunter stuff\n");
 	cmatrix newmarker;
     vector newy;
     cvector imarker;
     ivector newind;
-	Rprintf("Gonna allocate room for the new matrices\n");
+	//Rprintf("Gonna allocate room for the new matrices\n");
     newmarker= newcmatrix(Nmark+1,*Naug);
     newy= newvector(*Naug);
     newind= newivector(*Naug);
     imarker= newcvector(Nmark);
-	Rprintf("Allocation done\n");
+	//Rprintf("Allocation done\n");
      int iaug=0;      // iaug keeps track of current augmented individual
      int maxiaug=0;   // highest reached(?)
      int saveiaug=0;  // previous iaug
@@ -130,7 +130,7 @@ void augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector
      vector newprob, newprobmax;
      newprob= newvector(*Naug);
      newprobmax= newvector(*Naug);
-     Rprintf("maximum Naug= %d\n",(*Naug));
+     //Rprintf("maximum Naug= %d\n",(*Naug));
      // ---- foreach individual create one in the newmarker matrix
      for (int i=0; i<(*Nind); i++)
      {   newind[iaug]=i-((*Nind)-newNind);  // index of individuals
@@ -340,12 +340,8 @@ void augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector
              if ((iaug-saveiaug+1)>imaxNaug)
              {  newNind-= 1;
                 iaug= saveiaug-1;
-               // cout << "individual " << i << " is eliminated, because it is not informative enough" << endl;
-               // ofstream fff("mqm_out.txt", ios::out | ios::app);
-               // fff << "individual " << i << " is eliminated, because it is not informative enough" << endl;
-               // fff.close();
+              Rprintf("individual %d is eliminated, because it is not informative enough\n",i);
              }
-
              sumprob= 0.0;
              for (int ii=saveiaug; ii<=iaug; ii++) sumprob+= newprob[ii];
              for (int ii=saveiaug; ii<=iaug; ii++) newprob[ii]/= sumprob;
@@ -364,6 +360,7 @@ void augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector
          for (int j=0; j<Nmark; j++) (*augmarker)[j][i]= newmarker[j][i];
      }
 	Free(newy);
+	Free(newmarker);
 	Free(newind);
 	Free(newprob);
 	Free(newprobmax);
