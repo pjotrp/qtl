@@ -18,7 +18,7 @@ void simuF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y);
 
 /* analyseF2 - analyse one F2 family */
 
-void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, double **QTL,vector *mapdistance);
+void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, double **QTL,vector *mapdistance,int **Chromo,int Nrun,int RMLorML);
 double probleft(char c, int jloc, cvector imarker, vector r, cvector position);
 double probright(char c, int jloc, cvector imarker, vector r, cvector position);
 
@@ -35,12 +35,12 @@ void rmixture(cmatrix marker, vector weight, vector r, cvector position, ivector
 /* ML estimation of parameters in mixture model via EM;
 */
 double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
-              vector y, ivector ind, int Nind, int Naug, int Nloci, double *variance, int em, vector *weight);
+              vector y, ivector ind, int Nind, int Naug, int Nloci, double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance);
 
 /* regression of trait on multiple cofactors
    y=xb+e with weight w   (xtwx)b=(xtw)y   b=inv(xtwx)(xtw)y */
 
-double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector* weight, ivector ind, int Naug, double *variance, vector Fy, char biasadj);
+double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector* weight, ivector ind, int Naug, double *variance, vector Fy, char biasadj,char fitQTL,char dominance);
 
 
 /* backward elimination in regression of trait on multiple cofactors
@@ -48,10 +48,10 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
    matrices XtWX en Xt van volledig model worden genoemd fullxtwx en fullxt;
    analoog vector XtWY wordt full xtwy genoemd;
 */
-double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector weight, int* ind, int Naug, double logLfull, double variance, double F1, double F2, cvector* newcofactor, vector r, cvector position,vector *informationcontent,vector *mapdistance);
+double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector weight, int* ind, int Naug, double logLfull, double variance, double F1, double F2, cvector* newcofactor, vector r, cvector position,vector *informationcontent,vector *mapdistance,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance);
 
 /* mapQTL */
-double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatrix marker, cvector position, vector mapdistance, vector y, vector r, ivector ind, int Naug, double variance, char printoutput,vector *informationcontent);
+double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatrix marker, cvector position, vector mapdistance, vector y, vector r, ivector ind, int Naug, double variance, char printoutput,vector *informationcontent,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance);
 
 
 /*

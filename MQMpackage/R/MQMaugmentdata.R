@@ -26,16 +26,16 @@ cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
 MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=1000,neglect=1000){
     library(qtl)
 	if(is.null(cross)){
-		print(paste("Error: No cross file. Please supply a valid cross object."))
+		stop("Error: No cross file. Please supply a valid cross object.")
 		return 
 	}
 	if(class(cross)[1] == "f2"){
-		#print(paste("INFO: Received an F2 cross."))
+		#cat("INFO: Received an F2 cross.")
 		n.ind <- nind(cross)
 		n.chr <- nchr(cross)
 		n.aug <- maxaug
-		#print(paste("INFO: Number of individuals:",n.ind))
-		#print(paste("INFO: Number of chr:",n.chr))
+		#cat("INFO: Number of individuals:",n.ind)
+		#cat("INFO: Number of chr:",n.chr)
 		geno <- NULL
 		chr <- NULL
 		dist <- NULL
@@ -59,7 +59,7 @@ MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=1000,neglect=1000){
 		dropped <- NULL
 		for(i in 1:dim(pheno)[1]) {
 			if(is.na(pheno[i,1])){
-			  print(paste("Dropped individual ",i," with missing genotype\n",sep=""))
+			  cat("Dropped individual ",i ," with missing genotype\n")
 			  dropped <- c(dropped,i) 
 			  n.ind = n.ind-1
 			}
@@ -118,7 +118,7 @@ MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=1000,neglect=1000){
 		}
 		cross
 	}else{
-		print(paste("Error: Currently only f2 crosses can be analyzed by MQM."))
+		stop("Error: Currently only f2 crosses can be analyzed by MQM.")
 		return 
 	}			
 }

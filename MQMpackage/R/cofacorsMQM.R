@@ -24,11 +24,11 @@ cross <- read.cross("csv","","Test.csv")
 
 MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
 	if(is.null(cross)){
-      print(paste("Error: No cross file. Please supply a valid cross object."))
+      stop("Error: No cross file. Please supply a valid cross object.")
 	  return 
 	}
 	if(is.null(cofactors)){
-      print(paste("Error: Cofactors to set. Please supply a list of markers to serve as cofactors."))
+      stop("Error: Cofactors to set. Please supply a list of markers to serve as cofactors.")
 	  return 
 	}
 		
@@ -43,14 +43,25 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
 	n.mark <- ncol(geno)
 
 	if(max(cofactors) > n.mark){
-      print(paste("Error: Trying to set a non-existent marker as a cofactor."))
+      stop("Error: Trying to set a non-existent marker as a cofactor.")
 	  return 	  
 	}
 
-	if(max(sexfactors) > n.mark){
-      print(paste("Error: Trying to set a non-existent marker as a sexfactor."))
+	if(min(cofactors) <= 0){
+      stop("Error: Trying to set a non-existent marker as a cofactor.")
 	  return 	  
 	}
+	
+
+	if(max(sexfactors) > n.mark){
+      stop("Error: Trying to set a non-existent marker as a sexfactor.")
+	  return 	  
+	}
+	
+	if(min(sexfactors) <= 0){
+      stop("Error: Trying to set a non-existent marker as a sexfactor.")
+	  return 	  
+	}	
 
     cofactorlist <- rep(0,n.mark)
 	for(i in 1:length(cofactors)) {
@@ -65,4 +76,3 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
 }
 
 a <- MQMCofactors(cross,c(10,20,30,40,50,60,70,80),c(186,187))
-b <- MQMCofactors(cross,c(10,20,30,40,50,60,70,80,300),c(186,187))

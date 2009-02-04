@@ -20,9 +20,6 @@
 #include "MQMdata.h"
 #include "MQMsupport.h"
 
-double neglect=1000; // eliminate unlikely genotype configurations
-int maxNaug=10000; // maximum size of augmented dataset
-int imaxNaug=1000; // maximum size of augmented data for individual i
 int em=1000; // maximum number of em iterations
 double alfa=0.02; // alfa used in selection procedure
 double windowsize=25.0; // used in mapQTL procedure
@@ -30,16 +27,6 @@ double stepsize=5; // size of steps when moving QTL along chromosomes (for outpu
 double stepmin=-20; // start moving QTL at position stepmin cM (for output)
 double stepmax=220; // move QTL up to stepmax (for output)
 long *idum; // for monte carlo simulation or permutation
-
-vector r;
-ivector chr;
-matrix Frun;
-int Nrun=0;
-int run=-1;
-char REMLorML='0';
-char fitQTL='n';
-char dominance='n';
-char perm_simu='1';
 
 double Lnormal(double residual, double variance)
 {      double Likelihood;
@@ -147,12 +134,8 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
    markername= newcmatrix(Nmark,20);
    cofactor= newcvector(Nmark);  
    mapdistance= newvector(Nmark);
-   
-   chr= newivector(Nmark);
    int cnt=0;   
    for(int i=0; i< Nmark; i++){
-      //Filling chromosome information in the MQM style
-      chr[i] = Chromo[0][i];
 	  cofactor[i] = '0';
 	  if(Cofactors[0][i] == 1){
         cofactor[i] = '1';
@@ -177,15 +160,12 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
    stepsize=Steps; // size of steps when moving QTL along chromosomes (for output)
    stepmin=Stepmi; // start moving QTL at position stepmin cM (for output)
    stepmax=Stepma; // move QTL up to stepmax (for output)
-   Nrun = NRUN;
-   REMLorML='0';
-   if(RMLorML == 1){
-		REMLorML='1';
-   }
+   
+
    em=Emiter; // maximum number of em iterations
    alfa=Alfa; // alfa used in selection procedure
    Rprintf("We got all the needed information, so lets start with the MQM\n");   
-   analyseF2(Nind, Nmark, cofactor, markers, Pheno[0], f1genotype, Backwards,QTL,&mapdistance);
+   analyseF2(Nind, Nmark, cofactor, markers, Pheno[0], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML);
    return;
 }  /* end of function scanMQM */
 

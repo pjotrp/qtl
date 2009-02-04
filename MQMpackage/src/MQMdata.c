@@ -26,7 +26,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	int **NEW;
 	double **NEWPheno;
 	int prior = *Nind;
-	
+	Rprintf("Starting augmentation of data\n");
 	ivector new_ind;
     vector new_y,r,mapdistance;
 	cvector position;

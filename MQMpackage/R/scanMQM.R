@@ -26,15 +26,14 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 					step.min=-20.0,step.max=220.0,n.run=0){
     library(qtl)
 	if(is.null(cross)){
-		print(paste("Error: No cross file. Please supply a valid cross object."))
-		return 
+		stop("Error: No cross file. Please supply a valid cross object.") 
 	}
 	if(class(cross)[1] == "f2"){
-		print(paste("INFO: Received an F2 cross."))
+		cat("INFO: Received an F2 cross.\n")
 		n.ind <- nind(cross)
 		n.chr <- nchr(cross)
-		print(paste("INFO: Number of individuals:",n.ind))
-		print(paste("INFO: Number of chr:",n.chr))
+		cat("INFO: Number of individuals: ",n.ind,"\n")
+		cat("INFO: Number of chr: ",n.chr,"\n")
 		geno <- NULL
 		chr <- NULL
 		dist <- NULL
@@ -45,18 +44,19 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 			dist <- c(dist,cross$geno[[i]]$map)
 		}
 		if(alfa <=0 || alfa >= 1){
-			print(paste("Error: Alfa must be between 0 and 1."))
-			return	
+			stop("Error: Alfa must be between 0 and 1.")
+		}
+		if(n.run <0 || n.run >= 10000){
+			stop("Error: # of runs should be positive and < 10000.")
 		}
 		pheno <- cross$pheno
 		n.mark <- ncol(geno)
-		print(paste("INFO: Number of markers:",n.mark))
+		cat("INFO: Number of markers:",n.mark,"\n")
 		for(i in 1:n.ind) {
 			for(j in 1:n.mark) {
 				if(is.na(geno[i,j])){
-					print("ERROR: Missing genotype information, please estimate unknown data, before running scanMQM\n")
-					return
-					geno[i,j] <- 9;
+					stop("ERROR: Missing genotype information, please estimate unknown data, before running scanMQM.\n")
+					geno[i,j] <- 9
 				}
 			}
 		}
@@ -64,7 +64,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 		dropped <- NULL
 		for(i in 1:dim(pheno)[1]) {
 			if(is.na(pheno[i,1])){
-			  print(paste("INFO: Dropped individual ",i," with missing genotype\n",sep=""))
+			  cat("INFO: Dropped individual ",i," with missing genotype.\n")
 			  dropped <- c(dropped,i) 
 			  n.ind = n.ind-1
 			}
@@ -77,24 +77,26 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 		#check if we have cofactors, so we can do backward elimination
 		backward <- 0;
 		if(is.null(cofactors)){
-			print(paste("INFO: No cofactors, setting cofactors to 0"))
+			cat("INFO: No cofactors, setting cofactors to 0\n")
 			cofactors = rep(0,n.mark)
 		}else{
 			if(length(cofactors) != n.mark){
-				print("Error: # Cofactors != # Markers")		
+				cat("Error: # Cofactors != # Markers\n")		
 			}else{
-				print(paste("INFO:#",length(cofactors),"Cofactors received"))
+				print(paste("INFO:#",length(cofactors),"Cofactors received"),quote = FALSE)
 				if(sum(cofactors) > 0){
-					print(paste("INFO: Doing backward elimination of selected cofactors."))
+					cat("INFO: Doing backward elimination of selected cofactors.\n")
+					cat("INFO: Not doing permutation of data.\n")
 					backward <- 1;
+					n.run <- 0;
 				}else{
 					backward <- 0;
-					print(paste("Error: Are u trying to give an empty cofactor list ???"))
+					stop("Error: Are u trying to give an empty cofactor list ???")
 				}
 			}
 		}
 		qtlAchromo <- length(seq(step.min,step.max,step.size))
-		print(paste("Number of locations per chromosome:",out.qtl))
+		cat("Number of locations per chromosome: ",qtlAchromo, "\n")
 		result <- .C("R_scanMQM",
 				as.integer(n.ind),
                 as.integer(n.mark),
@@ -132,8 +134,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 		qtl
 	
 	}else{
-		print(paste("Error: Currently only f2 crosses can be analyzed by MQM."))
-		return 
+		stop("Error: Currently only f2 crosses can be analyzed by MQM.")
 	}			
 }
 
