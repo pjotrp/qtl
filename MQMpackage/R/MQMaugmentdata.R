@@ -23,7 +23,7 @@ qtl <- c(3,15,3,7)							# QTL at chromosome 3
 data(map10)									# Mouse genome
 cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
 
-MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=100,neglect=10){
+MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=1000,neglect=1000){
     library(qtl)
 	if(is.null(cross)){
 		print(paste("Error: No cross file. Please supply a valid cross object."))
@@ -54,6 +54,20 @@ MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=100,neglect=10){
 					geno[i,j] <- 9;
 				}
 			}
+		}
+		#check for missing phenotypes
+		dropped <- NULL
+		for(i in 1:dim(pheno)[1]) {
+			if(is.na(pheno[i,1])){
+			  print(paste("Dropped individual ",i," with missing genotype\n",sep=""))
+			  dropped <- c(dropped,i) 
+			  n.ind = n.ind-1
+			}
+		}
+		#throw em out
+		if(!is.null(dropped)){
+			geno <- geno[-dropped,]  
+			pheno <- pheno[-dropped,]
 		}
 
 		result <- .C("R_augdata",
@@ -111,4 +125,4 @@ MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=100,neglect=10){
 
 # end of MQMaugment.R
 
-res <- MQMaugment(cross)
+res <- MQMaugment(cross,maxaug=500,maxiaug=10,neglect=10)

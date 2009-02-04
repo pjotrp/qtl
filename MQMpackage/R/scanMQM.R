@@ -54,10 +54,27 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 		for(i in 1:n.ind) {
 			for(j in 1:n.mark) {
 				if(is.na(geno[i,j])){
+					print("ERROR: Missing genotype information, please estimate unknown data, before running scanMQM\n")
+					return
 					geno[i,j] <- 9;
 				}
 			}
 		}
+		#check for missing phenotypes
+		dropped <- NULL
+		for(i in 1:dim(pheno)[1]) {
+			if(is.na(pheno[i,1])){
+			  print(paste("INFO: Dropped individual ",i," with missing genotype\n",sep=""))
+			  dropped <- c(dropped,i) 
+			  n.ind = n.ind-1
+			}
+		}
+		#throw em out
+		if(!is.null(dropped)){
+			geno <- geno[-dropped,]  
+			pheno <- pheno[-dropped,]
+		}
+		#check if we have cofactors, so we can do backward elimination
 		backward <- 0;
 		if(is.null(cofactors)){
 			print(paste("INFO: No cofactors, setting cofactors to 0"))

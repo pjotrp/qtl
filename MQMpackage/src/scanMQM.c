@@ -20,7 +20,7 @@
 #include "MQMdata.h"
 #include "MQMsupport.h"
 
-double neglect=100; // eliminate unlikely genotype configurations
+double neglect=1000; // eliminate unlikely genotype configurations
 int maxNaug=10000; // maximum size of augmented dataset
 int imaxNaug=1000; // maximum size of augmented data for individual i
 int em=1000; // maximum number of em iterations

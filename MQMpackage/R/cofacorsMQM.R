@@ -1,19 +1,19 @@
 #####################################################################
 #
-# makeCofList.R
+# MQMCofactors.R
 #
 # copyright (c) 2009, Danny Arends
 # last modified Fep, 2009
 # first written Feb, 2009
 # 
 # Part of the R/qtl package
-# Contains: makeCofList
+# Contains: MQMCofactors
 #
 ######################################################################
 
 ######################################################################
 #
-# makeCofList: Prepares a cofactor list to use with scanMQM
+# MQMCofactors: Prepares a cofactor list to use with scanMQM
 #
 ######################################################################
 
@@ -22,7 +22,7 @@ library(qtl)
 dyn.load("scanMQM.dll")
 cross <- read.cross("csv","","Test.csv")
 
-makeCofList <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
+MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
 	if(is.null(cross)){
       print(paste("Error: No cross file. Please supply a valid cross object."))
 	  return 
@@ -64,5 +64,5 @@ makeCofList <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
     cofactorlist
 }
 
-a <- makeCofList(cross,c(10,20,30,40,50,60,70,80),c(186,187))
-b <- makeCofList(cross,c(10,20,30,40,50,60,70,80,300),c(186,187))
+a <- MQMCofactors(cross,c(10,20,30,40,50,60,70,80),c(186,187))
+b <- MQMCofactors(cross,c(10,20,30,40,50,60,70,80,300),c(186,187))
