@@ -6,26 +6,26 @@
   
 }
 \usage{
-MQMaugment(cross = NULL, maxaug = 10000, maxiaug = 100, neglect = 10)
+MQMaugment(cross = NULL, maxaug = 10000, maxiaug = 1000, neglect = 1000)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{cross}{ Cross object from R/QTL }
-  \item{maxaug}{ Maximum size after augmentation }
+  \item{maxaug}{ Maximum number of (total) individuals after augmentation }
   \item{maxiaug}{ Maximum augmentations per individual }
-  \item{neglect}{ Possible genotypes to considered have a higher prob then 1:Neglect }
+  \item{neglect}{ Genotypes considered have a higher probability of occuring then one in neglect }
 }
 \details{
-  ~~ If necessary, more details than the description above ~~
+Special care has 2 be taken when setting unrealistic values.
+When the algorithm ends with an "DATASET TOO LARGE after augmentation", the crossfile could be corrupted.
 }
 \value{
-  Cross object from R/QTL
+Cross object from R/QTL
 }
 \references{ ~put references to the literature/web site here ~ }
 \author{ Danny Arends }
-\note{ ~~further notes~~ 
-
- ~Make other sections like Warning with \section{Warning }{....} ~
+\note{
+If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }
 \seealso{ ~~objects to See Also as \code{\link{help}}, ~~~ }
 \examples{
