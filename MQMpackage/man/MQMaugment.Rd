@@ -30,12 +30,12 @@ If u find anything wrong with the algorithm please notify me at: Danny.Arends@gm
 \seealso{ ~~objects to See Also as \code{\link{help}}, ~~~ }
 \examples{
 	library(MQMpackage)
-	qtl <- c(3,15,3,7)												# QTL at chromosome 3
-	data(map10)														# Mouse genome
+	qtl <- c(3,15,3,7)							# QTL at chromosome 3
+	data(map10)								# Mouse genome
 	cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
-	cross_good <- MQMaugment(cross)									# Augmentation of the data
-	result <- scanMQM(cross_good)									# Do a MQM scan of the genome
-	plot(result)													# Plot the results of the genome scan
+	cross_good <- MQMaugment(cross)						# Augmentation of the data
+	result <- scanMQM(cross_good)						# Do a MQM scan of the genome
+	plot(result)								# Plot the results of the genome scan
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
