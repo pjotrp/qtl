@@ -52,7 +52,7 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
 	  return 	  
 	}
 	
-
+	if(!is.null(sexfactors)){
 	if(max(sexfactors) > n.mark){
       stop("Error: Trying to set a non-existent marker as a sexfactor.")
 	  return 	  
@@ -61,6 +61,7 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
 	if(min(sexfactors) <= 0){
       stop("Error: Trying to set a non-existent marker as a sexfactor.")
 	  return 	  
+	}
 	}	
 
     cofactorlist <- rep(0,n.mark)

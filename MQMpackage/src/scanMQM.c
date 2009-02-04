@@ -20,13 +20,7 @@
 #include "MQMdata.h"
 #include "MQMsupport.h"
 
-int em=1000; // maximum number of em iterations
-double alfa=0.02; // alfa used in selection procedure
-double windowsize=25.0; // used in mapQTL procedure
-double stepsize=5; // size of steps when moving QTL along chromosomes (for output)
-double stepmin=-20; // start moving QTL at position stepmin cM (for output)
-double stepmax=220; // move QTL up to stepmax (for output)
-long *idum; // for monte carlo simulation or permutation
+//long *idum; // for monte carlo simulation or permutation
 
 double Lnormal(double residual, double variance)
 {      double Likelihood;
@@ -126,8 +120,8 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
     // Rprintf("\n");
    }   
 
-   idum = (long *)Calloc(1, long*);
-   idum[0]=-1;
+ //  idum = (long *)Calloc(1, long*);
+ //  idum[0]=-1;
    cvector cofactor;
    cmatrix markername;
    
@@ -155,17 +149,9 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	//  Rprintf("Mapdist %d: %f <-> %f\n",i,mapdistance[i],Dist[0][i]);
    }
 
-   //SETTING UP GLOBAL VARIABLES
-   windowsize=Windowsize; // used in mapQTL procedure
-   stepsize=Steps; // size of steps when moving QTL along chromosomes (for output)
-   stepmin=Stepmi; // start moving QTL at position stepmin cM (for output)
-   stepmax=Stepma; // move QTL up to stepmax (for output)
-   
 
-   em=Emiter; // maximum number of em iterations
-   alfa=Alfa; // alfa used in selection procedure
    Rprintf("We got all the needed information, so lets start with the MQM\n");   
-   analyseF2(Nind, Nmark, cofactor, markers, Pheno[0], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML);
+   analyseF2(Nind, Nmark, cofactor, markers, Pheno[0], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter);
    return;
 }  /* end of function scanMQM */
 
