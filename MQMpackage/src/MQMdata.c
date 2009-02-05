@@ -19,13 +19,14 @@
 #include "MQMsupport.h"
 
 
-void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,double *neglect,int *chromo){
+void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *augIND,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,double *neglect,int *chromo){
 	int **Geno;
 	double **Pheno;
 	double **Dist;
 	int **NEW;
 	int **Chromo;
 	double **NEWPheno;
+	int **NEWIND;
 	int prior = *Nind;
 	Rprintf("Starting augmentation of data\n");
 	ivector new_ind;
@@ -48,6 +49,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	reorg_pheno(*Nmark,1,dist,&Dist);
    
     reorg_int(*maxaug,*Nmark,auggeno,&NEW);	   
+	reorg_int((*maxiaug)*(*Nind),1,augIND,&NEWIND);	 
 	reorg_pheno(*maxaug,1,augPheno,&NEWPheno);	 
 	
 	for(int i=0; i< *Nmark; i++){
@@ -113,6 +115,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		for (int i=0; i<(*Nmark); i++){   
 			for (int j=0; j<(*Naug); j++){
 				NEWPheno[0][j] = new_y[j];
+				NEWIND[0][j] = new_ind[j];
 				NEW[i][j] = 9;
 				if(new_markers[i][j] == '0'){
 					NEW[i][j] = 1;

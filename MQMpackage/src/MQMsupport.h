@@ -15,7 +15,7 @@
 
 void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, 
 			   double **QTL,vector *mapdistance,int **Chromo,int Nrun,int RMLorML, double windowsize,double stepsize,
-			   double stepmin,double stepmax,double alfa,int em);
+			   double stepmin,double stepmax,double alfa,int em,int out_Naug,int **INDlist);
 			   
 double probleft(char c, int jloc, cvector imarker, vector r, cvector position);
 double probright(char c, int jloc, cvector imarker, vector r, cvector position);

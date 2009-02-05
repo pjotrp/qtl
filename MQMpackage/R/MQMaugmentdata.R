@@ -23,7 +23,7 @@ qtl <- c(3,15,3,7)							# QTL at chromosome 3
 data(map10)									# Mouse genome
 cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
 
-MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=10,neglect=1000){
+MQMaugment <- function(cross= NULL,maxaug=1000,maxiaug=10,neglect=10){
     library(qtl)
 	if(is.null(cross)){
 		stop("Error: No cross file. Please supply a valid cross object.")
@@ -59,7 +59,7 @@ MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=10,neglect=1000){
 		dropped <- NULL
 		for(i in 1:dim(pheno)[1]) {
 			if(is.na(pheno[i,1])){
-			  cat("Dropped individual ",i ," with missing genotype\n")
+			  cat("Dropped individual ",i ," with missing phenotype.\n")
 			  dropped <- c(dropped,i) 
 			  n.ind = n.ind-1
 			}
@@ -76,6 +76,7 @@ MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=10,neglect=1000){
 				as.double(pheno[,1]),
 				augGeno=as.integer(rep(0,n.mark*maxaug)),
 				augPheno=as.double(rep(0,maxaug)),
+				augIND=as.integer(rep(0,maxiaug*n.ind)),
 				as.integer(n.ind),
 				as.integer(n.aug),
                 as.integer(n.mark),
@@ -85,8 +86,8 @@ MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=10,neglect=1000){
 				as.double(neglect),
 				as.integer(chr)				
 			    )
-		n.aug = result[[7]]
-		#print(paste("INFO: Number of individuals:",n.aug))		
+		n.ind = result[[7]]
+		n.aug = result[[8]]	
 		markONchr <- 0
 		markdone <- 0
 		for(c in 1:n.chr){
@@ -114,7 +115,9 @@ MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=10,neglect=1000){
 			cross$geno[[c]]$data <- matri
 			colnames(pheno) = "phenotype"
 			cross$pheno <- as.data.frame(pheno)
-
+			cross$extra$Nind <- n.ind
+			cross$extra$Naug <- n.aug
+			cross$extra$augIND <- result[[6]][1:n.aug]
 			markdone <- (markdone+markONchr)  
 		}
 		cross
@@ -126,6 +129,5 @@ MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=10,neglect=1000){
 
 # end of MQMaugment.R
 
-res <- MQMaugment(cross,maxaug=500,maxiaug=10,neglect=10)
-data(listeria)
-res2 <- MQMaugment(listeria,maxaug=500,maxiaug=10,neglect=10)
+	
+cross_good <- MQMaugment(cross)

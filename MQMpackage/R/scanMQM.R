@@ -74,6 +74,16 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 			geno <- geno[-dropped,]  
 			pheno <- pheno[-dropped,]
 		}
+		if(!is.null(cross$extra)){
+			cat("INFO: previously augmented dataset.\n")			
+			cat("INFO: Individuals before augmentation",cross$extra$Nind,".\n")
+			extra1 <- cross$extra$Nind
+			cat("INFO: Individuals after augmentation",cross$extra$augIND,".\n")
+			extra2 <- cross$extra$augIND
+		}else{
+			extra1 <- n.ind
+			extra2 <- 1:n.ind
+		}
 		#check if we have cofactors, so we can do backward elimination
 		backward <- 0;
 		if(is.null(cofactors)){
@@ -115,6 +125,8 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 				as.double(step.min),
 				as.double(step.max),
 				as.integer(n.run),
+				as.integer(extra1),
+				as.integer(extra2),
 				QTL=as.double(rep(0,n.chr*qtlAchromo))
 			    )
 		# initialize output object

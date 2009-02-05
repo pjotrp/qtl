@@ -30,7 +30,7 @@
  */
 void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, 
 			   double **QTL,vector *mapdistance,int **Chromo,int Nrun,int RMLorML, double windowsize,double stepsize,
-			   double stepmin,double stepmax,double alfa,int em)
+			   double stepmin,double stepmax,double alfa,int em,int out_Naug,int **INDlist)
 {    
     int Naug;
 	int run=0;
@@ -166,15 +166,15 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 	
 	//Fix for not doing dataaugmentation, we just copy the current as the augmented and set Naug to Nind
 	Naug=Nind;
+	Nind=out_Naug;
 	newind= newivector(Naug);
 	newy= newvector(Naug);
 	newmarker= newcmatrix(Nmark,Naug);
      for (int i=0; i<Naug; i++)
      {   newy[i]= y[i];
-         newind[i]= i;
+         newind[i]= INDlist[0][i];
          for (int j=0; j<Nmark; j++) newmarker[j][i]= marker[j][i];
      }
-	
 //	 if(augdata(marker,y,&newmarker,&newy,&newind,&Nind,&Naug,Nmark,position,r,maxNaug,imaxNaug,neglect)==1){
 //		Rprintf("Data augmentation finished succesfull\n");
 //		Rprintf("# Unique individuals before augmentation:%d\n",prior);
