@@ -19,11 +19,12 @@
 #include "MQMsupport.h"
 
 
-void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,double *neglect){
+void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,double *neglect,int *chromo){
 	int **Geno;
 	double **Pheno;
 	double **Dist;
 	int **NEW;
+	int **Chromo;
 	double **NEWPheno;
 	int prior = *Nind;
 	Rprintf("Starting augmentation of data\n");
@@ -31,13 +32,18 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
     vector new_y,r,mapdistance;
 	cvector position;
     cmatrix markers,new_markers;
+	ivector chr;
+	
 	markers= newcmatrix(*Nmark,*Nind);
 	new_markers= newcmatrix(*Nmark,*maxaug);
 	r = newvector(*Nmark);
 	mapdistance = newvector(*Nmark);
 	position= newcvector(*Nmark);
+	chr= newivector(*Nmark);
+	
 	//Reorganise the pointers into arrays, Singletons are just cast into the function
 	reorg_geno(*Nind,*Nmark,geno,&Geno);
+	reorg_int(*Nmark,1,chromo,&Chromo); 
 	reorg_pheno(*Nind,*Npheno,pheno,&Pheno);
 	reorg_pheno(*Nmark,1,dist,&Dist);
    
@@ -66,18 +72,22 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		mapdistance[i]=999.0;
 	    mapdistance[i]=Dist[0][i];
 	}
+	Rprintf("Filling the chromosome matrix\n");
+	for(int i=0; i<(*Nmark); i++){
+		chr[i] = Chromo[0][i];
+	}
 
     Rprintf("Calculating relative genomepositions of the markers\n");
     for (int j=0; j<(*Nmark); j++)
     {   
         if (j==0)
-        { if (markers[j]==markers[j+1]) position[j]='L'; else position[j]='U'; }
+        { if (chr[j]==chr[j+1]) position[j]='L'; else position[j]='U'; }
         else if (j==(*Nmark-1))
-        { if (markers[j]==markers[j-1]) position[j]='R'; else position[j]='U'; }
-        else if (markers[j]==markers[j-1])
-        { if (markers[j]==markers[j+1]) position[j]='M'; else position[j]='R'; }
+        { if (chr[j]==chr[j-1]) position[j]='R'; else position[j]='U'; }
+        else if (chr[j]==chr[j-1])
+        { if (chr[j]==chr[j+1]) position[j]='M'; else position[j]='R'; }
         else
-        { if (markers[j]==markers[j+1]) position[j]='L'; else position[j]='U'; }
+        { if (chr[j]==chr[j+1]) position[j]='L'; else position[j]='U'; }
     }
 
     Rprintf("Estimating recombinant frequencies\n");	
@@ -91,6 +101,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 				return;
 			}
 		}
+		//Rprintf("recomfreq:%d,%f\n",j,r[j]);
     }
 
 	if(augdata(markers, Pheno[0], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r,*maxaug,*maxiaug,*neglect)==1){
