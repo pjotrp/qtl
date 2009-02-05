@@ -82,7 +82,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 			extra2 <- cross$extra$augIND
 		}else{
 			extra1 <- n.ind
-			extra2 <- 1:n.ind
+			extra2 <- 0:n.ind
 		}
 		#check if we have cofactors, so we can do backward elimination
 		backward <- 0;
