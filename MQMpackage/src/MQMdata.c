@@ -19,7 +19,7 @@
 #include "MQMsupport.h"
 
 
-void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,int *neglect){
+void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,double *neglect){
 	int **Geno;
 	double **Pheno;
 	double **Dist;
@@ -36,8 +36,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	r = newvector(*Nmark);
 	mapdistance = newvector(*Nmark);
 	position= newcvector(*Nmark);
-	
-	//Reorganise the pointers into arrays, ginletons are just cast into the function
+	//Reorganise the pointers into arrays, Singletons are just cast into the function
 	reorg_geno(*Nind,*Nmark,geno,&Geno);
 	reorg_pheno(*Nind,*Npheno,pheno,&Pheno);
 	reorg_pheno(*Nmark,1,dist,&Dist);
@@ -48,14 +47,20 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	for(int i=0; i< *Nmark; i++){
 		for(int j=0; j< *Nind; j++){ 
 			markers[i][j] = '9';
-			if(Geno[i][j] == 1){
+			if(Geno[i][j] == 1){				//AA
 				markers[i][j] = '0';
 			}
-			if(Geno[i][j] == 2){
+			if(Geno[i][j] == 2){				//AB
+				markers[i][j] = '1';
+			}
+			if(Geno[i][j] == 3){				//BB
 				markers[i][j] = '2';
 			}
-			if(Geno[i][j] == 3){
-				markers[i][j] = '1';
+			if(Geno[i][j] == 4){				//AA of AB
+				markers[i][j] = '4';
+			}
+			if(Geno[i][j] == 5){				//BB of AB
+				markers[i][j] = '3';
 			}
 		}
 		mapdistance[i]=999.0;
@@ -74,11 +79,17 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
         else
         { if (markers[j]==markers[j+1]) position[j]='L'; else position[j]='U'; }
     }
+
     Rprintf("Estimating recombinant frequencies\n");	
 	for (int j=0; j<*Nmark; j++){   
 		r[j]= 999.0;
 		if ((position[j]=='L')||(position[j]=='M')){
 			r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
+			if (r[j]<0){
+				Rprintf("error: recombination frequency is negative\n");
+				Rprintf("position=%d r[j]=%d\n",position[j], r[j]);
+				return;
+			}
 		}
     }
 
@@ -91,22 +102,53 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		for (int i=0; i<(*Nmark); i++){   
 			for (int j=0; j<(*Naug); j++){
 				NEWPheno[0][j] = new_y[j];
+				NEW[i][j] = 9;
 				if(new_markers[i][j] == '0'){
 					NEW[i][j] = 1;
 				}
 				if(new_markers[i][j] == '1'){
-					NEW[i][j] = 3;
-				}
-				if(new_markers[i][j] == '2'){
 					NEW[i][j] = 2;
 				}
+				if(new_markers[i][j] == '2'){
+					NEW[i][j] = 3;
+				}
+				if(new_markers[i][j] == '3'){
+					NEW[i][j] = 5;
+				}
+				if(new_markers[i][j] == '4'){
+					NEW[i][j] = 4;
+				}				
 			}
 		}
+	}else{
+		Rprintf("Data augmentation failed\n");
+		*Naug = *Nind;
+		for (int i=0; i<(*Nmark); i++){   
+			for (int j=0; j<(*Naug); j++){
+				NEWPheno[0][j] = Pheno[0][j];
+				NEW[i][j] = 9;
+				if(markers[i][j] == '0'){
+					NEW[i][j] = 1;
+				}
+				if(markers[i][j] == '1'){
+					NEW[i][j] = 2;
+				}
+				if(markers[i][j] == '2'){
+					NEW[i][j] = 3;
+				}
+				if(markers[i][j] == '3'){
+					NEW[i][j] = 5;
+				}
+				if(markers[i][j] == '4'){
+					NEW[i][j] = 4;
+				}					
+			}
+		}	
 	}
     return;
 }
 
-int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector* augind, int *Nind, int *Naug, int Nmark, cvector position, vector r,int maxNaug,int imaxNaug,int neglect){
+int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector* augind, int *Nind, int *Naug, int Nmark, cvector position, vector r,int maxNaug,int imaxNaug,double neglect){
 
 	int jj;
     int newNind=(*Nind);
@@ -131,6 +173,8 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
     vector newprob, newprobmax;
     newprob= newvector(*Naug);
     newprobmax= newvector(*Naug);
+	
+	Rprintf("Parameters: MAXaug=%d,MAXindaug=%d,Neglect=%f\n",maxNaug, imaxNaug, neglect);
     // ---- foreach individual create one in the newmarker matrix
     for (int i=0; i<(*Nind); i++)
     {   newind[iaug]=i-((*Nind)-newNind);  // index of individuals

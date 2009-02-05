@@ -27,10 +27,10 @@ prepareMQM <- function(cross, name,cofactors=NULL,dominance='n',RemLorML=0){
         f2mar[i,j] <- 'A'
     }
     if(as.character(f2mar[i,j]) == '2'){
-        f2mar[i,j] <- 'B'
+        f2mar[i,j] <- 'H'
     }
     if(as.character(f2mar[i,j]) == '3'){
-        f2mar[i,j] <- 'H'
+        f2mar[i,j] <- 'B'
     }
     if(as.character(f2mar[i,j]) == '4'){
         f2mar[i,j] <- 'C'

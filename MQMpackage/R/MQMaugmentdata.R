@@ -82,7 +82,7 @@ MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=1000,neglect=1000){
 				as.integer(1),    # 1 phenotype
 				as.integer(maxaug),
 				as.integer(maxiaug),
-				as.integer(neglect)
+				as.double(neglect)
 			    )
 		n.aug = result[[7]]
 		#print(paste("INFO: Number of individuals:",n.aug))		
@@ -126,3 +126,5 @@ MQMaugment <- function(cross= NULL,maxaug=10000,maxiaug=1000,neglect=1000){
 # end of MQMaugment.R
 
 res <- MQMaugment(cross,maxaug=500,maxiaug=10,neglect=10)
+data(listeria)
+res2 <- MQMaugment(listeria,maxaug=500,maxiaug=10,neglect=10)

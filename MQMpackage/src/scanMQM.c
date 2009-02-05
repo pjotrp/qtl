@@ -82,77 +82,66 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 			 double **Dist, double **Pheno, int **Cofactors, int Backwards, int RMLorML,double Alfa,int Emiter,
 			 double Windowsize,double Steps,
 			 double Stepmi,double Stepma,int NRUN, double **QTL){
-   ivector f1genotype;
-   f1genotype = newivector(Nmark);
-   cmatrix markers;
-   vector mapdistance;
-   markers= newcmatrix(Nmark,Nind);
-   //Rprintf("Printing Genotype matrix\n");
-   for(int i=0; i< Nmark; i++){
-     f1genotype[i] = 12;
-     for(int j=0; j< Nind; j++){ 
-	    markers[i][j] = '9';
-	    if(Geno[i][j] == 1){
-		 markers[i][j] = '0';
-		}
-	    if(Geno[i][j] == 2){
-		 markers[i][j] = '2';
-		}
-	    if(Geno[i][j] == 3){
-		 markers[i][j] = '1';
-		}
-		
-	//	Rprintf("%d ",markers[i][j]);
-     }
-   //  Rprintf("\n");
-   }
-
-   //Rprintf("Printing Chromosome matrix\n");
-   for(int i=0; i< Nmark; i++){
-     // Rprintf("%d\n",Chromo[0][i]);         
-   }
-
-   //Rprintf("Printing Phenotype matrix\n");
-   for(int i=0; i< Npheno; i++){
-     for(int j=0; j< Nind; j++){
-      // Rprintf("%f\n",Pheno[i][j]);         
-     }
-    // Rprintf("\n");
-   }   
-
- //  idum = (long *)Calloc(1, long*);
- //  idum[0]=-1;
-   cvector cofactor;
-   cmatrix markername;
+	
+	ivector f1genotype;
+	cmatrix markers;
+	cvector cofactor;
+	vector mapdistance;
+	
+	markers= newcmatrix(Nmark,Nind);
+	f1genotype = newivector(Nmark);
+	cofactor= newcvector(Nmark);  
+	mapdistance= newvector(Nmark);
+	
+	int cnt=0;  	
    
-   markername= newcmatrix(Nmark,20);
-   cofactor= newcvector(Nmark);  
-   mapdistance= newvector(Nmark);
-   int cnt=0;   
-   for(int i=0; i< Nmark; i++){
-	  cofactor[i] = '0';
-	  if(Cofactors[0][i] == 1){
-        cofactor[i] = '1';
-		cnt++;
-	  }
-	  if(Cofactors[0][i] == 2){
-	    cofactor[i] = '2';
-		cnt++;
-	  }
-	  if(cnt > (Nmark/2)){
-	    Rprintf("ERROR: More than half of the markers are to be cofactors, this is not allowed\n");
-		return;
-	  }
-	//  Rprintf("Cofactor %d : %c\n",i,cofactor[i]);
-      mapdistance[i]=999.0;
-	  mapdistance[i]=Dist[0][i];
-	//  Rprintf("Mapdist %d: %f <-> %f\n",i,mapdistance[i],Dist[0][i]);
-   }
+	//Rprintf("Converting Genotype matrix\n");
+	for(int i=0; i< Nmark; i++){
+		f1genotype[i] = 12;
+		//receiving mapdistances
+		mapdistance[i]=999.0;
+		mapdistance[i]=Dist[0][i];
+	 	cofactor[i] = '0';
+		if(Cofactors[0][i] == 1){
+			cofactor[i] = '1';
+			cnt++;
+		}
+		if(Cofactors[0][i] == 2){
+			cofactor[i] = '2';
+			cnt++;
+		}
+		if(cnt > (Nmark/2)){
+			Rprintf("ERROR: More than half of the markers are to be cofactors, this is not allowed\n");
+			return;
+		}
+		for(int j=0; j< Nind; j++){ 
+			markers[i][j] = '9';
+			if(Geno[i][j] == 1){				//AA
+				markers[i][j] = '0';
+			}
+			if(Geno[i][j] == 2){				//AB
+				markers[i][j] = '1';
+			}
+			if(Geno[i][j] == 3){				//BB
+				markers[i][j] = '2';
+			}
+			if(Geno[i][j] == 4){				//AA of AB
+				markers[i][j] = '4';
+			}
+			if(Geno[i][j] == 5){				//BB of AB
+				markers[i][j] = '3';
+			}
+		}
+	}
 
-
-   Rprintf("We got all the needed information, so lets start with the MQM\n");   
-   analyseF2(Nind, Nmark, cofactor, markers, Pheno[0], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter);
-   return;
+	Rprintf("We got all the needed information, so lets start with the MQM\n");   
+	analyseF2(Nind, Nmark, cofactor, markers, Pheno[0], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter);
+	//Rprintf("Starting Cleanup\n");
+	delcmatrix(markers,Nmark);
+	Free(f1genotype);
+	Free(cofactor);
+	Free(mapdistance);
+	return;
 }  /* end of function scanMQM */
 
 

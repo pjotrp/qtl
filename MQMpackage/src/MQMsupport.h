@@ -11,11 +11,6 @@
  *
  **********************************************************************/
 
- /*
- * simuF2 for every individual calculate a random cvariance (y). Next the * markers are walked and depending on type the cvariance is adjusted by +/- 1
- */
-void simuF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y);
-
 /* analyseF2 - analyse one F2 family */
 
 void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, 
@@ -40,12 +35,6 @@ void rmixture(cmatrix marker, vector weight, vector r, cvector position, ivector
 double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
               vector y, ivector ind, int Nind, int Naug, int Nloci, double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance);
 
-/* regression of trait on multiple cofactors
-   y=xb+e with weight w   (xtwx)b=(xtw)y   b=inv(xtwx)(xtw)y */
-
-double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector* weight, ivector ind, int Naug, double *variance, vector Fy, char biasadj,char fitQTL,char dominance);
-
-
 /* backward elimination in regression of trait on multiple cofactors
    routine subX haalt uit matrices voor volledige model de submatrices voor submodellen;
    matrices XtWX en Xt van volledig model worden genoemd fullxtwx en fullxt;
@@ -58,23 +47,5 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
 double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatrix marker, cvector position, vector mapdistance, vector y, 
 			  vector r, ivector ind, int Naug, double variance, char printoutput,vector *informationcontent,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance,int em, double windowsize,double stepsize,
 			  double stepmin,double stepmax);
-
-
-/*
------------------------------------------------------------------------
-subroutines from book 'Numerical Recipees in C' for calculating F-probabilities and 
-for generating randomly permuted trait data for other tasks
------------------------------------------------------------------------*/
-
-void ludcmp(matrix m, int dim, ivector ndx, int *d);
-void lusolve(matrix lu, int dim, ivector ndx, vector b);
-double gammln(double xx);
-double betai(double a, double b, double x);
-double betacf(double a, double b, double x);
-double inverseF(int df1, int df2, double alfa);
-double ran2(long *idum);
-double randomnormal(long *idum);
-void sort1(int n, vector ra);
-void sort2(int n, double *ra, ivector rb);
 
 /* end of MQMsupport.h */
