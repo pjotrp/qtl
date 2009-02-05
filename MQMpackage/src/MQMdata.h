@@ -27,7 +27,7 @@ Data augmentation routing
 
 void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,double *neglect);
 
-int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector* augind, int *Nind, int* Naug, int Nmark, cvector position, vector r,int maxNaug,int imaxNaug,double neglect);
+int augdata(cmatrix marker, vector y, cmatrix *augmarker, vector *augy, ivector* augind, int *Nind, int *Naug, int Nmark, cvector position, vector r,int maxNaug,int imaxNaug,double neglect);
 
 /*------------------------------------------------------------------------
 Basic routines for matrix and vector calculus

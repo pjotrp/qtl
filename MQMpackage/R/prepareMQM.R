@@ -17,6 +17,7 @@ prepareMQM <- function(cross, name,cofactors=NULL,dominance='n',RemLorML=0){
 
  f1mar <- NULL
  f2mar <- t(pull.geno(cross))
+ n.ind <- nind(cross)
  for(i in 1:dim(f2mar)[1]) {
    f1mar <- rbind(f1mar,12)
    for(j in 1:dim(f2mar)[2]) {
@@ -41,19 +42,38 @@ prepareMQM <- function(cross, name,cofactors=NULL,dominance='n',RemLorML=0){
 	}
  }
  rownames(f1mar) = rownames(f2mar)
+ pheno <- cross$pheno
+ #check for missing phenotypes
+ dropped <- NULL
+ for(i in 1:dim(pheno)[1]) {
+		if(is.na(pheno[i,1])){
+			cat("INFO: Dropped individual ",i," with missing phenotype.\n")
+			dropped <- c(dropped,i) 
+			n.ind = n.ind-1
+		}
+	}
+ #throw em out
+    if(!is.null(dropped)){
+			f2mar<- f2mar[,-dropped]  
+			pheno <- pheno[-dropped,]
+		}
  filename <- paste(name,"_F2.MAR.TXT", sep="")
  write.table(f2mar, file = filename, col.names=FALSE, quote=FALSE)
 
  filename <- paste(name,"_F2.QUA.TXT",sep="")
- f2qua <- pull.pheno(cross)
- write.table(t(f2qua), file = filename, row.names=FALSE,col.names=FALSE, quote=FALSE)
+ write.table(t(pheno), file = filename, row.names=FALSE,col.names=FALSE, quote=FALSE)
  MQM_in <- printMQMin(cross,name,cofactors,dominance,RemLorML) 
 }
 
 printMQMin <- function(cross,name,cofactors=NULL,dominance='n',RemLorML=0){
 #print mqm_in.txt file needed by the MQM algorithm
-	
+	pheno <- cross$pheno	
 	n.individuals <- nind(cross)
+	for(i in 1:dim(pheno)[1]) {
+		if(is.na(pheno[i,1])){
+			n.individuals = n.individuals-1
+		}
+	}	
 	n.fam <- 1
 	n.mark <- sum(nmar(cross))
 	info <- NULL

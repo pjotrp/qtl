@@ -1,4 +1,4 @@
-Nind= 120
+Nind= 116
 Nfam= 1
 Nmark= 133
 1 D10M44 0  

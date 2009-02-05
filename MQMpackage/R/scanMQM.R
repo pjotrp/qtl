@@ -64,7 +64,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 		dropped <- NULL
 		for(i in 1:dim(pheno)[1]) {
 			if(is.na(pheno[i,1])){
-			  cat("INFO: Dropped individual ",i," with missing genotype.\n")
+			  cat("INFO: Dropped individual ",i," with missing phenotype.\n")
 			  dropped <- c(dropped,i) 
 			  n.ind = n.ind-1
 			}

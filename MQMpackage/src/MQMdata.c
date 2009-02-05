@@ -68,7 +68,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	}
 
     Rprintf("Calculating relative genomepositions of the markers\n");
-    for (int j=0; j<*Nmark; j++)
+    for (int j=0; j<(*Nmark); j++)
     {   
         if (j==0)
         { if (markers[j]==markers[j+1]) position[j]='L'; else position[j]='U'; }
@@ -81,7 +81,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
     }
 
     Rprintf("Estimating recombinant frequencies\n");	
-	for (int j=0; j<*Nmark; j++){   
+	for (int j=0; j<(*Nmark); j++){   
 		r[j]= 999.0;
 		if ((position[j]=='L')||(position[j]=='M')){
 			r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
@@ -93,7 +93,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		}
     }
 
-	if(augdata(markers, Pheno[0], &new_markers, &new_y, &new_ind, &(*Nind), &(*Naug), *Nmark, position, r,*maxaug,*maxiaug,*neglect)==1){
+	if(augdata(markers, Pheno[0], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r,*maxaug,*maxiaug,*neglect)==1){
 		Rprintf("Data augmentation finished succesfull\n");
 		Rprintf("# Unique individuals before augmentation:%d\n",prior);
 		Rprintf("# Unique selected individuals:%d\n",*Nind);
