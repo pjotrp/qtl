@@ -179,7 +179,7 @@ readMQMout <- function(cross = NULL, file = "mqm_out.txt", plot = FALSE,chr = 1)
    data <-read.table(file, quote=":")
    data <-data[-dim(data)[1],]
    if(plot){
-       plot(rownames(data),data[,1]/1.5,xlab="Markers",ylab="QTL",main="MQM", type='n')
+       plot(rownames(data),data[,1],xlab="Markers",ylab="QTL",main="MQM", type='n')
        lines(rownames(data),data[,3],col="red",cex=0.5,pch=20)
        lines(rownames(data),data[,4],col="blue",cex=0.5,pch=20)  
    }
