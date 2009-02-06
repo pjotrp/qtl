@@ -10,7 +10,9 @@ TODO list MQM package
 - -Test the port of the analyse F2 in package -DONE-
 - Push back the QTL-map to the Cross object (so we can use Carls visualizations) -DONE-
 
-- Carl's book, make some plots about the listeria dataset using his plotting methode n correct scale
+- Carl's book, make some plots about the listeria dataset using his plotting methode n correct scale -DONE-
+
+- If there are Multiple traits in the cross object do them all when the user asks for it
 - Finish testing enviroment
 - - A set of objects in csv format and in MQM input files
 - - Double test augment data section

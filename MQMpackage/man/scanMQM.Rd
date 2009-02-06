@@ -11,6 +11,7 @@ scanMQM(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 100
 \arguments{
   \item{cross}{ Cross object from R/QTL }
   \item{cofactors}{ List of cofactors with length marker (0:no cofactor, 1:cofactor, 2:sexfactor) }
+  \item{Phenot}{ Phenotype to do thepull from the cross object }    
   \item{REMLorML}{ Lets the algorithm use reduced maximum likelyhood (0) or Maximum likelyhood (1) }
   \item{alfa}{ Global p-value (0<= alfa <= 1) }
   \item{em.iter}{ Maximum number of iterations EM algorithm }
@@ -24,7 +25,8 @@ scanMQM(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 100
 Using ML or Reduced ML the algorithm employs a forward- or backward selection strategy to identify QTL hotspot.
 }
 \value{
-Returns a matrix with QTL for each location on the chromosome, which can be plotted using the plot.scanone function of R/QTL
+Returns a matrix with QTLscores for each location on the chromosome, which can be plotted using the plot.scanone function of R/QTL.
+The phenotype under consideration is specified by the Phenot argument of the function.
 }
 \references{ R.C. Janssen, K. Brohman, D. Arends }
 \author{ Danny Arends }

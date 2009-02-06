@@ -106,7 +106,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		//Rprintf("recomfreq:%d,%f\n",j,r[j]);
     }
 
-	if(augdata(markers, Pheno[0], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r,*maxaug,*maxiaug,*neglect)==1){
+	if(augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r,*maxaug,*maxiaug,*neglect)==1){
 		Rprintf("Data augmentation finished succesfull\n");
 		Rprintf("# Unique individuals before augmentation:%d\n",prior);
 		Rprintf("# Unique selected individuals:%d\n",*Nind);

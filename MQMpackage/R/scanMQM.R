@@ -21,7 +21,7 @@ library(qtl)
 dyn.load("scanMQM.dll")
 cross <- read.cross("csv","","Test.csv")
 
-scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
+scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
 					step.min=-20.0,step.max=220.0,n.run=0){
     library(qtl)
@@ -105,6 +105,13 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 				}
 			}
 		}
+		if(Phenot != 1){
+			cat("INFO: Selected phenotype ",Phenot,".\n")
+			cat("INFO: # of phenotypes in object ",nphe(cross),".\n")
+			if(nphe(cross) < Phenot){
+				stop("Error: No such phenotype")
+			}			
+		}
 		qtlAchromo <- length(seq(step.min,step.max,step.size))
 		cat("Number of locations per chromosome: ",qtlAchromo, "\n")
 		result <- .C("R_scanMQM",
@@ -114,7 +121,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,REMLorML=0,
                 as.integer(geno),
 				as.integer(chr),
 				as.double(dist),
-				as.double(pheno[,1]),
+				as.double(pheno[,Phenot]),
 				as.integer(cofactors),
 				as.integer(backward),
 				as.integer(REMLorML),

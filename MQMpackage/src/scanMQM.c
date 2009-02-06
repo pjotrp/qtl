@@ -135,7 +135,7 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	}
 
 	Rprintf("We got all the needed information, so lets start with the MQM\n");   
-	analyseF2(Nind, Nmark, cofactor, markers, Pheno[0], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist);
+	analyseF2(Nind, Nmark, cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist);
 	//Rprintf("Starting Cleanup\n");
 	delcmatrix(markers,Nmark);
 	Free(f1genotype);

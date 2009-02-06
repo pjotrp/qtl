@@ -11,6 +11,7 @@ MQMaugment(cross = NULL, maxaug = 10000, maxiaug = 1000, neglect = 1000)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{cross}{ Cross object from R/QTL }
+  \item{Phenot}{ Phenotype to pull from the cross object }  
   \item{maxaug}{ Maximum number of (total) individuals after augmentation }
   \item{maxiaug}{ Maximum augmentations per individual }
   \item{neglect}{ Genotypes considered have a higher probability of occuring then one in neglect }
@@ -20,7 +21,7 @@ Special care has 2 be taken when setting unrealistic values.
 When the algorithm ends with an "DATASET TOO LARGE after augmentation", the crossfile could be corrupted.
 }
 \value{
-Cross object from R/QTL
+Cross object with 1 phenotype (indicated by setting the Phenot parameter) suitable for scanMQM from R/QTL
 }
 \references{ ~put references to the literature/web site here ~ }
 \author{ Danny Arends }
