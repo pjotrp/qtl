@@ -6,7 +6,7 @@
 Main multiQTL scanning function for the R/qtl package (for use with F2 populations)
 }
 \usage{
-scanMQM(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 0)
+scanMQM(cross = NULL, cofactors = NULL, Phenot = 1, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 0)
 }
 \arguments{
   \item{cross}{ Cross object from R/QTL }
@@ -15,8 +15,8 @@ scanMQM(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 100
   \item{REMLorML}{ Lets the algorithm use reduced maximum likelyhood (0) or Maximum likelyhood (1) }
   \item{alfa}{ Global p-value (0<= alfa <= 1) }
   \item{em.iter}{ Maximum number of iterations EM algorithm }
-  \item{windowsize}{ Window size when mappingQTL locations }
-  \item{step.size}{ Step.size used for the generation of output QTL. }
+  \item{windowsize}{ Windowsize used when mappingQTL locations }
+  \item{step.size}{ Step.size used for the generation of output QTL }
   \item{step.min}{ Begin this many Cm before the chromosome }
   \item{step.max}{ Maximum length in Cm }
   \item{n.run}{ When setting n.run >= 1, a simple permuation of the data will occur, giving insight into the significance of the QTL }

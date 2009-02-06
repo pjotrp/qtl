@@ -108,7 +108,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		if(Phenot != 1){
 			cat("INFO: Selected phenotype ",Phenot,".\n")
 			cat("INFO: # of phenotypes in object ",nphe(cross),".\n")
-			if(nphe(cross) < Phenot){
+			if(nphe(cross) < Phenot || Phenot < 1){
 				stop("Error: No such phenotype")
 			}			
 		}
