@@ -2,17 +2,17 @@ TODO list MQM package
 - Make a V_0_C.exe which uses selected cofactors in stead of em all -DONE-
 
 - Carl's book, make some plots about the listeria dataset -DONE-
-- - We need a working dataset of carl with 2 qtls to show we have increased power in MQM
 - Use MQM with co-factors on Listeria set  -DONE-
-- - Same goes here, show that using cofactors we can increase detection power of other QTLs
-- Use better thresholds for the listeria dataset (will require recompilation of MQM) -DONE-
-- -As above
 
+- Use better thresholds for the listeria dataset (will require recompilation of MQM) -DONE-
+- Remove input textfiles between C and R -DONE-
+- -Not yet all input variables are send to C from R, we should choose defaults for all of em set them in R and send them to C -DONE-
+- -Test the port of the analyse F2 in package -DONE-
+- Push back the QTL-map to the Cross object (so we can use Carls visualizations) -DONE-
+
+- Carl's book, make some plots about the listeria dataset using his plotting methode n correct scale
+- Finish testing enviroment
+- - Same goes here, show that using cofactors we can increase detection power of other QTLs
+- - We need a working dataset of carl with 2 qtls to show we have increased power in MQM
 - Extend the testsets (more with selected co-factors)
 - -perhaps: try a family run (F1 and F2 marker data)
-
-- Remove input textfiles between C and R -DONE-
-- -Not yet all input variables are send to C from R, we should choose defaults for all of em set them in R and send them to C
-- -Test the port of the analyse F2 in package
-- Push back the QTL-map to the Cross object (so we can use Carls visualizations)
-- Finish testing enviroment
