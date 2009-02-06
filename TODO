@@ -12,7 +12,18 @@ TODO list MQM package
 
 - Carl's book, make some plots about the listeria dataset using his plotting methode n correct scale
 - Finish testing enviroment
+- - A set of objects in csv format and in MQM input files
+- - Double test augment data section
 - - Same goes here, show that using cofactors we can increase detection power of other QTLs
 - - We need a working dataset of carl with 2 qtls to show we have increased power in MQM
 - Extend the testsets (more with selected co-factors)
 - -perhaps: try a family run (F1 and F2 marker data)
+
+MID TERM
+Use stl (+boost) for all internal vectors and matrices
+Figure out a correct way of handling autosomes
+
+LONG TERM
+Include RIL analysis
+Include BC analysis
+Include 4-way cross analysis
