@@ -19,7 +19,7 @@
 #include "MQMsupport.h"
 
 
-void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *augIND,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,double *neglect,int *chromo, int *verbose){
+void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *augIND,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,double *neglect,int *chromo){
 	int **Geno;
 	double **Pheno;
 	double **Dist;
@@ -28,9 +28,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	double **NEWPheno;
 	int **NEWIND;
 	int prior = *Nind;
-	if((*verbose)){
-		Rprintf("Starting augmentation of data\n");
-	}
+	Rprintf("Starting augmentation of data\n");
 	ivector new_ind;
     vector new_y,r,mapdistance;
 	cvector position;
@@ -76,15 +74,13 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		mapdistance[i]=999.0;
 	    mapdistance[i]=Dist[0][i];
 	}
-	if((*verbose)){
-		Rprintf("Filling the chromosome matrix\n");
-	}
+	Rprintf("Filling the chromosome matrix\n");
+
 	for(int i=0; i<(*Nmark); i++){
 		chr[i] = Chromo[0][i];
 	}
-	if((*verbose)){
-		Rprintf("Calculating relative genomepositions of the markers\n");
-	}
+	Rprintf("Calculating relative genomepositions of the markers\n");
+
     for (int j=0; j<(*Nmark); j++)
     {   
         if (j==0)
@@ -96,9 +92,8 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
         else
         { if (chr[j]==chr[j+1]) position[j]='L'; else position[j]='U'; }
     }
-	if((*verbose)){
-		Rprintf("Estimating recombinant frequencies\n");
-	}
+	Rprintf("Estimating recombinant frequencies\n");
+
 	for (int j=0; j<(*Nmark); j++){   
 		r[j]= 999.0;
 		if ((position[j]=='L')||(position[j]=='M')){
@@ -112,7 +107,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		//Rprintf("recomfreq:%d,%f\n",j,r[j]);
     }
 
-	if(augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r,*maxaug,*maxiaug,*neglect,*verbose)==1){
+	if(augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r,*maxaug,*maxiaug,*neglect)==1){
 		for (int i=0; i<(*Nmark); i++){   
 			for (int j=0; j<(*Naug); j++){
 				NEWPheno[0][j] = new_y[j];
@@ -141,13 +136,11 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		Free(position);
 		Free(r);
 		Free(chr);
-		if((*verbose)){
-			Rprintf("Data augmentation finished succesfull\n");
-			Rprintf("# Unique individuals before augmentation:%d\n",prior);
-			Rprintf("# Unique selected individuals:%d\n",*Nind);
-			Rprintf("# Marker p individual:%d\n",*Nmark);
-			Rprintf("# Individuals after augmentation:%d\n",*Naug);
-		}
+		Rprintf("Data augmentation finished succesfull\n");
+		Rprintf("# Unique individuals before augmentation:%d\n",prior);
+		Rprintf("# Unique selected individuals:%d\n",*Nind);
+		Rprintf("# Marker p individual:%d\n",*Nmark);
+		Rprintf("# Individuals after augmentation:%d\n",*Naug);
 	}else{
 		*Naug = *Nind;
 		for (int i=0; i<(*Nmark); i++){   
@@ -182,7 +175,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
     return;
 }
 
-int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector* augind, int *Nind, int *Naug, int Nmark, cvector position, vector r,int maxNaug,int imaxNaug,double neglect,int verbose){
+int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector* augind, int *Nind, int *Naug, int Nmark, cvector position, vector r,int maxNaug,int imaxNaug,double neglect){
 
 	int jj;
     int newNind=(*Nind);
@@ -207,9 +200,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
     vector newprob, newprobmax;
     newprob= newvector(*Naug);
     newprobmax= newvector(*Naug);
-	if(verbose){
-		Rprintf("Parameters: MAXaug=%d,MAXindaug=%d,Neglect=%f\n",maxNaug, imaxNaug, neglect);
-	}
+	Rprintf("Parameters: MAXaug=%d,MAXindaug=%d,Neglect=%f\n",maxNaug, imaxNaug, neglect);
     // ---- foreach individual create one in the newmarker matrix
     for (int i=0; i<(*Nind); i++)
     {   newind[iaug]=i-((*Nind)-newNind);  // index of individuals
@@ -426,9 +417,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
              if ((iaug-saveiaug+1)>imaxNaug)
              {  newNind-= 1;
                 iaug= saveiaug-1;
-				if(verbose){
-					Rprintf("Individual %d is eliminated\n",i);
-				}
+				Rprintf("Individual %d is eliminated\n",i);
              }
              sumprob= 0.0;
              for (int ii=saveiaug; ii<=iaug; ii++) sumprob+= newprob[ii];

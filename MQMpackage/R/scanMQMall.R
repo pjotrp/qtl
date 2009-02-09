@@ -38,7 +38,7 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 	data <- NULL
 	
 	for(i in 1:n.pheno) {
-		data[[i]] <- MQMaugment(cross,i,verbose=FALSE)
+		data[[i]] <- MQMaugment(cross,i)
 	}
 	
 	if("snow" %in% installed.packages()[1:dim(installed.packages())[1]]){
@@ -65,4 +65,4 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 
 # end of scanMQM.R
 
-res <- scanMQMall(cross)
+#res <- scanMQMall(cross)
