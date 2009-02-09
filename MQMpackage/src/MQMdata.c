@@ -129,12 +129,19 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 				}				
 			}
 		}
-	Rprintf("Data augmentation finished succesfull\n");
+		delcmatrix(new_markers,(*Nmark));
+		delcmatrix(markers,(*Nmark));
+		Free(mapdistance);
+		Free(position);
+		Free(r);
+		Free(chr);
+		Rprintf("Data augmentation finished succesfull\n");
 		Rprintf("# Unique individuals before augmentation:%d\n",prior);
 		Rprintf("# Unique selected individuals:%d\n",*Nind);
 		Rprintf("# Marker p individual:%d\n",*Nmark);
 		Rprintf("# Individuals after augmentation:%d\n",*Naug);
 	}else{
+		*Naug = *Nind;
 		for (int i=0; i<(*Nmark); i++){   
 			for (int j=0; j<(*Naug); j++){
 				NEWPheno[0][j] = Pheno[0][j];
@@ -155,9 +162,14 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 					NEW[i][j] = 4;
 				}					
 			}
-		}	
+		}
+		delcmatrix(new_markers,(*Nmark));
+		delcmatrix(markers,(*Nmark));
+		Free(mapdistance);
+		Free(position);
+		Free(r);
+		Free(chr);		
 		Rprintf("Data augmentation failed\n");
-		*Naug = *Nind;
 	}
     return;
 }
@@ -392,13 +404,14 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
                    {       
                     Rprintf("ERROR in augmentation routine: dataset too large after augmentation\n");
                     Rprintf("Recall procedure with larger value for parameter maxaug or lower for the parameter neglect\n");
-					Free(newy);
-					Free(newmarker);
-					Free(newind);
-					Free(newprob);
-					Free(newprobmax);
-					Free(imarker);
-                      return 0;
+					// Better not free them, we dun know if the already contain something, perhaps not... then we would segfault
+					//Free(newy);
+					//Free(newmarker);
+					//Free(newind);
+					//Free(newprob);
+					//Free(newprobmax);
+					//Free(imarker);
+                    return 0;
                    }
                }
              if ((iaug-saveiaug+1)>imaxNaug)

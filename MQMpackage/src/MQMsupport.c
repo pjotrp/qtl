@@ -770,14 +770,14 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
      while ((Ncof>0)&&(finished=='n'))
      {     for (int j=0; j<Nmark; j++)
            {   if ((*newcofactor)[j]=='1')
-               {  Rprintf("Drop marker %d\n",j);
+               {  //Rprintf("Drop marker %d\n",j);
                   (*newcofactor)[j]='0';
                   if (REMLorML=='1') variance= -1.0;
                   logL[j]= QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance);
                   (*newcofactor)[j]='1';
                }
                else if ((*newcofactor)[j]=='2')
-               {  Rprintf("Drop marker %d\n",j);
+               {  //Rprintf("Drop marker %d\n",j);
                   (*newcofactor)[j]='0';
                   if (REMLorML=='1') variance= -1.0;
                   logL[j]=  QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance);
@@ -794,21 +794,21 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
            if  ( ((*newcofactor)[dropj]=='1') && ( F2> 2.0*(savelogL-maxlogL)) )
            {   savelogL= maxlogL;
                (*newcofactor)[dropj]= '0'; Ncof-=1;
-               Rprintf("Marker %d is dropped, resulting in logL of reduced model = %f\n",dropj,savelogL);
+               Rprintf("Marker %d is dropped, resulting in logL of reduced model = %f\n",(dropj+1),savelogL);
            }
            else if  ( ((*newcofactor)[dropj]=='2') && (F1> 2.0*(savelogL-maxlogL)) )
            {   savelogL= maxlogL;
                (*newcofactor)[dropj]= '0'; Ncof-=1;
-               Rprintf("marker %d is dropped, resulting in logL of reduced model = %f\n",dropj,savelogL);
+               Rprintf("marker %d is dropped, resulting in logL of reduced model = %f\n",(dropj+1),savelogL);
            }
            else /* ready */
            {   finished='y';
                for (int j=0; j<Nmark; j++)
-               if ((*newcofactor)[j]=='1') Rprintf("Marker %d is selected\n",j);
+               if ((*newcofactor)[j]=='1') Rprintf("Marker %d is selected\n",(j+1));
            }
      }
      for (int j=0; j<Nmark; j++)
-     if ((*newcofactor)[j]!='0') Rprintf("Marker %d is in final model\n",j);
+     if ((*newcofactor)[j]!='0') Rprintf("Marker %d is in final model\n",(j+1));
 
      maxF= mapQTL(Nind, Nmark, cofactor, (*newcofactor), marker, position,
            (*mapdistance), y, r, ind, Naug, variance, 'n', informationcontent,Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax); // printoutput='n'
