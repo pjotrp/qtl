@@ -28,8 +28,8 @@ scanMQMall(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 
 \value{
   Returns a list of scanone objects that can be plotted using plot.scanone(result[[trait]])
 }
-\references{ R.C. Janssen, K. Brohman, D. Arends  }
-\author{ Danny Arends }
+\references{ Danny Arends <Danny.Arends@gmail.com> ; R.C. Janssen <r.c.jansen@rug.nl> ; Karl W. Brohamn <kbroman@biostat.wisc.edu>  }
+\author{ Danny Arends <Danny.Arends@gmail.com>}
 \note{ 
 
 }

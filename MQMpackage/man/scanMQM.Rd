@@ -28,8 +28,8 @@ Using ML or Reduced ML the algorithm employs a forward- or backward selection st
 Returns a matrix with QTLscores for each location on the chromosome, which can be plotted using the plot.scanone function of R/QTL.
 The phenotype under consideration is specified by the Phenot argument of the function.
 }
-\references{ R.C. Janssen, K. Brohman, D. Arends }
-\author{ Danny Arends }
+\references{ Danny Arends <Danny.Arends@gmail.com> ; R.C. Janssen <r.c.jansen@rug.nl> ; Karl W. Brohamn <kbroman@biostat.wisc.edu> }
+\author{ Danny Arends <Danny.Arends@gmail.com>}
 \note{
 	If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }

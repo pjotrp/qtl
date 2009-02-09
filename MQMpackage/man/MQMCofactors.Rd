@@ -8,7 +8,6 @@
 \usage{
 MQMCofactors(cross = NULL, cofactors = NULL, sexfactors = NULL)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{cross}{ Cross object from R/QTL }
   \item{cofactors}{ List of integer describing which marker should be treated as a cofactor }
@@ -21,11 +20,11 @@ Not available yet
 An formatted list of cofactors to be used with the scanMQM algorithm
 }
 \references{ ~put references to the literature/web site here ~ }
-\author{ Danny Arends }
+\author{ Danny Arends <Danny.Arends@gmail.com>}
 \note{ 	
 If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }
-\seealso{ ~~objects to See Also as \code{\link{help}}, ~~~ }
+\seealso{  }
 \examples{
 library(MQMpackage)
 qtl <- c(3,15,3,7)						# QTL at chromosome 3

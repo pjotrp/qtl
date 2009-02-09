@@ -23,22 +23,17 @@ Built: \tab R 2.8.1; i386-pc-mingw32; 2009-02-09 13:36:42; windows\cr
 
 Index:
 \preformatted{
-MQMaugment              MQMaugment - Missing data augmentation routine
-                        for MQM
-MQMCofactors            MQMCofactors - Helper function to create
-                        cofactors to be used with scanMQM
-MQMCofactorsEach        MQMCofactorsEach - Helper function to create
-                        cofactors to be used with scanMQM
+MQMaugment              MQMaugment - Missing data augmentation routine for MQM
+MQMCofactors            MQMCofactors - Helper function to create cofactors to be used with scanMQM
+MQMCofactorsEach        MQMCofactorsEach - Helper function to create cofactors to be used with scanMQM
 multitrait              Crossobject from R/QTL with multiple traits
-scanMQM                 scanMQM - Multiple qtl mapping for F2 crosses
-scanMQMall              scanMQMall - Multitrait analysis of a cross
-                        object
+scanMQM                 scanMQM - Multiple QTL mapping for F2 crosses
+scanMQMall              scanMQMall - Multitrait analysis of a cross object
 }
-~~ An overview of how to use the package, including the most important ~~
-~~ functions ~~
+
 }
 \author{
-Danny Arends <Danny.Arends@gmail.com> ; R.C. Janssen <> ; K. Brohamn <>
+Danny Arends <Danny.Arends@gmail.com> ; R.C. Janssen <r.c.jansen@rug.nl> ; Karl W. Brohamn <kbroman@biostat.wisc.edu>
 
 Maintainer: Danny Arends <Danny.Arends@gmail.com>
 }

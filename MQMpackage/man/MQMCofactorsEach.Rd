@@ -8,7 +8,6 @@
 \usage{
 MQMCofactorsEach(cross = NULL, each = 3)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{cross}{ Cross object from R/QTL }
   \item{each}{ Every 'each' marker will be used as a cofactor }
@@ -24,7 +23,7 @@ MQMCofactorsEach(cross = NULL, each = 3)
 \note{ 
 	If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }
-\seealso{ ~~objects to See Also as \code{\link{help}}, ~~~ }
+\seealso{  }
 \examples{
 library(MQMpackage)
 qtl <- c(3,15,3,7)						# QTL at chromosome 3
