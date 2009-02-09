@@ -49,6 +49,7 @@ Maintainer: Danny Arends <Danny.Arends@gmail.com>
 \examples{
 	library(MQMpackage)
 	data(multitrait)
-	result <- scanMQM(multitrait)
+	mt_est <- MQMaugment(multitrait)
+	result <- scanMQM(mt_est)
 	plot(result)
 }
