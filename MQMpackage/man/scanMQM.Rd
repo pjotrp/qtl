@@ -31,7 +31,7 @@ The phenotype under consideration is specified by the Phenot argument of the fun
 \references{ R.C. Janssen, K. Brohman, D. Arends }
 \author{ Danny Arends }
 \note{
-If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
+	If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }
 \seealso{  }
 \examples{

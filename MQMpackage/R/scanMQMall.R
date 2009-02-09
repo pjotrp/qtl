@@ -65,4 +65,4 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 
 # end of scanMQM.R
 
-#res <- scanMQMall(cross)
+res <- scanMQMall(cross)

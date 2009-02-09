@@ -76,4 +76,41 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
     cofactorlist
 }
 
+MQMCofactorsEach <- function(cross = NULL,each = 3){
+	if(is.null(cross)){
+      stop("Error: No cross file. Please supply a valid cross object.")
+	  return 
+	}
+
+
+	if(each < 2){
+      stop("Error: Can't set cofactors that often.")
+	  return 
+	}
+
+	
+	n.chr <- nchr(cross)
+	geno <- NULL
+	cofactorlist <- NULL
+
+	for(i in 1:n.chr) {
+      geno <- cbind(geno,cross$geno[[i]]$data)
+	}
+	
+	n.mark <- ncol(geno)
+
+	if(each > n.mark){
+      stop("Error: Not enough markers to place cofactors at.")
+	  return 
+	}	
+	
+    cofactorlist <- rep(0,n.mark)
+	for(i in 1:n.mark) {
+		if(i%%as.integer(each)==0){
+			cofactorlist[i] = 1
+		}
+	}
+    cofactorlist
+}
+
 a <- MQMCofactors(cross,c(10,20,30,40,50,60,70,80),c(186,187))

@@ -111,8 +111,8 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 			cnt++;
 		}
 		if(cnt > (Nmark/2)){
-			Rprintf("ERROR: More than half of the markers are to be cofactors, this is not allowed\n");
-			return;
+			//Rprintf("ERROR: More than half of the markers are to be cofactors, this is not allowed\n");
+			//return;
 		}
 		for(int j=0; j< Nind; j++){ 
 			markers[i][j] = '9';

@@ -22,20 +22,22 @@ scanMQMall(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 
   \item{n.clusters}{ Number of child processes to spil the job into }
 }
 \details{
-  Uses MQMaugment and scanMQM to scan for QTL's for each phenotype in the cross object.
+  Uses MQMaugment and scanMQM to scan for QTL's for each phenotype in the cross object. It is recomended to also install the snow library.
+  The snow library allows calculations to run on multiple cores or even scale it up to an entire cluster, thus speeding up calcuation.
 }
 \value{
   Returns a list of scanone objects that can be plotted using plot.scanone(result[[trait]])
 }
-\references{ snow -  }
+\references{ R.C. Janssen, K. Brohman, D. Arends  }
 \author{ Danny Arends }
-\note{ ~~further notes~~ 
+\note{ 
 
- ~Make other sections like Warning with \section{Warning }{....} ~
 }
 \seealso{ ~~objects to See Also as \code{\link{help}}, ~~~ }
 \examples{
-
+	library(MQMpackage)
+	data(multitrait)
+	result <- scanMQMall(multitrait)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
