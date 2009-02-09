@@ -22,6 +22,7 @@ dyn.load("scanMQM.dll")
 qtl <- c(3,15,3,7)							# QTL at chromosome 3
 data(map10)									# Mouse genome
 cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
+data(listeria)
 
 MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
     library(qtl)
@@ -99,24 +100,23 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 		for(c in 1:n.chr){
 			#print(paste("Cromosome",c,"\n",sep=""))
 			matri <- NULL
+			matri2 <- NULL
 			markONchr <- dim(cross$geno[[c]]$data)[2]
 			#print(paste("# markers",markONchr,"\n",sep=""))
 			for(j in markdone:(markdone+markONchr-1)){
 			    #print(paste("Start",markdone,":End",(markdone+markONchr-1),"\n",sep=""))
-				ind <- NULL
+				ind2 <- NULL
 				pheno <- NULL
-				for(i in 1:n.aug){
-					ind = c(ind,result[[4]][i+(j*maxaug)])
-					pheno <- rbind(pheno,result[[5]][i])
-				}
-				matri <- rbind(matri,ind)
+				ind2 = result[[4]][(1+(j*maxaug)):(n.aug+(j*maxaug))]
+				matri <- rbind(matri,ind2)
 			}
+			pheno <- as.matrix(result[[5]][1:n.aug])
 			matri <- t(matri)
 			if(markdone==0){
-			colnames(matri) <- colnames(geno)[markdone:(markdone+markONchr)]
+				colnames(matri) <- colnames(geno)[markdone:(markdone+markONchr)]
 			}else{
-			#print(paste("Markdone",markdone,"End",(markdone+markONchr-1)))
-			colnames(matri) <- colnames(geno)[(markdone+1):(markdone+markONchr)]			
+				#print(paste("Markdone",markdone,"End",(markdone+markONchr-1)))
+				colnames(matri) <- colnames(geno)[(markdone+1):(markdone+markONchr)]			
 			}
 			cross$geno[[c]]$data <- matri
 			colnames(pheno) = "phenotype"
@@ -137,3 +137,4 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 
 	
 cross_good <- MQMaugment(cross)
+listeria_good <- MQMaugment(listeria,maxaug=10000,maxiaug=1000,neglect=1000)

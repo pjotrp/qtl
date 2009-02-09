@@ -107,11 +107,6 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
     }
 
 	if(augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r,*maxaug,*maxiaug,*neglect)==1){
-		Rprintf("Data augmentation finished succesfull\n");
-		Rprintf("# Unique individuals before augmentation:%d\n",prior);
-		Rprintf("# Unique selected individuals:%d\n",*Nind);
-		Rprintf("# Marker p individual:%d\n",*Nmark);
-		Rprintf("# Individuals after augmentation:%d\n",*Naug);
 		for (int i=0; i<(*Nmark); i++){   
 			for (int j=0; j<(*Naug); j++){
 				NEWPheno[0][j] = new_y[j];
@@ -134,9 +129,12 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 				}				
 			}
 		}
+	Rprintf("Data augmentation finished succesfull\n");
+		Rprintf("# Unique individuals before augmentation:%d\n",prior);
+		Rprintf("# Unique selected individuals:%d\n",*Nind);
+		Rprintf("# Marker p individual:%d\n",*Nmark);
+		Rprintf("# Individuals after augmentation:%d\n",*Naug);
 	}else{
-		Rprintf("Data augmentation failed\n");
-		*Naug = *Nind;
 		for (int i=0; i<(*Nmark); i++){   
 			for (int j=0; j<(*Naug); j++){
 				NEWPheno[0][j] = Pheno[0][j];
@@ -158,6 +156,8 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 				}					
 			}
 		}	
+		Rprintf("Data augmentation failed\n");
+		*Naug = *Nind;
 	}
     return;
 }
