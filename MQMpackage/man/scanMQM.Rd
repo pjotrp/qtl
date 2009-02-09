@@ -6,7 +6,7 @@
 Main multiQTL scanning function for the R/qtl package (for use with F2 populations)
 }
 \usage{
-scanMQM(cross = NULL, cofactors = NULL, Phenot = 1, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 0)
+scanMQM(cross = NULL, cofactors = NULL, Phenot = 1, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 0, file = "MQM_output.txt")
 }
 \arguments{
   \item{cross}{ Cross object from R/QTL }
@@ -20,6 +20,7 @@ scanMQM(cross = NULL, cofactors = NULL, Phenot = 1, REMLorML = 0, alfa = 0.02, e
   \item{step.min}{ Begin this many Cm before the chromosome }
   \item{step.max}{ Maximum length in Cm }
   \item{n.run}{ When setting n.run >= 1, a simple permuation of the data will occur, giving insight into the significance of the QTL }
+  \item{file}{ File to which the raw results are saved (MQM_output.txt) }
 }
 \details{
 Using ML or Reduced ML the algorithm employs a forward- or backward selection strategy to identify QTL hotspot.
@@ -29,7 +30,7 @@ Returns a matrix with QTLscores for each location on the chromosome, which can b
 The phenotype under consideration is specified by the Phenot argument of the function.
 }
 \references{ Danny Arends <Danny.Arends@gmail.com> ; R.C. Janssen <r.c.jansen@rug.nl> ; Karl W. Brohamn <kbroman@biostat.wisc.edu> }
-\author{ Danny Arends <Danny.Arends@gmail.com>}
+\author{ Danny Arends <Danny.Arends@gmail.com> }
 \note{
 	If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }

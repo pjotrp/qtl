@@ -23,7 +23,7 @@ cross <- read.cross("csv","","Test.csv")
 
 scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0,n.run=0){
+					step.min=-20.0,step.max=220.0,n.run=0,file="MQM_output.txt"){
     library(qtl)
 	if(is.null(cross)){
 		stop("Error: No cross file. Please supply a valid cross object.") 
@@ -112,6 +112,12 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 				stop("Error: No such phenotype")
 			}			
 		}
+		if((step.min+step.size) > step.max){
+				stop("Error: current Step setting would crash the algorithm")
+		}
+		if(step.size < 1){
+				stop("Error: Step.size needs to be larger than 1")
+		}
 		qtlAchromo <- length(seq(step.min,step.max,step.size))
 		cat("Number of locations per chromosome: ",qtlAchromo, "\n")
 		result <- .C("R_scanMQM",
@@ -148,7 +154,9 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		
 		#So we can use carls plotting routines
 		class(qtl) <- c(class(qtl),"scanone") 
-	
+		
+		cat("Saving output to file: ",file, "\n")
+		write.table(qtl,file)
 		#return QTL
 		qtl
 	

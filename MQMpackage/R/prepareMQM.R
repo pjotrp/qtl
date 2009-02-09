@@ -11,6 +11,13 @@
 #
 ######################################################################
 
+MQMLoadanalysis <- function(file="MQM_output.txt"){
+	data <- read.table(file)
+	class(data) <- c("scanone",class(data))
+	plot(data)
+	data
+}
+
 prepareMQM <- function(cross, name,cofactors=NULL,dominance='n',RemLorML=0){
 #print files needed by the MQM algorithm (Genotype & Phenotype, also calls 
 #the construction function of the run-input file)
