@@ -25,7 +25,7 @@ class(cross)[1] <- "f2"
 
 scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0,n.clusters=10){
+					step.min=-20.0,step.max=220.0,n.clusters=2){
 
 	
 	if(is.null(cross)){
@@ -36,17 +36,21 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 	}
 	n.pheno <- nphe(cross)
 	data <- NULL
+	
 	for(i in 1:n.pheno) {
-		data[[i]] <- MQMaugment(cross,i)
+		data[[i]] <- MQMaugment(cross,i,verbose=FALSE)
 	}
+	
 	if("snow" %in% installed.packages()[1:dim(installed.packages())[1]]){
+		cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 		library(snow)
 		cl <- makeCluster(n.clusters)
 		clusterEvalQ(cl, library(MQMpackage))
-		res <- parLapply(cl,data,scanMQM)
+		res <- parLapply(cl,data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size)
 		stopCluster(cl)
 	}else{
-		res <- Lapply(cl,data,scanMQM)
+		cat("INFO: Library snow not found, so going into singlemode.\n")
+		res <- lapply(data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size)
 	}
 	colors <- rainbow(n.pheno)
 	for(i in 1:n.pheno) {

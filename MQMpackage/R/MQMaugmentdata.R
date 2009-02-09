@@ -24,19 +24,22 @@ data(map10)									# Mouse genome
 cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
 data(listeria)
 
-MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
+MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10,verbose=TRUE){
     library(qtl)
 	if(is.null(cross)){
 		stop("Error: No cross file. Please supply a valid cross object.")
 		return 
 	}
 	if(class(cross)[1] == "f2"){
-		#cat("INFO: Received an F2 cross.")
+		
 		n.ind <- nind(cross)
 		n.chr <- nchr(cross)
 		n.aug <- maxaug
-		#cat("INFO: Number of individuals:",n.ind)
-		#cat("INFO: Number of chr:",n.chr)
+		if(verbose){
+			cat("INFO: Received an F2 cross.")
+			cat("INFO: Number of individuals:",n.ind)
+			cat("INFO: Number of chr:",n.chr)
+		}
 		geno <- NULL
 		chr <- NULL
 		dist <- NULL
@@ -48,7 +51,9 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 		}
 		pheno <- cross$pheno
 		n.mark <- ncol(geno)
-		#print(paste("INFO: Number of markers:",n.mark))
+		if(verbose){
+			print(paste("INFO: Number of markers:",n.mark))
+		}
 		for(i in 1:n.ind) {
 			for(j in 1:n.mark) {
 				if(is.na(geno[i,j])){
@@ -60,7 +65,9 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 		dropped <- NULL
 		for(i in 1:dim(pheno)[1]) {
 			if(is.na(pheno[i,1])){
-			  cat("Dropped individual ",i ," with missing phenotype.\n")
+			  if(verbose){
+				cat("Dropped individual ",i ," with missing phenotype.\n")
+			  }
 			  dropped <- c(dropped,i) 
 			  n.ind = n.ind-1
 			}
@@ -71,8 +78,10 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 			pheno <- pheno[-dropped,]
 		}
 		if(Phenot != 1){
-			cat("INFO: Selected phenotype ",Phenot,".\n")
-			cat("INFO: # of phenotypes in object ",nphe(cross),".\n")
+			if(verbose){
+				cat("INFO: Selected phenotype ",Phenot,".\n")
+				cat("INFO: # of phenotypes in object ",nphe(cross),".\n")
+			}
 			if(nphe(cross) < Phenot || Phenot < 1){
 				stop("Error: No such phenotype")
 			}			
@@ -91,7 +100,8 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 				as.integer(maxaug),
 				as.integer(maxiaug),
 				as.double(neglect),
-				as.integer(chr)				
+				as.integer(chr),
+				as.integer(verbose)
 			    )
 		n.ind = result[[7]]
 		n.aug = result[[8]]	
