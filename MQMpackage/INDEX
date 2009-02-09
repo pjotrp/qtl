@@ -6,7 +6,7 @@ MQMCofactorsEach        MQMCofactorsEach - Helper function to create
                         cofactors to be used with scanMQM
 MQMLoadanalysis         Enables loading of previous MQM analysis from
                         file
-MQMpackage-package      Tool for analyzing QTL experiments
+MQMpackage              Tool for analyzing QTL experiments
 multitrait              Crossobject from R/QTL with multiple traits
 scanMQM                 scanMQM - Multiple qtl mapping for F2 crosses
 scanMQMall              scanMQMall - Multitrait analysis of a cross

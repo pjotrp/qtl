@@ -24,11 +24,14 @@ When the algorithm ends with an "DATASET TOO LARGE after augmentation", the cros
 Cross object with 1 phenotype (indicated by setting the Phenot parameter) suitable for scanMQM from R/QTL
 }
 \references{ ~put references to the literature/web site here ~ }
-\author{ Danny Arends }
+\author{ Danny Arends <Danny.Arends@gmail.com> }
 \note{
 If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }
-\seealso{ ~~objects to See Also as \code{\link{help}}, ~~~ }
+\seealso{ 
+	\code{\link{scanMQM}}
+	\code{\link{scanMQMall}}
+ }
 \examples{
 	library(MQMpackage)
 	qtl <- c(3,15,3,7)							# QTL at chromosome 3

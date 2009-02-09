@@ -1,5 +1,4 @@
 \name{MQMpackage-package}
-\alias{MQMpackage-package}
 \alias{MQMpackage}
 \docType{package}
 \title{

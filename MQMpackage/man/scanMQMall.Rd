@@ -19,7 +19,7 @@ scanMQMall(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 
   \item{step.size}{ Step.size used for the generation of output QTL }
   \item{step.min}{ Begin this many Cm before the chromosome }
   \item{step.max}{ Maximum length in Cm }
-  \item{n.clusters}{ Number of child processes to spil the job into }
+  \item{n.clusters}{ Number of child processes to split the job into }
 }
 \details{
   Uses MQMaugment and scanMQM to scan for QTL's for each phenotype in the cross object. It is recomended to also install the snow library.
@@ -33,7 +33,10 @@ scanMQMall(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 
 \note{ 
 
 }
-\seealso{ ~~objects to See Also as \code{\link{help}}, ~~~ }
+\seealso{ 
+	\code{\link{scanMQM}}
+	\code{\link{MQMaugment}}
+}
 \examples{
 	library(MQMpackage)
 	data(multitrait)

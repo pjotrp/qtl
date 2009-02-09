@@ -1,0 +1,7 @@
+Testing enviroment for MQM
+-> test.csv : A cross in R/QTL format
+-> Test_Y.txt : A cross in R/QTL format with multiple traits
+-> DLLtest directory : Testing the DLL (using the test.csv)
+-> TestData directory : Testing of several testsets, output from V_0.exe
+-> Simu26 directory : Old testsets
+-> OAT directory : Kanota and Ogle data fetched from public resources
