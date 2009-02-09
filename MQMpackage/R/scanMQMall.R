@@ -66,3 +66,9 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 # end of scanMQM.R
 
 res <- scanMQMall(cross)
+a <- NULL
+for(i in 1:length(res)){
+	a <- rbind(a,res[[i]][,3])
+}
+a <- t(a)
+filled.contour(x=seq(1,dim(a)[1]),y=seq(1,dim(a)[2]),xlab="Markers",ylab="Trait",a,col=rainbow(24,1,1.0,0.1))
