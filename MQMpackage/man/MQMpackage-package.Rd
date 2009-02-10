@@ -40,9 +40,9 @@ Normal layout of MQM-QTL analysis
 
 }
 \author{
-Danny Arends <Danny.Arends@gmail.com> ; R.C. Janssen <r.c.jansen@rug.nl> ; Karl W. Brohamn <kbroman@biostat.wisc.edu>
+Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu}
 
-Maintainer: Danny Arends <Danny.Arends@gmail.com>
+Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 }
 \references{
 

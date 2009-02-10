@@ -39,10 +39,10 @@ IF(Nrun) THEN Bootstrapping either mapQTL or Backward elimination
 Returns a matrix with QTLscores for each location on the chromosome, which can be plotted using the plot.scanone function of R/QTL.
 The phenotype under consideration is specified by the Phenot argument of the function.
 }
-\references{ Danny Arends <Danny.Arends@gmail.com> ; R.C. Janssen <r.c.jansen@rug.nl> ; Karl W. Brohamn <kbroman@biostat.wisc.edu> }
-\author{ Danny Arends <Danny.Arends@gmail.com> }
-\note{
-	If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
+\references{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu} }
+\author{ Danny Arends \email{Danny.Arends@gmail.com} }
+\note{ 
+	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com)
 }
 \seealso{  
 
@@ -52,7 +52,7 @@ The phenotype under consideration is specified by the Phenot argument of the fun
 library(MQMpackage)
 f2qtl <- c(3,15,3,7)					# QTL at chromosome 3
 data(map10)						# Mouse genome
-f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")			# Simulate a F2 Cross
+f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
 f2result <- scanMQM(f2cross)				# Do a MQM scan of the genome
 plot(f2result)						# Plot the results of the genome scan
 
@@ -60,7 +60,7 @@ plot(f2result)						# Plot the results of the genome scan
 library(MQMpackage)
 bcqtl <- c(3,15,2)					# QTL at chromosome 3
 data(map10)						# Mouse genome
-bccross <- sim.cross(map10,bcqtl,n=100,type="bc")			# Simulate a BC Cross
+bccross <- sim.cross(map10,bcqtl,n=100,type="bc")	# Simulate a BC Cross
 bcresult <- scanMQM(bccross)				# Do a MQM scan of the genome
 plot(bcresult)						# Plot the results of the genome scan
 

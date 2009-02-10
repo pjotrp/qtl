@@ -48,16 +48,16 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
     char fitQTL='n';
 	
 	chr= newivector(Nmark);
-	Rprintf("Starting MQM analysis of an F2 population\n\n");
+	Rprintf("Starting MQM analysis\n\n");
     Rprintf("Filling the chromosome matrix\n");
 	for(int i=0; i< Nmark; i++){
 		chr[i] = Chromo[0][i];
 	}
-	
 
 	if(RMLorML == 1){
 		REMLorML='1';
 	}
+
 	Rprintf("Calculating relative genomepositions of the markers\n");
 	for (int j=0; j<Nmark; j++){
         if (j==0)
@@ -69,13 +69,15 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
         else
         { if (chr[j]==chr[j+1]) position[j]='L'; else position[j]='U'; }
     }
-    Rprintf("Estimating recombinant frequencies\n");		 
+    
+	Rprintf("Estimating recombinant frequencies\n");		 
     for (int j=0; j<Nmark; j++){   
 		r[j]= 999.0;
 		if ((position[j]=='L')||(position[j]=='M')){
 			r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
 		}
     }
+	
 	Rprintf("Initialize Frun and informationcontent to 0.0\n");	// ---- Initialize Frun and informationcontent to 0.0
 	int Nsteps;
 	Nsteps= chr[Nmark-1]*((stepmax-stepmin)/stepsize+1);	
@@ -501,50 +503,52 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
               int Nloci,
               double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance)
 {  //  Rprintf("QTLmixture called\n");
-     int iem= 0, newNaug, i, j;
-     char varknown, biasadj='n';
-	 double Nrecom, oldlogL=-10000, delta=1.0, calc_i, logP=0.0, Pscale=1.75;
-     vector indweight, Ploci, Fy;
-     indweight= newvector(Nind);
-     newNaug= (fitQTL=='n' ? Naug : 3*Naug);
-     Ploci= newvector(newNaug);
-     Fy= newvector(newNaug);
-     logP= Nloci*log(Pscale); // only for computational accuracy
-//	 Rprintf("LogP:%f %f %c\n",logP,log(Pscale),REMLorML);
-     varknown= (((*variance)==-1.0) ? 'n' : 'y' );
-     if ((REMLorML=='0')&&(varknown=='n')) Rprintf("variance is being estimated and bias adjusted\n");
-     if (REMLorML=='1') { varknown='n'; biasadj='n'; }
-     for (i=0; i<newNaug; i++){ Ploci[i]= 1.0;}
-     if (fitQTL=='n'){
-	 for (j=0; j<Nloci; j++)
-     {    for (i=0; i<Naug; i++) 
+    int iem= 0, newNaug, i, j;
+    char varknown, biasadj='n';
+	double Nrecom, oldlogL=-10000, delta=1.0, calc_i, logP=0.0, Pscale=1.75;
+    
+	vector indweight, Ploci, Fy;
+    
+	indweight= newvector(Nind);
+    newNaug= (fitQTL=='n' ? Naug : 3*Naug);
+    Ploci= newvector(newNaug);
+    Fy= newvector(newNaug);
+    logP= Nloci*log(Pscale); // only for computational accuracy
+	varknown= (((*variance)==-1.0) ? 'n' : 'y' );
+	
+    if ((REMLorML=='0')&&(varknown=='n')){ 
+		Rprintf("variance is being estimated and bias adjusted\n");
+	}
+    if (REMLorML=='1') { 
+		varknown='n'; biasadj='n'; 
+	}
+    for (i=0; i<newNaug; i++){ 
+		Ploci[i]= 1.0;
+	}
+    if (fitQTL=='n'){
+		for (j=0; j<Nloci; j++){
+		    for (i=0; i<Naug; i++) 
 			Ploci[i]*= Pscale;
-			//Rprintf("A %f\n",Ploci[1]);
-          if ((position[j]=='L')||(position[j]=='U')){
-          for (i=0; i<Naug; i++) Ploci[i]*= (loci[j][i]=='1' ? 0.5 : 0.25);
-		  }
-		  //Rprintf("B %f\n",Ploci[1]);
-          if ((position[j]=='L')||(position[j]=='M'))
-          {  for (i=0; i<Naug; i++)
-             {  Nrecom= absdouble((double)loci[j][i]-(double)loci[j+1][i]);
-			    if ((loci[j][i]=='1')&&(loci[j+1][i]=='1')){
-                   calc_i= (r[j]*r[j]+(1.0-r[j])*(1.0-r[j]));}
-                else if (Nrecom==0) {calc_i= (1.0-r[j])*(1.0-r[j]);}
-                else if (Nrecom==1) {calc_i= ((loci[j+1][i]=='1')
-                        ? 2.0*r[j]*(1.0-r[j]) : r[j]*(1.0-r[j]));}
-                else {calc_i= r[j]*r[j];}
-				//Rprintf("calc_i: %f\n",calc_i);
-                Ploci[i]*= calc_i;
-             }
-          }
-		//  Rprintf("C %f\n",Ploci[1]);
-		//   Rprintf("Done! i=%d j=%d\n",i,j);
-     }
-	// for (j=0; j<Naug; j++){
-	//   Rprintf("%d,%f",j,Ploci[j]);
-	// }
-//	    Rprintf("For loop done !!!!!");
-     }else{
+		    if ((position[j]=='L')||(position[j]=='U')){
+				for (i=0; i<Naug; i++) Ploci[i]*= (loci[j][i]=='1' ? 0.5 : 0.25);
+			}
+		    if ((position[j]=='L')||(position[j]=='M')){
+				for (i=0; i<Naug; i++){
+					Nrecom= absdouble((double)loci[j][i]-(double)loci[j+1][i]);
+					if ((loci[j][i]=='1')&&(loci[j+1][i]=='1')){
+						calc_i= (r[j]*r[j]+(1.0-r[j])*(1.0-r[j]));}
+					else if (Nrecom==0) {
+						calc_i= (1.0-r[j])*(1.0-r[j]);
+					}else if (Nrecom==1) {
+						calc_i= ((loci[j+1][i]=='1') ? 2.0*r[j]*(1.0-r[j]) : r[j]*(1.0-r[j]));
+					}else {
+						calc_i= r[j]*r[j];
+					}
+					Ploci[i]*= calc_i;
+				}
+			}
+		}
+	}else{
 	// Rprintf("fitQTL=y\n");
      for (j=0; j<Nloci; j++)
      {    for (i=0; i<Naug; i++)
@@ -857,8 +861,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
       // ofstream fff("mqm_out.txt", ios::out | ios::app);
       // cout << endl << endl;
 	//   Rprintf("DEBUG testing_1");
-       /* fit QTL on top of markers (full ML)
-          fit QTL between markers (full ML) */
+       /* fit QTL on top of markers (full ML)   fit QTL between markers (full ML) */
        // cout << "please wait (mixture calculus may take quite a lot of time)" << endl;
        /* estimate variance in mixture model with all marker cofactors */
        // cout << "estimate variance in mixture model with all cofactors" << endl;
@@ -889,14 +892,11 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
        double maxF=0.0, savebaseNoQTLModel=0.0;
        int baseNoQTLModel=0, step=0;
 	 //  Rprintf("DEBUG testing_3");
-       for (j=0; j<Nmark; j++)
-       {   /* fit a QTL in two steps:
-              1. move QTL along marker interval j -> j+1 with steps
-                 of stepsize=20 cM, starting from -20 cM up to 220 cM
-              2. all marker-cofactors in the neighborhood of the QTL
-                 are dropped by using cM='windows' as criterium
-
-           */
+       for (j=0; j<Nmark; j++){   
+	    /* 	fit a QTL in two steps:
+			1. move QTL along marker interval j -> j+1 with steps of stepsize=20 cM, starting from -20 cM up to 220 cM
+			2. all marker-cofactors in the neighborhood of the QTL are dropped by using cM='windows' as criterium
+		*/
          nextinterval= 'n';
          while (nextinterval=='n')
          { // step 1:
@@ -1059,12 +1059,10 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
               if (run>0) (*Frun)[step][run]+= QTLlikelihood;
               else (*Frun)[step][0]+= QTLlikelihood;
 
-              /* Each individual has condition multilocus probabilities
-                 for being 0, 1 or 2 at the QTL.
-                 Calculate the maximum per individu.
-                 Calculate the mean of this maximum, averaging over all individuals
-                 This is the information content plotted.
-              */
+            /* 	Each individual has condition multilocus probabilities for being 0, 1 or 2 at the QTL.
+				Calculate the maximum per individu. Calculate the mean of this maximum, averaging over all individuals
+				This is the information content plotted.
+			*/
               infocontent= 0.0;
               for (int i=0; i<Nind; i++)
               {   info0[i]= 0.0; // qq
@@ -1081,12 +1079,6 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
               else infocontent+= (info0[i]<info2[i] ? info2[i] : info0[i]);
               (*informationcontent)[step]+=infocontent/Nind;
               step++;
-          //    if (printoutput=='y')
-            //  {  cout << j << " " << chr[j] << " " << setprecision(0) << (moveQTL-stepsize) << " "
-              //     << setprecision(5) << QTLlikelihood << " " << (infocontent/Nind) << endl;
-                // fff << chr[j] << " " << setprecision(0) << (moveQTL-stepsize) << " " <<  setprecision(5)
-                  // << QTLlikelihood << " " << setprecision(2) << (infocontent/Nind) << endl;
-           //   }
            }
          }
        }
