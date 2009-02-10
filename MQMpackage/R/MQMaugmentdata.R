@@ -30,12 +30,11 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 		stop("Error: No cross file. Please supply a valid cross object.")
 		return 
 	}
-	if(class(cross)[1] == "f2"){
-		
+	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "ril"){
+		cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
 		n.ind <- nind(cross)
 		n.chr <- nchr(cross)
 		n.aug <- maxaug
-		cat("INFO: Received an F2 cross.\n")
 		cat("INFO: Number of individuals:",n.ind,"\n")
 		cat("INFO: Number of chr:",n.chr,"\n")
 		geno <- NULL
@@ -129,8 +128,7 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 		}
 		cross
 	}else{
-		stop("Error: Currently only f2 crosses can be analyzed by MQM.")
-		return 
+		stop("Error: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			
 }
 

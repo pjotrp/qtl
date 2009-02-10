@@ -1,9 +1,9 @@
 \name{scanMQM}
 \alias{scanMQM}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ scanMQM - Multiple qtl mapping for F2 crosses }
+\title{ scanMQM - Multiple qtl mapping for inbred crosses }
 \description{
-Main multiQTL scanning function for the R/qtl package (for use with F2 populations)
+Main multiQTL scanning function for the R/qtl package (for use with F2 / BC / RIL populations)
 }
 \usage{
 scanMQM(cross = NULL, cofactors = NULL, Phenot = 1, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 0, file = "MQM_output.txt")
@@ -36,12 +36,22 @@ The phenotype under consideration is specified by the Phenot argument of the fun
 }
 \seealso{  }
 \examples{
+#Simulated F2 Population
 library(MQMpackage)
-qtl <- c(3,15,3,7)					# QTL at chromosome 3
+f2qtl <- c(3,15,3,7)					# QTL at chromosome 3
 data(map10)						# Mouse genome
-cross <- sim.cross(map10,qtl,n=100)			# Simulate a Cross
-result <- scanMQM(cross)				# Do a MQM scan of the genome
-plot(result)						# Plot the results of the genome scan
+f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")			# Simulate a F2 Cross
+f2result <- scanMQM(f2cross)				# Do a MQM scan of the genome
+plot(f2result)						# Plot the results of the genome scan
+
+#Simulated BC Population
+library(MQMpackage)
+bcqtl <- c(3,15,2)					# QTL at chromosome 3
+data(map10)						# Mouse genome
+bccross <- sim.cross(map10,bcqtl,n=100,type="bc")			# Simulate a BC Cross
+bcresult <- scanMQM(bccross)				# Do a MQM scan of the genome
+plot(bcresult)						# Plot the results of the genome scan
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

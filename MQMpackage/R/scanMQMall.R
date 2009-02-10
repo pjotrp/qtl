@@ -31,36 +31,39 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 	if(is.null(cross)){
 		stop("Error: No cross file. Please supply a valid cross object.") 
 	}
-	if(class(cross)[1] == "f2"){
-		cat("INFO: Received an F2 cross.\n")
-	}
-	n.pheno <- nphe(cross)
-	data <- NULL
+	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "ril"){
+		cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
+		n.pheno <- nphe(cross)
+		data <- NULL
 	
-	for(i in 1:n.pheno) {
-		data[[i]] <- MQMaugment(cross,i)
-	}
-	
-	if("snow" %in% installed.packages()[1:dim(installed.packages())[1]]){
-		cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
-		library(snow)
-		cl <- makeCluster(n.clusters)
-		clusterEvalQ(cl, library(MQMpackage))
-		res <- parLapply(cl,data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size)
-		stopCluster(cl)
-	}else{
-		cat("INFO: Library snow not found, so going into singlemode.\n")
-		res <- lapply(data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size)
-	}
-	colors <- rainbow(n.pheno)
-	for(i in 1:n.pheno) {
-		if(i !=1 ){
-			plot(res[[i]],add=TRUE,col=colors[i])
-		}else{
-			plot(res[[i]],col=colors[i])
+		for(i in 1:n.pheno) {
+			#we use the augmentation routinge to make a list where data[i] has trait[i] and a crossfile
+			data[[i]] <- MQMaugment(cross,i)
 		}
+	
+		if("snow" %in% installed.packages()[1:dim(installed.packages())[1]]){
+			cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
+			library(snow)
+			cl <- makeCluster(n.clusters)
+			clusterEvalQ(cl, library(MQMpackage))
+			res <- parLapply(cl,data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size)
+			stopCluster(cl)
+		}else{
+			cat("INFO: Library snow not found, so going into singlemode.\n")
+			res <- lapply(data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size)
+		}
+		colors <- rainbow(n.pheno)
+		for(i in 1:n.pheno) {
+			if(i !=1 ){
+				plot(res[[i]],add=TRUE,col=colors[i])
+			}else{
+				plot(res[[i]],col=colors[i])
+			}
+		}
+		res
+	}else{
+		stop("Error: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}
-	res
 }
 
 # end of scanMQM.R
@@ -71,4 +74,4 @@ for(i in 1:length(res)){
 	a <- rbind(a,res[[i]][,3])
 }
 a <- t(a)
-filled.contour(x=seq(1,dim(a)[1]),y=seq(1,dim(a)[2]),xlab="Markers",ylab="Trait",a,col=rainbow(24,1,1.0,0.1))
+filled.contour(x=seq(1,dim(a)[1]),y=seq(1,dim(a)[2]),xlab="Markers",ylab="Trait",a,col=rainbow(max(a)+25,1,1.0,0.1),nlevels=max(a),plot.title="QTL Heatmap")

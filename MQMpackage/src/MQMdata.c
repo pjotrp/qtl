@@ -28,7 +28,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	double **NEWPheno;
 	int **NEWIND;
 	int prior = *Nind;
-	Rprintf("Starting augmentation of data\n");
+	Rprintf("Starting C-part of the dataaugmentation routine\n");
 	ivector new_ind;
     vector new_y,r,mapdistance;
 	cvector position;
@@ -404,7 +404,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
                    {       
                     Rprintf("ERROR in augmentation routine: dataset too large after augmentation\n");
                     Rprintf("Recall procedure with larger value for parameter maxaug or lower for the parameter neglect\n");
-					// Better not free them, we dun know if the already contain something, perhaps not... then we would segfault
+					// Better not free them, we don't know if the arrays already contain something, perhaps not... then we would segfault in R
 					//Free(newy);
 					//Free(newmarker);
 					//Free(newind);

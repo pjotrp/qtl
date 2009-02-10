@@ -38,9 +38,19 @@ scanMQMall(cross = NULL, cofactors = NULL, REMLorML = 0, alfa = 0.02, em.iter = 
 	\code{\link{MQMaugment}}
 }
 \examples{
+	#Doing a multitrait analysis
 	library(MQMpackage)
 	data(multitrait)
 	result <- scanMQMall(multitrait)
+	
+	#Plotting a contourmap to show QTL's over the entire genome
+	a <- NULL
+	for(i in 1:length(res)){
+		a <- rbind(a,res[[i]][,3])
+	}
+	a <- t(a)
+	filled.contour(x=seq(1,dim(a)[1]),y=seq(1,dim(a)[2]),xlab="Markers",ylab="Trait",a,col=rainbow(max(a)+25,1,1.0,0.1),nlevels=max(a))
+	
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

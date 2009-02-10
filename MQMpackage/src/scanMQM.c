@@ -111,8 +111,8 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 			cnt++;
 		}
 		if(cnt > (Nmark/2)){
-			//Rprintf("ERROR: More than half of the markers are to be cofactors, this is not allowed\n");
-			//return;
+			Rprintf("ERROR: More than half of the markers are to be cofactors, this is not allowed\n");
+			return;
 		}
 		for(int j=0; j< Nind; j++){ 
 			markers[i][j] = '9';
@@ -169,11 +169,12 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
    reorg_geno(*Nind,*Nmark,geno,&Geno);
    reorg_int(*Nmark,1,chromo,&Chromo);   
    reorg_pheno(*Nmark,1,dist,&Dist);
-   reorg_pheno((*chromo) * (( (*stepmi)+(*stepma))/ (*steps)),1,qtl,&QTL);
+   //Here we have  the assumption that step.min is negative this needs to be split in 2
+   reorg_pheno((*chromo) * (((*stepma)-(*stepmi))/ (*steps)),1,qtl,&QTL);
    reorg_pheno(*Nind,*Npheno,pheno,&Pheno);
    reorg_int(*Nmark,1,cofactors,&Cofactors);  
    reorg_int(*out_Naug,1,indlist,&INDlist);  
-   //Done with reorganising lets start executing the main loop
+   //Done with reorganising lets start executing
    
    scanMQM(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL);
 } /* end of function R_scanMQM */
