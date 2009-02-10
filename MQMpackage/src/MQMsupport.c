@@ -97,30 +97,29 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
    //  Rprintf("any triple of non-segregating markers is considered to be the result of:\n");
    //  Rprintf("identity-by-descent (IBD) instead of identity-by-state (IBS)\n");
   //   Rprintf("no (segregating!) cofactors are fitted in such non-segregating IBD regions\n");
-     for (int j=0; j<Nmark; j++)
-     {   // if ((f1genotype[j]==12)||(f1genotype[j]==21)) dropj='n';
-         if (mod(f1genotype[j],11)!=0) dropj='n';
-         else if (cofactor[j]=='0') dropj='y';
-         else if (position[j]=='L') // (cofactor[j]!='0') cofactor at non-segregating marker
-         // test whether next segregating marker is nearby (<20cM)
-         {  dropj='y';
+    for (int j=0; j<Nmark; j++){
+		if (mod(f1genotype[j],11)!=0){
+			dropj='n';
+		}else if (cofactor[j]=='0'){
+			dropj='y';
+		}else if (position[j]=='L'){
+			// (cofactor[j]!='0') cofactor at non-segregating marker
+			// test whether next segregating marker is nearby (<20cM)
+			dropj='y';
             if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+1],11)!=0)) dropj='n';
             else if (position[j+1]!='R')
             if ((((*mapdistance)[j+2]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+2],11)!=0)) dropj='n';
-         }
-         else if (position[j]=='M')
-         {  dropj='y';
+        }else if (position[j]=='M'){
+			dropj='y';
             if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)&&(mod(f1genotype[j-1],11)!=0)) dropj='n';
             else if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+1],11)!=0)) dropj='n';
-         }
-         else if (position[j]=='R')
-         {  dropj='y';
+        }else if (position[j]=='R'){
+			dropj='y';
             if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)&&(mod(f1genotype[j-1],11)!=0)) dropj='n';
             else if (position[j-1]!='L')
             if ((((*mapdistance)[j]-(*mapdistance)[j-2])<20)&&(mod(f1genotype[j-2],11)!=0)) dropj='n';
-         }
-         if (dropj=='n')
-         {  
+        }
+		if (dropj=='n'){  
             marker[jj]= marker[j];
             cofactor[jj]= cofactor[j];
             (*mapdistance)[jj]= (*mapdistance)[j];
@@ -128,10 +127,10 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
             r[jj]= r[j];
             position[jj]= position[j];
             jj++;
-         }else if (cofactor[j]=='1'){  
+        }else if (cofactor[j]=='1'){  
             Rprintf("cofactor at chr %d is dropped\n",chr[j]);
-         }
-     }
+        }
+    }
     Nmark= jj;
     for (int j=0; j<Nmark; j++){
 		r[j]= 999.0;
@@ -172,11 +171,13 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 	newind= newivector(Naug);
 	newy= newvector(Naug);
 	newmarker= newcmatrix(Nmark,Naug);
-     for (int i=0; i<Naug; i++)
-     {   newy[i]= y[i];
-         newind[i]= INDlist[0][i];
-         for (int j=0; j<Nmark; j++) newmarker[j][i]= marker[j][i];
-     }
+    for (int i=0; i<Naug; i++){
+		newy[i]= y[i];
+        newind[i]= INDlist[0][i];
+        for (int j=0; j<Nmark; j++){
+			newmarker[j][i]= marker[j][i];
+		}
+    }
 //	 if(augdata(marker,y,&newmarker,&newy,&newind,&Nind,&Naug,Nmark,position,r,maxNaug,imaxNaug,neglect)==1){
 //		Rprintf("Data augmentation finished succesfull\n");
 //		Rprintf("# Unique individuals before augmentation:%d\n",prior);
@@ -193,12 +194,18 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
     newweight= newvector(Naug);
     rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark);
     /* eliminate individuals with missing trait values */
-    int oldNind=Nind;
-    for (int i=0; i<oldNind; i++) Nind-= ((y[i]==999.0) ? 1 : 0);
-   //  Free(y);
+    //We can skip this part iirc because R throws out missing phenotypes beforehand
+	int oldNind=Nind;
+    //for (int i=0; i<oldNind; i++){
+	//	Nind-= ((y[i]==999.0) ? 1 : 0);
+	//}
+   
     int oldNaug=Naug;
-    for (int i=0; i<oldNaug; i++) Naug-= ((newy[i]==999.0) ? 1 : 0);
-    vector weight;
+    //for (int i=0; i<oldNaug; i++){
+	//	Naug-= ((newy[i]==999.0) ? 1 : 0);
+	//}
+    
+	vector weight;
     ivector ind;
     marker= newcmatrix(Nmark,Naug);
     y= newvector(Naug);
@@ -226,14 +233,19 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 
  //    vector Fy;
  //    Fy= newvector(Naug);
-     double variance=-1.0, logLfull;
-     cvector selcofactor;
-     selcofactor= newcvector(Nmark); /* selected cofactors */
+    double variance=-1.0;
+	double logLfull;
+    cvector selcofactor;
+    selcofactor= newcvector(Nmark); /* selected cofactors */
 
-     int dimx=1;
-     for (int j=0; j<Nmark; j++)
-     if (cofactor[j]=='1') dimx+= (dominance=='n' ? 1 : 2);  // per QTL only additivity !!
-     else if (cofactor[j]=='2') { dimx+=1; } /* sex of the mouse */
+    int dimx=1;
+    for (int j=0; j<Nmark; j++){
+		if (cofactor[j]=='1'){
+			dimx+= (dominance=='n' ? 1 : 2);  // per QTL only additivity !!
+		}else if (cofactor[j]=='2'){
+			dimx+=1;  /* sex of the mouse */
+		}
+	}
      double F1, F2;
      F1= inverseF(1,Nind-dimx,alfa);
      F2= inverseF(2,Nind-dimx,alfa);

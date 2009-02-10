@@ -22,7 +22,7 @@ An formatted list of cofactors to be used with the scanMQM algorithm
 \references{ ~put references to the literature/web site here ~ }
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }
 \note{ 
-	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com)
+	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
 \seealso{  
 	\code{\link{scanMQM}} - Function called to do single trait analysis

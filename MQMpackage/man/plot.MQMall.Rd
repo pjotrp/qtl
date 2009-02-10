@@ -23,7 +23,7 @@ plot.MQMall(cross = NULL, result = NULL, type = "C")
 \references{  }
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }
 \note{ 
-	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com)
+	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
 \seealso{ 
 	\code{\link{scanMQMall}} - Function called to do multiple trait analysis

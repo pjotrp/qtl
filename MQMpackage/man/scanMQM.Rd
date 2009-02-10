@@ -42,7 +42,7 @@ The phenotype under consideration is specified by the Phenot argument of the fun
 \references{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu} }
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }
 \note{ 
-	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com)
+	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
 \seealso{  
 
