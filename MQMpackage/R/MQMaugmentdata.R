@@ -35,8 +35,8 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 		n.ind <- nind(cross)
 		n.chr <- nchr(cross)
 		n.aug <- maxaug
-		cat("INFO: Number of individuals:",n.ind,"\n")
-		cat("INFO: Number of chr:",n.chr,"\n")
+		cat("INFO: Number of individuals:",n.ind,".\n")
+		cat("INFO: Number of chr:",n.chr,".\n")
 		geno <- NULL
 		chr <- NULL
 		dist <- NULL
@@ -48,7 +48,7 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 		}
 		pheno <- cross$pheno
 		n.mark <- ncol(geno)
-		cat("INFO: Number of markers:",n.mark)
+		cat("INFO: Number of markers:",n.mark,".\n")
 		for(i in 1:n.ind) {
 			for(j in 1:n.mark) {
 				if(is.na(geno[i,j])){

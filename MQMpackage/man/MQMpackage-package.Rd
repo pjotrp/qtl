@@ -29,6 +29,14 @@ multitrait              Crossobject from R/QTL with multiple traits
 scanMQM                 scanMQM - Multiple QTL mapping for F2 crosses
 scanMQMall              scanMQMall - Multitrait analysis of a cross object
 }
+Normal layout of MQM-QTL analysis
+-Load in experiment using formats supported by R/QTL
+-Set trait under consideration as first trait in R/QTL format
+-Fill in missing data using either the fill.geno or MQMaugmentdata routine
+-Call scanMQM to do a genomescan
+-Call scanMQM setting the n.run to get an estimate of ‘significant’ lod scores
+-Set cofactors at ‘top scoring’ and not so ‘top scoring’ markers
+-Rerun analysis with cofactors
 
 }
 \author{
@@ -43,7 +51,9 @@ Maintainer: Danny Arends <Danny.Arends@gmail.com>
 ~~ the R documentation directory ~~
 \keyword{ package }
 \seealso{
-
+	\code{\link{MQMaugment}} - Dataaugmentation routine to estimate missing data
+	\code{\link{scanMQM}} - Function called to do single trait analysis
+	\code{\link{scanMQMall}} - Function called to do multiple trait analysis
 }
 \examples{
 	library(MQMpackage)

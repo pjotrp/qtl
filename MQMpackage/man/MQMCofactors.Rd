@@ -20,11 +20,14 @@ Not available yet
 An formatted list of cofactors to be used with the scanMQM algorithm
 }
 \references{ ~put references to the literature/web site here ~ }
-\author{ Danny Arends <Danny.Arends@gmail.com>}
+\author{ Danny Arends <Danny.Arends@gmail.com> }
 \note{ 	
 If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }
-\seealso{  }
+\seealso{  
+	\code{\link{scanMQM}} - Function called to do single trait analysis
+	\code{\link{scanMQMall}} - Function called to do multiple trait analysis
+}
 \examples{
 library(MQMpackage)
 qtl <- c(3,15,3,7)						# QTL at chromosome 3

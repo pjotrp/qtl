@@ -8,6 +8,8 @@ MQMLoadanalysis         Enables loading of previous MQM analysis from
                         file
 MQMpackage              Tool for analyzing QTL experiments
 multitrait              Crossobject from R/QTL with multiple traits
+plot.MQMall             plot.MQMall - Plotting routine to display the
+                        results from a scanMQMall scan
 scanMQM                 scanMQM - Multiple qtl mapping for inbred
                         crosses
 scanMQMall              scanMQMall - Multitrait analysis of a cross

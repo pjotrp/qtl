@@ -24,6 +24,16 @@ scanMQM(cross = NULL, cofactors = NULL, Phenot = 1, REMLorML = 0, alfa = 0.02, e
 }
 \details{
 Using ML or Reduced ML the algorithm employs a forward- or backward selection strategy to identify QTL hotspot.
+The algoreithm passes through the following stages:
+Calculating relative marker positions
+Calculating recombinant frequencies
+IF(Missing data) THEN Fix for dataaugmentation
+Rmixture function
+Loglikelyhood estimated of full model
+IF(Cofactors) THEN Backward elimination & mapQTL
+IF(No cofactors) THEN mapQTL function
+IF(Nrun) THEN Bootstrapping either mapQTL or Backward elimination
+
 }
 \value{
 Returns a matrix with QTLscores for each location on the chromosome, which can be plotted using the plot.scanone function of R/QTL.
@@ -34,7 +44,9 @@ The phenotype under consideration is specified by the Phenot argument of the fun
 \note{
 	If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }
-\seealso{  }
+\seealso{  
+
+}
 \examples{
 #Simulated F2 Population
 library(MQMpackage)
