@@ -16,13 +16,6 @@
 # scanMQMall:
 #
 ######################################################################
-setwd("D:/")
-
-library(MQMpackage)
-dyn.load("scanMQM.dll")
-cross <- read.cross("csvr","","Test_Y.txt",genotype=c(1,2))
-class(cross)[1] <- "f2"
-
 scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
 					step.min=-20.0,step.max=220.0,n.clusters=2){
@@ -76,8 +69,6 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 }
 
 # end of scanMQMall
-
-result <- scanMQMall(cross)
 
 plot.MQMall <- function(cross=NULL, result = NULL, type="C"){
 	if(is.null(cross)|| is.null(result)){

@@ -196,14 +196,14 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
     /* eliminate individuals with missing trait values */
     //We can skip this part iirc because R throws out missing phenotypes beforehand
 	int oldNind=Nind;
-    //for (int i=0; i<oldNind; i++){
-	//	Nind-= ((y[i]==999.0) ? 1 : 0);
-	//}
+    for (int i=0; i<oldNind; i++){
+		Nind-= ((y[i]==999.0) ? 1 : 0);
+	}
    
     int oldNaug=Naug;
-    //for (int i=0; i<oldNaug; i++){
-	//	Naug-= ((newy[i]==999.0) ? 1 : 0);
-	//}
+    for (int i=0; i<oldNaug; i++){
+		Naug-= ((newy[i]==999.0) ? 1 : 0);
+	}
     
 	vector weight;
     ivector ind;
@@ -538,6 +538,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 		Ploci[i]= 1.0;
 	}
     if (fitQTL=='n'){
+	Rprintf("FitQTL=N\n");	
 		for (j=0; j<Nloci; j++){
 		    for (i=0; i<Naug; i++) 
 			Ploci[i]*= Pscale;
@@ -560,8 +561,9 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 				}
 			}
 		}
+	Rprintf("FitQTL=N Done\n");			
 	}else{
-	// Rprintf("fitQTL=y\n");
+	Rprintf("FitQTL=Y\n");	
      for (j=0; j<Nloci; j++)
      {    for (i=0; i<Naug; i++)
           {   Ploci[i]*= Pscale; Ploci[i+Naug]*= Pscale; Ploci[i+2*Naug]*= Pscale;
@@ -645,7 +647,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
           }
 	 }
 	 }
-//	 Rprintf("fitQTL's done\n");
+	 Rprintf("fitQTL's done\n");
      if ((*weight)[0]== -1.0)
      {  for (i=0; i<Nind; i++) indweight[i]= 0.0;
 		if (fitQTL=='n')
@@ -661,11 +663,11 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
            }
         }
      }
-//	 Rprintf("Weights done\n");
-//     Rprintf("Individual->trait->cofactor->weight\n");
-//     for (int j=0; j<Nind; j++){
-//	    Rprintf("%d->%f,%d,%f\n",j,y[j],cofactor[j],(*weight)[j]);
-//	 }	
+	 Rprintf("Weights done\n");
+     Rprintf("Individual->trait->cofactor->weight\n");
+     for (int j=0; j<Nind; j++){
+	    Rprintf("%d->%f,%d,%f\n",j,y[j],cofactor[j],(*weight)[j]);
+	 }	
      double logL=0;
      vector indL;
      indL= newvector(Nind);
