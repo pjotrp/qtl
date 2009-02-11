@@ -23,7 +23,7 @@ cross <- read.cross("csv","","Test.csv")
 
 scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0,n.run=0,file="MQM_output.txt"){
+					step.min=-20.0,step.max=220.0,n.run=0,file="MQM_output.txt",doLOG=0){
     library(qtl)
 	if(is.null(cross)){
 		stop("Error: No cross file. Please supply a valid cross object.") 
@@ -49,7 +49,18 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		if(n.run <0 || n.run >= 10000){
 			stop("Error: # of runs should be positive and < 10000.")
 		}
-		pheno <- cross$pheno
+		pheno <- cross$pheno[[Phenot]]
+		cat("Before LOG MEAN:",mean(pheno,na.rm = TRUE),"VAR:",var(pheno,na.rm = TRUE),".\n")
+		if(var(pheno,na.rm = TRUE)> 1000){
+			if(doLOG == 0){
+				warning("We should LOG-transform this phenotype, please set parameter: doLOG=1 to correct this error")
+			}
+		}
+		if(doLOG != 0){
+				#transform the cross file
+				cross <- MQMlogPheno(cross,Phenot)
+				pheno <- cross$pheno[[Phenot]]
+		}
 		n.mark <- ncol(geno)
 		cat("INFO: Number of markers:",n.mark,"\n")
 		for(i in 1:n.ind) {
@@ -62,8 +73,8 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		}
 		#check for missing phenotypes
 		dropped <- NULL
-		for(i in 1:dim(pheno)[1]) {
-			if(is.na(pheno[i,1])){
+		for(i in 1:length(pheno)) {
+			if(is.na(pheno[i])){
 			  cat("INFO: Dropped individual ",i," with missing phenotype.\n")
 			  dropped <- c(dropped,i) 
 			  n.ind = n.ind-1
@@ -72,7 +83,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		#throw em out
 		if(!is.null(dropped)){
 			geno <- geno[-dropped,]  
-			pheno <- pheno[-dropped,]
+			pheno <- pheno[-dropped]
 		}
 		if(!is.null(cross$extra)){
 			cat("INFO: previously augmented dataset.\n")			
@@ -130,7 +141,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
                 as.integer(geno),
 				as.integer(chr),
 				as.double(dist),
-				as.double(pheno[,Phenot]),
+				as.double(pheno),
 				as.integer(cofactors),
 				as.integer(backward),
 				as.integer(REMLorML),

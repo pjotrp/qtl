@@ -132,6 +132,38 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 	}			
 }
 
+MQMlogPheno <- function(cross= NULL,Phenot=NULL){
+    library(qtl)
+	if(is.null(cross)){
+		stop("Error: No cross file. Please supply a valid cross object.")
+		return 
+	}
+	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "ril"){
+		if(!is.null(Phenot)){
+			pheno <- NULL
+			logpheno <- NULL
+			pheno <- cross$pheno[[Phenot]]
+			logpheno <- log(pheno)
+			cross$pheno[[Phenot]] <- logpheno
+			cat("Phenotype:",Phenot,".\n")
+			cat("Before LOG MEAN:",mean(pheno,na.rm = TRUE),"VAR:",var(pheno,na.rm = TRUE),".\n")
+			cat("After LOG MEAN:",mean(logpheno,na.rm = TRUE),"VAR:",var(logpheno,na.rm = TRUE),".\n")
+		}else{
+			n.pheno <- nphe(cross)
+			for(i in 1:n.pheno) {
+				pheno <- cross$pheno[[i]]
+				logpheno <- log(pheno)
+				cross$pheno[[i]] <- logpheno
+				cat("Phenotype:",i,".\n")
+				cat("Before LOG MEAN:",mean(pheno,na.rm = TRUE),"VAR:",var(pheno,na.rm = TRUE),".\n")
+				cat("After LOG MEAN:",mean(logpheno,na.rm = TRUE),"VAR:",var(logpheno,na.rm = TRUE),".\n")				
+			}
+		}
+		cross
+	}else{
+		stop("Error: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+	}			
+}
 # end of MQMaugment.R
 
 	
