@@ -24,7 +24,7 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 	if(is.null(cross)){
 		stop("Error: No cross file. Please supply a valid cross object.") 
 	}
-	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "ril"){
+	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
 		cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
 		n.pheno <- nphe(cross)
 		data <- NULL
