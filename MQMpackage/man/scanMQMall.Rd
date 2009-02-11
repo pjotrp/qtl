@@ -43,7 +43,7 @@ scanMQMall(cross = NULL, cofactors = NULL, doLOG = 0,REMLorML = 0, alfa = 0.02, 
 	#Doing a multitrait analysis
 	library(MQMpackage)
 	data(multitrait)
-	result <- scanMQMall(multitrait)
+	result <- scanMQMall(multitrait,doLOG=1)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -29,9 +29,9 @@ Cross object with 1 phenotype (indicated by setting the Phenot parameter) suitab
 If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }
 \seealso{ 
-	\code{\link{scanMQM}}
-	\code{\link{scanMQMall}}
- }
+	\code{\link{scanMQM}} - Function called to do single trait analysis
+	\code{\link{scanMQMall}} - Function called to do multiple trait analysis
+}
 \examples{
 	library(MQMpackage)
 	qtl <- c(3,15,3,7)							# QTL at chromosome 3

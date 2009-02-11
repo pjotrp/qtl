@@ -21,6 +21,6 @@
 \examples{
 	library(MQMpackage)
 	data(multitrait)
-	result <- scanMQMall(multitrait)
+	result <- scanMQMall(multitrait,doLOG=1)
 }
 \keyword{datasets}
