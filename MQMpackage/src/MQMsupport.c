@@ -538,7 +538,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 		Ploci[i]= 1.0;
 	}
     if (fitQTL=='n'){
-	Rprintf("FitQTL=N\n");	
+	//Rprintf("FitQTL=N\n");	
 		for (j=0; j<Nloci; j++){
 		    for (i=0; i<Naug; i++) 
 			Ploci[i]*= Pscale;
@@ -561,9 +561,9 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 				}
 			}
 		}
-	Rprintf("FitQTL=N Done\n");			
+	//Rprintf("FitQTL=N Done\n");			
 	}else{
-	Rprintf("FitQTL=Y\n");	
+	//Rprintf("FitQTL=Y\n");	
      for (j=0; j<Nloci; j++)
      {    for (i=0; i<Naug; i++)
           {   Ploci[i]*= Pscale; Ploci[i+Naug]*= Pscale; Ploci[i+2*Naug]*= Pscale;
@@ -647,7 +647,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
           }
 	 }
 	 }
-	 Rprintf("fitQTL's done\n");
+	// Rprintf("fitQTL's done\n");
      if ((*weight)[0]== -1.0)
      {  for (i=0; i<Nind; i++) indweight[i]= 0.0;
 		if (fitQTL=='n')
@@ -663,11 +663,11 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
            }
         }
      }
-	 Rprintf("Weights done\n");
-     Rprintf("Individual->trait->cofactor->weight\n");
-     for (int j=0; j<Nind; j++){
-	    Rprintf("%d->%f,%d,%f\n",j,y[j],cofactor[j],(*weight)[j]);
-	 }	
+	// Rprintf("Weights done\n");
+     //Rprintf("Individual->trait->cofactor->weight\n");
+    // for (int j=0; j<Nind; j++){
+	//    Rprintf("%d->%f,%d,%f\n",j,y[j],cofactor[j],(*weight)[j]);
+	 //}	
      double logL=0;
      vector indL;
      indL= newvector(Nind);

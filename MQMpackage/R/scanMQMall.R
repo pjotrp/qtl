@@ -70,7 +70,7 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 
 # end of scanMQMall
 
-plot.MQMall <- function(cross=NULL, result = NULL, type="C"){
+plot.MQMall <- function(cross=NULL, result = NULL, type="C",theta=30,phi=15){
 	if(is.null(cross)|| is.null(result)){
 		stop("Error: NO result or cross.") 
 	}
@@ -89,6 +89,28 @@ plot.MQMall <- function(cross=NULL, result = NULL, type="C"){
 				col=rainbow((max(c)/5)+25,1,1.0,0.1),
 				nlevels=(max(c)/5)
 			)
+		}
+		if(type=="I"){
+			c <- NULL
+			for(i in 1:length(result)){
+				c <- rbind(c,result[[i]][,3])
+			}
+			c <- t(c)
+			image(x=1:dim(c)[1],y=1:dim(c)[2],c,
+				  xlab="Markers",ylab="Trait",
+				  col=rainbow((max(c)/5)+25,1,1.0,0.1),
+			)
+		
+		}
+		if(type=="D"){
+			c <- NULL
+			for(i in 1:length(result)){
+				c <- rbind(c,result[[i]][,3])
+			}
+			c <- t(c)
+			persp(x=1:dim(c)[1],y=1:dim(c)[2],c,
+				  theta = theta, phi = phi, expand = 1,
+				  col="gray", xlab = "Markers", ylab = "Traits", zlab = "QTL")
 		}
 		if(type=="P"){
 			n.pheno <- nphe(cross)
