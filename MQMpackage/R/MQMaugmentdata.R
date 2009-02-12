@@ -59,7 +59,7 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 		#check for missing phenotypes
 		dropped <- NULL
 		for(i in 1:dim(pheno)[1]) {
-			if(is.na(pheno[i,1])){
+			if(is.na(pheno[i,Phenot])){
 				cat("Dropped individual ",i ," with missing phenotype.\n")
 				dropped <- c(dropped,i) 
 				n.ind = n.ind-1
@@ -138,7 +138,7 @@ MQMlogPheno <- function(cross= NULL,Phenot=NULL){
 		stop("Error: No cross file. Please supply a valid cross object.")
 		return 
 	}
-	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "ril"){
+	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
 		if(!is.null(Phenot)){
 			pheno <- NULL
 			logpheno <- NULL

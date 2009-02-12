@@ -17,16 +17,16 @@ TODO list MQM package
 - Finish testing enviroment
 - - A set of objects in csv format and in MQM input files
 - - Double test augment data section
-- Show that using cofactors we can increase detection power of other QTLs
 - - We need a working dataset of carl with 2 qtls to show we have increased power in MQM
 - Extend the testsets (more with selected co-factors)
+- Include correct RIL analysis, moved up after talk 11-febr-2009
+- Include correct BC analysis, moved up after talk 11-febr-2009
+- Remove bootstrapping from scanMQM and make it done by R
 
 MID TERM
 Use stl (+boost) for all internal vectors and matrices
 Figure out a correct way of handling autosomes
 
 LONG TERM
-Include RIL analysis
-Include BC analysis
 Include 4-way cross analysis
 Write report about masterinternship II at GBIC

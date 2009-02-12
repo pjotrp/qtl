@@ -437,6 +437,7 @@ void rmixture(cmatrix marker, vector weight, vector r,
     char rknown='n';
 	
     for (j=0; j<Nmark; j++){
+		Rprintf("Recombination frequency: %f at marker %d\n",r[j],j);
 		if (r[j]!=999.0){
 			rknown='y';
 		}
@@ -561,7 +562,13 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 				}
 			}
 		}
-	//Rprintf("FitQTL=N Done\n");			
+	//Rprintf("FitQTL=N Done\n");
+	//for (j=0; j<Nloci; j++){
+	//    for (i=0; i<Naug; i++){
+	//		Rprintf("%c ",loci[j][i]);
+	//	}
+	//	Rprintf("\n");
+	//}
 	}else{
 	//Rprintf("FitQTL=Y\n");	
      for (j=0; j<Nloci; j++)
