@@ -52,6 +52,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	reorg_int((*maxiaug)*(*Nind),1,augIND,&NEWIND);	 
 	reorg_pheno(*maxaug,1,augPheno,&NEWPheno);	 
 	
+	//Change all the markers from Karl format to our own
 	for(int i=0; i< *Nmark; i++){
 		for(int j=0; j< *Nind; j++){ 
 			markers[i][j] = '9';
@@ -108,6 +109,8 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
     }
 
 	if(augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r,*maxaug,*maxiaug,*neglect)==1){
+		//Data augmentation finished succesfully
+		//Push it back into RQTL format
 		for (int i=0; i<(*Nmark); i++){   
 			for (int j=0; j<(*Naug); j++){
 				NEWPheno[0][j] = new_y[j];
@@ -142,6 +145,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		Rprintf("# Marker p individual:%d\n",*Nmark);
 		Rprintf("# Individuals after augmentation:%d\n",*Naug);
 	}else{
+		//Unsuccessfull data augmentation exit
 		*Naug = *Nind;
 		for (int i=0; i<(*Nmark); i++){   
 			for (int j=0; j<(*Naug); j++){

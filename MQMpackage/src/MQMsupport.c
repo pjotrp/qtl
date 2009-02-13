@@ -193,6 +193,9 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
     vector newweight;
     newweight= newvector(Naug);
     rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark);
+	//for (int j=0; j<Nmark; j++){
+	//	Rprintf("r(%d)= %f\n",j,r[j]);
+	//}
     /* eliminate individuals with missing trait values */
     //We can skip this part iirc because R throws out missing phenotypes beforehand
 	int oldNind=Nind;
@@ -447,6 +450,7 @@ void rmixture(cmatrix marker, vector weight, vector r,
 	}
     if (rknown=='y'){
 		Rprintf("recombination parameters are not re-estimated\n");
+		//rknown='n'; //HAX to make it update recombination frequenties
     }
 	//We should use other values then set ones.... em.iter here ?
      while ((iem<100)&&(rdelta>0.001))
@@ -491,24 +495,23 @@ void rmixture(cmatrix marker, vector weight, vector r,
                          Nrecom= 2.0*r[j]*r[j]/(r[j]*r[j]+(1-r[j])*(1-r[j]));
                       newr+= Nrecom*weight[i];
                   }
-                  if (rknown=='n')
+                  if (rknown=='n' && position[j]!='R') //only update if it isn't the last marker of a chromosome ;)
                   {  oldr=r[j];
                      r[j]= newr/(2.0*Nind);
                      rdelta+=pow(r[j]-oldr,2.0);
                   }
-                  else rdelta=0.0;
+                  else rdelta+=0.0;
                }
             }
      }
      
 /*   print new estimates of recombination frequencies */
-    Rprintf("iem= %d rdelta= %d\n",iem,rdelta);
-    if (rknown=='n'){  
-        for (j=0; j<Nmark; j++){
-			if ((position[j]=='L')||(position[j]=='M'))
-				Rprintf("r(%d)= %f\n",j,r[j]);
-		}
-    }
+    Rprintf("iem= %d rdelta= %f\n",iem,rdelta);
+   // if (rknown=='n'){  
+   //     for (j=0; j<Nmark; j++){
+	//		Rprintf("r(%d)= %f\n",j,r[j]);
+	//	}
+   // }
 	Free(indweight);
 }
 
@@ -892,12 +895,13 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
        // cout << "estimate variance in mixture model with all cofactors" << endl;
        variance= -1.0;
        savelogL= 2.0*QTLmixture(marker,cofactor,r,position, y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance);
+	   Rprintf("log-likelihood of full model= %f\n",savelogL/2);
        Nloci= Nmark+1;
        // augment data for missing QTL observations (x 3)
        fitQTL='y';
        int newNaug;
        newNaug= 3*Naug;
-     //  delete[] weight;
+	   Free(weight);
        weight= newvector(newNaug);
        weight[0]= 1.0;
        vector weight0;
@@ -1067,7 +1071,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
               {  if ((position[j]=='L')&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= '2';
                  else QTLcofactor[j+1]= '2';
                  QTLlikelihood= -2.0*QTLmixture(QTLloci,QTLcofactor,QTLr,QTLposition,y,ind,Nind,Naug,Nloci,&variance,em,&weight0,REMLorML,fitQTL,dominance);
-                 weight0[0]= -1.0;
+				 Rprintf("log-likelihood of NO QTL model= %f\n",QTLlikelihood/-2);
+				 weight0[0]= -1.0;
                  savebaseNoQTLModel= QTLlikelihood;
                  if ((position[j]=='L')&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= '0';
                  else QTLcofactor[j+1]= '0';
@@ -1082,8 +1087,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
               else QTLcofactor[j+1]= '3';
               if (REMLorML=='1') weight[0]= -1.0;
               QTLlikelihood+=2.0*QTLmixture(QTLloci,QTLcofactor,QTLr,QTLposition,y,ind,Nind,Naug,Nloci,&variance,em,&weight,REMLorML,fitQTL,dominance);
-              //this is the place we error at, because the likelyhood is not correct.
-			  if (QTLlikelihood<-0.05) { Rprintf("error QTLlikelihood=%f\n",QTLlikelihood); return 0;}
+			  //this is the place we error at, because the likelyhood is not correct.
+			  if (QTLlikelihood<-0.05) { Rprintf("Error Negative QTLlikelihood=%f  versus BASE MODEL:%f QTL at %d\n",QTLlikelihood,savebaseNoQTLModel,j);} //return 0;}
               maxF= (maxF<QTLlikelihood ? QTLlikelihood : maxF);
               if (run>0) (*Frun)[step][run]+= QTLlikelihood;
               else (*Frun)[step][0]+= QTLlikelihood;
