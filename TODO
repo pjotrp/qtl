@@ -21,6 +21,10 @@ TODO list MQM package
 - Extend the testsets (more with selected co-factors)
 - Include correct RIL analysis, moved up after talk 11-febr-2009
 - Include correct BC analysis, moved up after talk 11-febr-2009
+- - both could perhaps be done with getting the recombinant frequencies from R and then adjusting the algorithm
+- - this would remove rmixture function (which is outdated by the R/QTL est.map & calc.genoprob functions as far as i can tell)
+- - this would involve a mayor rewriting some of the QTLmixture part (perhaps even regression, but that relies on 
+- - the weightmatrix (setting them 0 could be an option))
 - Remove bootstrapping from scanMQM and make it done by R
 
 MID TERM

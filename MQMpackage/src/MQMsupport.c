@@ -70,7 +70,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
         { if (chr[j]==chr[j+1]) position[j]='L'; else position[j]='U'; }
     }
     
-	Rprintf("Estimating recombinant frequencies\n");		 
+	Rprintf("Estimating recombinant frequencies\n");	
     for (int j=0; j<Nmark; j++){   
 		r[j]= 999.0;
 		if ((position[j]=='L')||(position[j]=='M')){
@@ -280,6 +280,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      yoriginal= newvector(Nind);
 	 urand= newvector(Naug);
 	// printf("Gonna start bootstrapping??? Nrun:%d\n",Nrun);
+	//This is gonna be removed and put into R
      if (Nrun>0){  
         urand[0]= ran2(idum);
         for (int i=0; i<Naug; i++) yoriginal[ind[i]]= y[i];
@@ -313,6 +314,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
             // cout << "run " << run <<" ready; maxF= " << maxF[run] << endl;
         }
 	}
+	//administration and such (should be also)... however we do need the Cumulative distribution of maximum test statistic value
     if (Nrun > 0){
 		sort1(Nrun,maxF);
 		Rprintf("Cumulative distribution of maximum test statistic value in %d permutations or simulations\n",Nrun);
@@ -435,7 +437,8 @@ void rmixture(cmatrix marker, vector weight, vector r,
     vector indweight;
     indweight = newvector(Nind);
     char rknown='n';
-	
+	//this should change because we should re-estimate the Recombination frequency for all r[j] != 999.0
+	//this then effects to mapQTL and ends because of r[j] errors... perhaps r[j] should come from R/QTL so we don't have to worry about those calculations
     for (j=0; j<Nmark; j++){
 		//Rprintf("Recombination frequency: %f at marker %d\n",r[j],j);
 		if (r[j]!=999.0){
@@ -445,6 +448,7 @@ void rmixture(cmatrix marker, vector weight, vector r,
     if (rknown=='y'){
 		Rprintf("recombination parameters are not re-estimated\n");
     }
+	//We should use other values then set ones.... em.iter here ?
      while ((iem<100)&&(rdelta>0.001))
      {     R_CheckUserInterrupt(); /* check for ^C */
 		   R_ProcessEvents(); /* do some windows/C stuff so R doesn't look so unresponsive */
@@ -938,6 +942,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
               else if (moveQTL<=mapdistance[j+1])
               {  QTLposition[j]= position[j];
                  QTLposition[j+1]= 'M';
+				 //HERE there is an error, a slicht buggyness which should be solved the we can re-estimate rec frec. by EM.... QTLr should only depend on r[j]
                  QTLr[j]= 0.5*(1.0-exp(-0.02*(moveQTL-mapdistance[j])));
                  QTLr[j+1]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-moveQTL))); //r[j];
                  QTLloci[j]= marker[j];
@@ -952,6 +957,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
            {  if (moveQTL<=mapdistance[j+1])
               {  QTLposition[j]= position[j];
                  QTLposition[j+1]= 'M';
+				 //HERE there is an error, a slicht buggyness which should be solved the we can re-estimate rec frec. by EM.... QTLr should only depend on r[j]
                  QTLr[j]= 0.5*(1.0-exp(-0.02*(moveQTL-mapdistance[j]))); //0.0;
                  QTLr[j+1]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-moveQTL))); //r[j];
                  QTLloci[j]= marker[j];
@@ -966,6 +972,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
            {  if (moveQTL<=stepmax)
               {  QTLposition[j]= 'M';
                  QTLposition[j+1]= 'R';
+				 //HERE there is an error, a slicht buggyness which should be soled the we can re-estimate rec frec. by EM.... QTLr should only depend on r[j]
                  QTLr[j]= 0.5*(1.0-exp(-0.02*(moveQTL-mapdistance[j]))); //0.0;
                  QTLr[j+1]= r[j]; // note r[j]=999.0
                  QTLloci[j]= marker[j];
@@ -1075,7 +1082,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
               else QTLcofactor[j+1]= '3';
               if (REMLorML=='1') weight[0]= -1.0;
               QTLlikelihood+=2.0*QTLmixture(QTLloci,QTLcofactor,QTLr,QTLposition,y,ind,Nind,Naug,Nloci,&variance,em,&weight,REMLorML,fitQTL,dominance);
-              if (QTLlikelihood<-0.05) { Rprintf("error QTLlikelihood=%f\n",QTLlikelihood); return 0;}
+              //this is the place we error at, because the likelyhood is not correct.
+			  if (QTLlikelihood<-0.05) { Rprintf("error QTLlikelihood=%f\n",QTLlikelihood); return 0;}
               maxF= (maxF<QTLlikelihood ? QTLlikelihood : maxF);
               if (run>0) (*Frun)[step][run]+= QTLlikelihood;
               else (*Frun)[step][0]+= QTLlikelihood;

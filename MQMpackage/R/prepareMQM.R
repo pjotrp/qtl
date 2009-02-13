@@ -181,7 +181,7 @@ GenerateTestSets <- function(){
 
 }
 
-readMQMout <- function(cross = NULL, file = "mqm_out.txt", plot = FALSE,chr = 1){
+readMQMout <- function(cross = NULL, file = "mqm_out.txt", plot = TRUE,chr = 1){
 #reads the output from the MQM algorithm
    data <-read.table(file, quote=":")
    data <-data[-dim(data)[1],]
