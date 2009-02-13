@@ -437,7 +437,7 @@ void rmixture(cmatrix marker, vector weight, vector r,
     char rknown='n';
 	
     for (j=0; j<Nmark; j++){
-		Rprintf("Recombination frequency: %f at marker %d\n",r[j],j);
+		//Rprintf("Recombination frequency: %f at marker %d\n",r[j],j);
 		if (r[j]!=999.0){
 			rknown='y';
 		}
