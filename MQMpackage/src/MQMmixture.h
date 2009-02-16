@@ -15,7 +15,7 @@
     ignorance of unlikely genotypes*/
 void rmixture(cmatrix marker, vector weight, vector r,
               cvector position, ivector ind,
-              int Nind, int Naug, int Nmark,vector *mapdistance);
+              int Nind, int Naug, int Nmark,vector *mapdistance, char reestimate);
 
 
 /* ML estimation of parameters in mixture model via EM;

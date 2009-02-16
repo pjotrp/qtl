@@ -22,7 +22,7 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
 			   int *geno,int *chromo, double *dist, double *pheno, 
 			   int *cofactors, int *backwards, int *RMLorML,double *alfa,int *emiter,
 			   double *windowsize,double *steps,
-			   double *stepmi,double *stepma,int *NRun, double *qtl);
+			   double *stepmi,double *stepma,int *NRun, double *qtl,int re_estimate);
 
 
 /**********************************************************************
@@ -35,7 +35,7 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
 void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo, 
 			 double **Dist, double **Pheno, int **Cofactors, int Backwards, int RMLorML,double Alfa,int Emiter,
 			 double Windowsize,double Steps,
-			 double Stepmi,double Stepma,int NRUN, double **QTL);
+			 double Stepmi,double Stepma,int NRUN, double **QTL,int *reestimate);
 
 /**********************************************************************
  * 

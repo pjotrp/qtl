@@ -25,7 +25,7 @@
     ignorance of unlikely genotypes*/
 void rmixture(cmatrix marker, vector weight, vector r,
               cvector position, ivector ind,
-              int Nind, int Naug, int Nmark,vector *mapdistance){   
+              int Nind, int Naug, int Nmark,vector *mapdistance, char reestimate){   
 	int i,j;
     int iem= 0;
     double Nrecom, oldr=0.0, newr, rdelta=1.0;
@@ -33,21 +33,14 @@ void rmixture(cmatrix marker, vector weight, vector r,
     indweight = newvector(Nind);
 	vector distance;
     distance= newvector(Nmark+1);
-    char rknown='n';
-	//this should change because we should re-estimate the Recombination frequency for all r[j] != 999.0
-	//this then effects to mapQTL and ends because of r[j] errors... perhaps r[j] should come from R/QTL so we don't have to worry about those calculations
-    for (j=0; j<Nmark; j++){
-		//Rprintf("Recombination frequency: %f at marker %d\n",r[j],j);
-		if (r[j]!=999.0){
-			rknown='y';
-		}
+
+    if (reestimate=='n'){
+		Rprintf("INFO: recombination parameters are not re-estimated\n");
+    }else{
+		Rprintf("INFO: recombination parameters are re-estimated\n");
 	}
-    if (rknown=='y'){
-		Rprintf("recombination parameters are not re-estimated\n");
-		//rknown='n'; //HAX to make it update recombination frequenties
-    }
-	//We should use other values then set ones.... em.iter here ?
-     while ((iem<100)&&(rdelta>0.001))
+	//Reestimation of map now works
+     while ((iem<1000)&&(rdelta>0.0001))
      {     R_CheckUserInterrupt(); /* check for ^C */
 		   R_ProcessEvents(); /* do some windows/C stuff so R doesn't look so unresponsive */
 		  // R_FlushConsole();
@@ -89,7 +82,7 @@ void rmixture(cmatrix marker, vector weight, vector r,
                          Nrecom= 2.0*r[j]*r[j]/(r[j]*r[j]+(1-r[j])*(1-r[j]));
                       newr+= Nrecom*weight[i];
                   }
-                  if (rknown=='n' && position[j]!='R') //only update if it isn't the last marker of a chromosome ;)
+                  if (reestimate=='y' && position[j]!='R') //only update if it isn't the last marker of a chromosome ;)
                   {  oldr=r[j];
                      r[j]= newr/(2.0*Nind);
                      rdelta+=pow(r[j]-oldr,2.0);
@@ -100,14 +93,26 @@ void rmixture(cmatrix marker, vector weight, vector r,
      }
      
 /*   print new estimates of recombination frequencies */
-    Rprintf("iem= %d rdelta= %f\n",iem,rdelta);
-   // if (rknown=='n'){  
-    //    for (j=0; j<Nmark; j++){
-	//		if ((position[j]=='L')||(position[j]=='U')){
-	//			(*mapdistance)[j]= -50*log(1-2.0*r[j]);
-	//			Rprintf("r(%d)= %f -> %f\n",j,r[j],(*mapdistance)[j]);
-	//		}
-	//	}
+
+	float last_step = 0.0;
+    if (reestimate=='y'){  
+        for (j=0; j<Nmark; j++){
+			if(position[j+1]=='R'){
+				last_step = (*mapdistance)[j+1]-(*mapdistance)[j];
+			}
+			if(position[j]!='L'){
+				if(position[j]!='R'){
+					(*mapdistance)[j]= -50*log(1-2.0*r[j])+(*mapdistance)[j-1];
+				}else{
+					(*mapdistance)[j]= (*mapdistance)[j-1]+last_step;
+				}
+			}else{
+				(*mapdistance)[j]= -50*log(1-2.0*r[j]);
+			}
+			Rprintf("r(%d)= %f -> %f\n",j,r[j],(*mapdistance)[j]);
+		}
+	}
+	Rprintf("Re-estimation took %d iterations, rdelta= %f\n",iem,rdelta);
 	Free(indweight);
 }
 

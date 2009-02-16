@@ -259,7 +259,9 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
               if (REMLorML=='1') weight[0]= -1.0;
               QTLlikelihood+=2.0*QTLmixture(QTLloci,QTLcofactor,QTLr,QTLposition,y,ind,Nind,Naug,Nloci,&variance,em,&weight,REMLorML,fitQTL,dominance);
 			  //this is the place we error at, because the likelyhood is not correct.
-			  if (QTLlikelihood<-0.05) { Rprintf("Error Negative QTLlikelihood=%f  versus BASE MODEL:%f QTL at %d\n",QTLlikelihood,savebaseNoQTLModel,j);} //return 0;}
+			  if (QTLlikelihood<-0.05) { 
+				Rprintf(" Negative QTLlikelihood=%f  versus BASE MODEL:%f QTL at %d\n",QTLlikelihood,savebaseNoQTLModel,j); //return 0;}	
+			  }
               maxF= (maxF<QTLlikelihood ? QTLlikelihood : maxF);
               if (run>0) (*Frun)[step][run]+= QTLlikelihood;
               else (*Frun)[step][0]+= QTLlikelihood;

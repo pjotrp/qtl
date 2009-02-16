@@ -32,7 +32,7 @@
  */
 void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, 
 			   double **QTL,vector *mapdistance,int **Chromo,int Nrun,int RMLorML, double windowsize,double stepsize,
-			   double stepmin,double stepmax,double alfa,int em,int out_Naug,int **INDlist)
+			   double stepmin,double stepmax,double alfa,int em,int out_Naug,int **INDlist,char reestimate)
 {    
     int Naug;
 	int run=0;
@@ -145,7 +145,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
         else
         { if (chr[j]==chr[j+1]) position[j]='L'; else position[j]='U'; }
     }
-    for (int j=0; j<Nmark; j++){
+	for (int j=0; j<Nmark; j++){
 		if ((position[j]=='L')||(position[j]=='M')){
 			r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
 			if (r[j]<0){
@@ -156,7 +156,6 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 			}
 		}
     }
-
     ivector newind;
     vector newy;
     cmatrix newmarker;
@@ -194,7 +193,22 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 
     vector newweight;
     newweight= newvector(Naug);
-    rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance);
+    
+	//Re-estimation of recombinant frequencies
+	rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance,reestimate);
+	
+	//Check if everything still is correct
+	for (int j=0; j<Nmark; j++){
+		if ((position[j]=='L')||(position[j]=='M')){
+			r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
+			if (r[j]<0){
+				Rprintf("error: recombination frequency is negative\n");
+				Rprintf("j=%d chr=%d mapdistance=%f mapdistance=%f\n",j,chr[j],(*mapdistance)[j+1],(*mapdistance)[j]); 
+				Rprintf("position=%d r[j]=%f\n",position[j], r[j]);
+				return;
+			}
+		}
+    }
 	//for (int j=0; j<Nmark; j++){
 	//	Rprintf("r(%d)= %f\n",j,r[j]);
 	//}
