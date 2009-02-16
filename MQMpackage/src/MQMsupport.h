@@ -16,36 +16,10 @@
 void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, 
 			   double **QTL,vector *mapdistance,int **Chromo,int Nrun,int RMLorML, double windowsize,double stepsize,
 			   double stepmin,double stepmax,double alfa,int em,int out_Naug,int **INDlist);
-			   
-double probleft(char c, int jloc, cvector imarker, vector r, cvector position);
-double probright(char c, int jloc, cvector imarker, vector r, cvector position);
 
-/* 
- * augmentdata inserts missing data - does not use the phenotypes - augments the
- * marker data. Phenotype checking is done in the EM step.
- */
-
-void augmentdata(cmatrix marker, vector y, cmatrix *augmarker, vector *augy, ivector *augind, int *Nind, int *Naug, int Nmark, cvector position, vector r);
-
-/* ML estimation of recombination frequencies via EM;  calculation of multilocus genotype probabilities;  ignorance of unlikely genotypes*/
-void rmixture(cmatrix marker, vector weight, vector r, cvector position, ivector ind, int Nind, int Naug, int Nmark);
-
-/* ML estimation of parameters in mixture model via EM;
-*/
-double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
-              vector y, ivector ind, int Nind, int Naug, int Nloci, double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance);
-
-/* backward elimination in regression of trait on multiple cofactors
-   routine subX haalt uit matrices voor volledige model de submatrices voor submodellen;
-   matrices XtWX en Xt van volledig model worden genoemd fullxtwx en fullxt;
-   analoog vector XtWY wordt full xtwy genoemd;
+/* backward elimination in regression of trait on multiple cofactors routine subX haalt uit matrices voor volledige model de submatrices voor submodellen;
+   matrices XtWX en Xt van volledig model worden genoemd fullxtwx en fullxt; analoog vector XtWY wordt full xtwy genoemd;
 */
 double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector weight, int* ind, int Naug, double logLfull, double variance, double F1, double F2, cvector* newcofactor, vector r, cvector position,vector *informationcontent,vector *mapdistance,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance,int em, double windowsize,double stepsize,
 			  double stepmin,double stepmax);
-
-/* mapQTL */
-double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatrix marker, cvector position, vector mapdistance, vector y, 
-			  vector r, ivector ind, int Naug, double variance, char printoutput,vector *informationcontent,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance,int em, double windowsize,double stepsize,
-			  double stepmin,double stepmax);
-
 /* end of MQMsupport.h */

@@ -16,7 +16,7 @@
 #include <R_ext/Utils.h>
 #include "scanMQM.h"
 #include "MQMdata.h"
-#include "MQMsupport.h"
+#include "MQMprob.h"
 
 
 void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *augIND,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,double *neglect,int *chromo){
