@@ -1,0 +1,2 @@
+useDynLib(MQMpackage)
+exportPattern("^[^\\.]")

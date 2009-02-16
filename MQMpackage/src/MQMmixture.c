@@ -136,7 +136,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
     Fy= newvector(newNaug);
     logP= Nloci*log(Pscale); // only for computational accuracy
 	varknown= (((*variance)==-1.0) ? 'n' : 'y' );
-	
+    Ploci= newvector(newNaug);	
     if ((REMLorML=='0')&&(varknown=='n')){ 
 		Rprintf("variance is being estimated and bias adjusted\n");
 	}
@@ -151,8 +151,11 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 		for (j=0; j<Nloci; j++){
 		    for (i=0; i<Naug; i++) 
 			Ploci[i]*= Pscale;
+			//Here we have ProbLeft
 		    if ((position[j]=='L')||(position[j]=='U')){
-				for (i=0; i<Naug; i++) Ploci[i]*= (loci[j][i]=='1' ? 0.5 : 0.25);
+				for (i=0; i<Naug; i++){
+					Ploci[i]*= (loci[j][i]=='1' ? 0.5 : 0.25);
+				}
 			}
 		    if ((position[j]=='L')||(position[j]=='M')){
 				for (i=0; i<Naug; i++){
@@ -166,6 +169,8 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 					}else {
 						calc_i= r[j]*r[j];
 					}
+					double pleft = probleft(loci[j][i],j,loci[j],r,position);
+					Rprintf("(i,j) (%d,%d) -> Calc_i:%f ProbLeft:%f\n",i,j,calc_i,pleft);
 					Ploci[i]*= calc_i;
 				}
 			}

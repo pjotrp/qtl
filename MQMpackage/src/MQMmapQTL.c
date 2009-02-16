@@ -117,8 +117,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
               else if (moveQTL<=mapdistance[j+1])
               {  QTLposition[j]= position[j];
                  QTLposition[j+1]= 'M';
-				 //HERE there is an error, a slicht buggyness which should be solved the we can re-estimate rec frec. by EM.... QTLr should only depend on r[j]
-                 QTLr[j]= 0.5*(1.0-exp(-0.02*(moveQTL-mapdistance[j])));
+				 QTLr[j]= 0.5*(1.0-exp(-0.02*(moveQTL-mapdistance[j])));
                  QTLr[j+1]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-moveQTL))); //r[j];
                  QTLloci[j]= marker[j];
                  QTLloci[j+1]= marker[Nloci-1];
@@ -132,8 +131,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
            {  if (moveQTL<=mapdistance[j+1])
               {  QTLposition[j]= position[j];
                  QTLposition[j+1]= 'M';
-				 //HERE there is an error, a slicht buggyness which should be solved the we can re-estimate rec frec. by EM.... QTLr should only depend on r[j]
-                 QTLr[j]= 0.5*(1.0-exp(-0.02*(moveQTL-mapdistance[j]))); //0.0;
+				 QTLr[j]= 0.5*(1.0-exp(-0.02*(moveQTL-mapdistance[j]))); //0.0;
                  QTLr[j+1]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-moveQTL))); //r[j];
                  QTLloci[j]= marker[j];
                  QTLloci[j+1]= marker[Nloci-1];
@@ -147,8 +145,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
            {  if (moveQTL<=stepmax)
               {  QTLposition[j]= 'M';
                  QTLposition[j+1]= 'R';
-				 //HERE there is an error, a slicht buggyness which should be soled the we can re-estimate rec frec. by EM.... QTLr should only depend on r[j]
-                 QTLr[j]= 0.5*(1.0-exp(-0.02*(moveQTL-mapdistance[j]))); //0.0;
+				 QTLr[j]= 0.5*(1.0-exp(-0.02*(moveQTL-mapdistance[j]))); //0.0;
                  QTLr[j+1]= r[j]; // note r[j]=999.0
                  QTLloci[j]= marker[j];
                  QTLloci[j+1]= marker[Nloci-1];
