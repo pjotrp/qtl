@@ -25,12 +25,14 @@
     ignorance of unlikely genotypes*/
 void rmixture(cmatrix marker, vector weight, vector r,
               cvector position, ivector ind,
-              int Nind, int Naug, int Nmark){   
+              int Nind, int Naug, int Nmark,vector *mapdistance){   
 	int i,j;
     int iem= 0;
     double Nrecom, oldr=0.0, newr, rdelta=1.0;
     vector indweight;
     indweight = newvector(Nind);
+	vector distance;
+    distance= newvector(Nmark+1);
     char rknown='n';
 	//this should change because we should re-estimate the Recombination frequency for all r[j] != 999.0
 	//this then effects to mapQTL and ends because of r[j] errors... perhaps r[j] should come from R/QTL so we don't have to worry about those calculations
@@ -100,10 +102,12 @@ void rmixture(cmatrix marker, vector weight, vector r,
 /*   print new estimates of recombination frequencies */
     Rprintf("iem= %d rdelta= %f\n",iem,rdelta);
    // if (rknown=='n'){  
-   //     for (j=0; j<Nmark; j++){
-	//		Rprintf("r(%d)= %f\n",j,r[j]);
+    //    for (j=0; j<Nmark; j++){
+	//		if ((position[j]=='L')||(position[j]=='U')){
+	//			(*mapdistance)[j]= -50*log(1-2.0*r[j]);
+	//			Rprintf("r(%d)= %f -> %f\n",j,r[j],(*mapdistance)[j]);
+	//		}
 	//	}
-   // }
 	Free(indweight);
 }
 

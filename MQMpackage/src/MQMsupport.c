@@ -194,7 +194,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 
     vector newweight;
     newweight= newvector(Naug);
-    rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark);
+    rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance);
 	//for (int j=0; j<Nmark; j++){
 	//	Rprintf("r(%d)= %f\n",j,r[j]);
 	//}
