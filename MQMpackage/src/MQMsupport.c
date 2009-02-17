@@ -32,7 +32,7 @@
  */
 void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, 
 			   double **QTL,vector *mapdistance,int **Chromo,int Nrun,int RMLorML, double windowsize,double stepsize,
-			   double stepmin,double stepmax,double alfa,int em,int out_Naug,int **INDlist,char reestimate)
+			   double stepmin,double stepmax,double alfa,int em,int out_Naug,int **INDlist,char reestimate,char crosstype)
 {    
     int Naug;
 	int run=0;
@@ -195,7 +195,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
     newweight= newvector(Naug);
     
 	//Re-estimation of recombinant frequencies
-	rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance,reestimate);
+	rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance,reestimate,crosstype);
 	
 	//Check if everything still is correct
 	for (int j=0; j<Nmark; j++){
@@ -273,17 +273,17 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
      weight[0]= -1.0;
-     logLfull= QTLmixture(marker,cofactor,r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance);
+     logLfull= QTLmixture(marker,cofactor,r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
      Rprintf("log-likelihood of full model= %f\n",logLfull);
      Rprintf("residual variance= %f\n",variance);
      Rprintf("Trait mean= %f \nTrait variation= %f\n",ymean,yvari);
 
      if (Backwards==1)    // use only selected cofactors
          logLfull= backward(Nind, Nmark, cofactor, marker, y, weight, ind, Naug, logLfull,
-                    variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax);
+                    variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype);
      if (Backwards==0) // use all cofactors
          logLfull= mapQTL(Nind, Nmark, cofactor, cofactor, marker, position,
-                  (*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax); // printout=='n'
+                  (*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype); // printout=='n'
 
 	long *idum;
     idum = (long *)Calloc(1, long*);
@@ -324,11 +324,11 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
             // logLfull= QTLmixture(marker,cofactor,r,position,y,ind,Nind,Naug,Nmark,variance,em,weight);
 			if (Backwards==1){ 
                   maxF[run]= backward(Nind, Nmark, cofactor, marker, y, weight, ind, Naug, logLfull,
-                    variance, F1, F2, &selcofactor, r, position,&informationcontent, mapdistance,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax);
+                    variance, F1, F2, &selcofactor, r, position,&informationcontent, mapdistance,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype);
 			}
 			if (Backwards==0){
                   maxF[run]= mapQTL(Nind, Nmark, cofactor, cofactor, marker, position,
-                  (*mapdistance), y, r, ind, Naug, variance, 'n',&informationcontent,&Frun,run,REMLorML, fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax);
+                  (*mapdistance), y, r, ind, Naug, variance, 'n',&informationcontent,&Frun,run,REMLorML, fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype);
 			}
             // cout << "run " << run <<" ready; maxF= " << maxF[run] << endl;
         }
@@ -380,7 +380,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
    analoog vector XtWY wordt full xtwy genoemd;
 */
 double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector weight, int* ind, int Naug, double logLfull, double variance, double F1, double F2, cvector* newcofactor, vector r, cvector position,vector *informationcontent,vector *mapdistance,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance,int em, double windowsize,double stepsize,
-			  double stepmin,double stepmax)
+			  double stepmin,double stepmax,char crosstype)
 {    int dropj=0, Ncof=0;
      double maxlogL, savelogL, maxF=0.0; //, minlogL=logLfull, maxFtest=0.0;
      char finished='n'; //, biasadj='n';
@@ -399,14 +399,14 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
                {  //Rprintf("Drop marker %d\n",j);
                   (*newcofactor)[j]='0';
                   if (REMLorML=='1') variance= -1.0;
-                  logL[j]= QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance);
+                  logL[j]= QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
                   (*newcofactor)[j]='1';
                }
                else if ((*newcofactor)[j]=='2')
                {  //Rprintf("Drop marker %d\n",j);
                   (*newcofactor)[j]='0';
                   if (REMLorML=='1') variance= -1.0;
-                  logL[j]=  QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance);
+                  logL[j]=  QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
                   (*newcofactor)[j]='2';
                }
                else if ((*newcofactor)[j]!='0') Rprintf("Something is wrong");
@@ -437,7 +437,7 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
      if ((*newcofactor)[j]!='0') Rprintf("Marker %d is in final model\n",(j+1));
 
      maxF= mapQTL(Nind, Nmark, cofactor, (*newcofactor), marker, position,
-           (*mapdistance), y, r, ind, Naug, variance, 'n', informationcontent,Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax); // printoutput='n'
+           (*mapdistance), y, r, ind, Naug, variance, 'n', informationcontent,Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype); // printoutput='n'
      //Rprintf("Backward selection finished\n");
      Free(logL);
      return maxF;

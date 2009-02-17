@@ -29,6 +29,11 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		stop("Error: No cross file. Please supply a valid cross object.") 
 	}
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
+		if(class(cross)[1] == "f2"){
+			ctype = 1
+		}else{
+			ctype = 2
+		}
 		cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
 		n.ind <- nind(cross)
 		n.chr <- nchr(cross)
@@ -155,7 +160,8 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 				as.integer(extra1),
 				as.integer(extra2),
 				QTL=as.double(rep(0,n.chr*qtlAchromo)),
-				as.integer(reestimate)
+				as.integer(reestimate),
+				as.integer(ctype)
 			    )
 		# initialize output object
 		qtl <- NULL

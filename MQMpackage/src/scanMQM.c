@@ -81,7 +81,7 @@ void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno)
 void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo, 
 			 double **Dist, double **Pheno, int **Cofactors, int Backwards, int RMLorML,double Alfa,int Emiter,
 			 double Windowsize,double Steps,
-			 double Stepmi,double Stepma,int NRUN,int out_Naug,int **INDlist, double **QTL, int re_estimate){
+			 double Stepmi,double Stepma,int NRUN,int out_Naug,int **INDlist, double **QTL, int re_estimate,int crosstype){
 	
 	ivector f1genotype;
 	cmatrix markers;
@@ -137,8 +137,14 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	if(re_estimate == 0){
 		reestimate = 'n';
 	}
+	char cross = 'F';
+	if(crosstype == 1){
+		cross = 'F';	
+	}else{
+		cross = 'R';	
+	}
 	Rprintf("We got all the needed information, so lets start with the MQM\n");   
-	analyseF2(Nind, Nmark, cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate);
+	analyseF2(Nind, Nmark, cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,cross);
 	//Rprintf("Starting Cleanup\n");
 	delcmatrix(markers,Nmark);
 	Free(f1genotype);
@@ -159,7 +165,7 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
 			   int *geno,int *chromo, double *dist, double *pheno, 
 			   int *cofactors, int *backwards, int *RMLorML,double *alfa,int *emiter,
 			   double *windowsize,double *steps,
-			   double *stepmi,double *stepma, int *nRun,int *out_Naug,int *indlist,  double *qtl,int *reestimate){
+			   double *stepmi,double *stepma, int *nRun,int *out_Naug,int *indlist,  double *qtl,int *reestimate,int *crosstype){
    int **Geno;
    int **Chromo;
    double **Dist;  
@@ -179,7 +185,7 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
    reorg_int(*out_Naug,1,indlist,&INDlist);  
    //Done with reorganising lets start executing
    
-   scanMQM(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate);
+   scanMQM(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,*crosstype);
 } /* end of function R_scanMQM */
 
 

@@ -15,7 +15,7 @@
     ignorance of unlikely genotypes*/
 void rmixture(cmatrix marker, vector weight, vector r,
               cvector position, ivector ind,
-              int Nind, int Naug, int Nmark,vector *mapdistance, char reestimate);
+              int Nind, int Naug, int Nmark,vector *mapdistance, char reestimate,char crosstype);
 
 
 /* ML estimation of parameters in mixture model via EM;
@@ -23,6 +23,6 @@ void rmixture(cmatrix marker, vector weight, vector r,
 double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
               vector y, ivector ind, int Nind, int Naug,
               int Nloci,
-              double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance);
+              double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance,char crosstype);
 
 /* end of MQMmixture.c */

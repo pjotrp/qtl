@@ -60,6 +60,53 @@ double probleft(char c, int jloc, cvector imarker, vector r, cvector position){
     }
 }
 
+double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,int ADJ){
+	//Compares loci[j][i] versus loci[j+1][i]
+	//F2 population specific
+	double calc_i;
+	double Nrecom;
+	char compareto;
+	
+	if(JorC==1){
+		//Rprintf("C %d %d\n",i,j);
+		compareto = c;
+	}else{
+		//Rprintf("loci[j+1][i] %d\n",j);
+		compareto = loci[j+1][i];
+	}
+	switch(crosstype){
+		case 'F':
+				//Rprintf("before Nrecom\n",j);				
+				Nrecom= absdouble((double)loci[j][i]-(double)compareto);
+				if ((loci[j][i]=='1')&&(compareto=='1')){
+					calc_i= (r[j+ADJ]*r[j+ADJ]+(1.0-r[j+ADJ])*(1.0-r[j+ADJ]));}
+				else if (Nrecom==0) {
+					calc_i= (1.0-r[j+ADJ])*(1.0-r[j+ADJ]);
+				}else if (Nrecom==1) {
+					if(ADJ!=0){
+						calc_i= ((loci[j][i]=='1') ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
+					}else{
+						calc_i= ((compareto=='1') ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
+					}
+				}else {
+					calc_i= r[j+ADJ]*r[j+ADJ];
+				}
+				//Rprintf("after IF\n",j);
+			break;
+		case 'R':
+				Nrecom= absdouble((double)loci[j][i]-(double)compareto);
+				if(Nrecom==0){
+					//No recombination has a chance of r[j]
+					calc_i =  (1.0-r[j+ADJ]);
+				}else{
+					// Recombination between markers has a chance of r[j-1]
+					calc_i = r[j+ADJ];
+				}
+			break;
+	}
+	return calc_i;
+}
+
 double probleft_RIL(char c, int jloc, cvector imarker, vector r, cvector position){
 	//This is for an RIL population, 0=A , 2=B... there are no H types XD
 	double nrecom;

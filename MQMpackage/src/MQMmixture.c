@@ -25,7 +25,7 @@
     ignorance of unlikely genotypes*/
 void rmixture(cmatrix marker, vector weight, vector r,
               cvector position, ivector ind,
-              int Nind, int Naug, int Nmark,vector *mapdistance, char reestimate){   
+              int Nind, int Naug, int Nmark,vector *mapdistance, char reestimate,char crosstype){   
 	int i,j;
     int iem= 0;
     double Nrecom, oldr=0.0, newr, rdelta=1.0;
@@ -55,13 +55,9 @@ void rmixture(cmatrix marker, vector weight, vector r,
                else weight[i]*= 0.25;
                if ((position[j]=='L')||(position[j]=='M'))
                for (i=0; i<Naug; i++)
-               {   Nrecom= absdouble((double)marker[j][i]-marker[j+1][i]);
-                   if ((marker[j][i]=='1')&&(marker[j+1][i]=='1'))
-                      weight[i]*= (r[j]*r[j]+(1.0-r[j])*(1.0-r[j])); // /2.0;
-                   else if (Nrecom==0) weight[i]*= (1.0-r[j])*(1.0-r[j]);
-                   else if (Nrecom==1) weight[i]*= ((marker[j+1][i]=='1') ? 2.0*r[j]*(1.0-r[j]) :
-                                                                                r[j]*(1.0-r[j]));
-                   else                weight[i]*=      r[j] *     r[j];
+               {   
+				   double calc_i = prob(marker,r,i,j,marker[j+1][i],crosstype,0,0);
+				   weight[i]*=calc_i;
                }
            }
            for (i=0; i<Nind; i++){ 
@@ -122,7 +118,7 @@ void rmixture(cmatrix marker, vector weight, vector r,
 double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
               vector y, ivector ind, int Nind, int Naug,
               int Nloci,
-              double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance){
+              double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance,char crosstype){
 	//Rprintf("QTLmixture called\n");
     int iem= 0, newNaug, i, j;
     char varknown, biasadj='n';
@@ -159,18 +155,8 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 			}
 		    if ((position[j]=='L')||(position[j]=='M')){
 				for (i=0; i<Naug; i++){
-					Nrecom= absdouble((double)loci[j][i]-(double)loci[j+1][i]);
-					if ((loci[j][i]=='1')&&(loci[j+1][i]=='1')){
-						calc_i= (r[j]*r[j]+(1.0-r[j])*(1.0-r[j]));}
-					else if (Nrecom==0) {
-						calc_i= (1.0-r[j])*(1.0-r[j]);
-					}else if (Nrecom==1) {
-						calc_i= ((loci[j+1][i]=='1') ? 2.0*r[j]*(1.0-r[j]) : r[j]*(1.0-r[j]));
-					}else {
-						calc_i= r[j]*r[j];
-					}
-					double pleft = probleft(loci[j][i],j,loci[j],r,position);
-					Rprintf("(i,j) (%d,%d) -> Calc_i:%f ProbLeft:%f\n",i,j,calc_i,pleft);
+					calc_i = prob(loci,r,i,j,loci[j+1][i],'F',0,0);
+					//Rprintf("(i,j) (%d,%d) -> Calc_i:%f Prob:%f\n",i,j,calc_i,pleft);
 					Ploci[i]*= calc_i;
 				}
 			}
@@ -202,66 +188,32 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
           }
           if ((position[j]=='L')||(position[j]=='M'))
           {  if ((cofactor[j]<='1')&&(cofactor[j+1]<='1'))
-             for (i=0; i<Naug; i++)
-             {  Nrecom= absdouble((double)loci[j][i]-(double)loci[j+1][i]);
-                if ((loci[j][i]=='1')&&(loci[j+1][i]=='1'))
-                   calc_i= (r[j]*r[j]+(1.0-r[j])*(1.0-r[j]));
-                else if (Nrecom==0) calc_i= (1.0-r[j])*(1.0-r[j]);
-                else if (Nrecom==1) calc_i= ((loci[j+1][i]=='1')
-                        ? 2.0*r[j]*(1.0-r[j]) : r[j]*(1.0-r[j]));
-                else calc_i= r[j]*r[j];
+             for (i=0; i<Naug; i++){  
+				calc_i = prob(loci,r,i,j,loci[j+1][i],crosstype,0,0);
                 Ploci[i]*= calc_i; Ploci[i+Naug]*= calc_i; Ploci[i+2*Naug]*= calc_i;
              }
              else if (cofactor[j]<='1') // locus j+1 == QTL
              for (i=0; i<Naug; i++)
              {  // QTL=='0'
-                Nrecom= absdouble((double)loci[j][i]-(double)'0');
-                if (Nrecom==0) calc_i= (1.0-r[j])*(1.0-r[j]);
-                else if (Nrecom==1) calc_i= r[j]*(1.0-r[j]);
-                else calc_i= r[j]*r[j];
+				calc_i = prob(loci,r,i,j,'0',crosstype,1,0);
                 Ploci[i]*= calc_i;
                 // QTL=='1'
-                Nrecom= absdouble((double)loci[j][i]-(double)'1');
-                if (loci[j][i]=='1')
-                   calc_i= (r[j]*r[j]+(1.0-r[j])*(1.0-r[j]));
-                else if (Nrecom==0) calc_i= (1.0-r[j])*(1.0-r[j]);
-                else if (Nrecom==1) calc_i= 2.0*r[j]*(1.0-r[j]);
-                else calc_i= r[j]*r[j];
+                calc_i = prob(loci,r,i,j,'1',crosstype,1,0);
                 Ploci[i+Naug]*= calc_i;
                 // QTL=='2'
-                Nrecom= absdouble((double)loci[j][i]-(double)'2');
-                if (Nrecom==0) calc_i= (1.0-r[j])*(1.0-r[j]);
-                else if (Nrecom==1) calc_i= r[j]*(1.0-r[j]);
-                else calc_i= r[j]*r[j];
+                calc_i = prob(loci,r,i,j,'2',crosstype,1,0);
                 Ploci[i+2*Naug]*= calc_i;
              }
              else // locus j == QTL
              for (i=0; i<Naug; i++)
              {  // QTL=='0'
-                Nrecom= absdouble((double)loci[j+1][i]-(double)'0');
-                if (Nrecom==0) calc_i= (1.0-r[j])*(1.0-r[j]);
-                else if (Nrecom==1) calc_i= ((loci[j+1][i]=='1')
-                        ? 2.0*r[j]*(1.0-r[j]) : r[j]*(1.0-r[j]));
-                else calc_i= r[j]*r[j];
+                calc_i = prob(loci,r,i,j+1,'0',crosstype,1,-1);
                 Ploci[i]*= calc_i;
-                //test= 0;
-                //test+= (calc_i==0 ? 1 : 0);
                 // QTL=='1'
-                Nrecom= absdouble((double)loci[j+1][i]-(double)'1');
-                if (loci[j+1][i]=='1')
-                   calc_i= (r[j]*r[j]+(1.0-r[j])*(1.0-r[j]));
-                else if (Nrecom==0) calc_i= (1.0-r[j])*(1.0-r[j]);
-                else if (Nrecom==1) calc_i= ((loci[j+1][i]=='1')
-                        ? 2.0*r[j]*(1.0-r[j]) : r[j]*(1.0-r[j]));
-                else calc_i= r[j]*r[j];
+				calc_i = prob(loci,r,i,j+1,'1',crosstype,1,-1);
                 Ploci[i+Naug]*= calc_i;
-                //test+= (calc_i==0 ? 1 : 0);
                 // QTL=='2'
-                Nrecom= absdouble((double)loci[j+1][i]-(double)'2');
-                if (Nrecom==0) calc_i= (1.0-r[j])*(1.0-r[j]);
-                else if (Nrecom==1) calc_i= ((loci[j+1][i]=='1')
-                        ? 2.0*r[j]*(1.0-r[j]) : r[j]*(1.0-r[j]));
-                else calc_i= r[j]*r[j];
+                calc_i = prob(loci,r,i,j+1,'2',crosstype,1,-1);
                 Ploci[i+2*Naug]*= calc_i;
              }
           }
