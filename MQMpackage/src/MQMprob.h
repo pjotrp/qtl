@@ -15,5 +15,5 @@ double probleft(char c, int jloc, cvector imarker, vector r, cvector position);
 
 double probright(char c, int jloc, cvector imarker, vector r, cvector position);
 
-double prob(cmatrix loci, vector r,int i,int j,char c,char crosstype,int JorC,int ADJ);
+double prob(cmatrix loci, vector r,int i,int j,char c,char crosstype,int JorC,int ADJ,int start);
 /* end of MQMprob.h */

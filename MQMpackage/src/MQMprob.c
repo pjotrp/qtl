@@ -60,9 +60,9 @@ double probleft(char c, int jloc, cvector imarker, vector r, cvector position){
     }
 }
 
-double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,int ADJ){
+double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,int ADJ,int start){
 	//Compares loci[j][i] versus loci[j+1][i]
-	//F2 population specific
+	
 	double calc_i;
 	double Nrecom;
 	char compareto;
@@ -76,6 +76,9 @@ double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,
 	}
 	switch(crosstype){
 		case 'F':
+				if(start){
+					return (loci[j][i]=='1' ? 0.5 : 0.25);
+				}
 				//Rprintf("before Nrecom\n",j);				
 				Nrecom= absdouble((double)loci[j][i]-(double)compareto);
 				if ((loci[j][i]=='1')&&(compareto=='1')){
@@ -94,6 +97,9 @@ double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,
 				//Rprintf("after IF\n",j);
 			break;
 		case 'R':
+				if(start){
+					return 0.5;
+				}
 				Nrecom= absdouble((double)loci[j][i]-(double)compareto);
 				if(Nrecom==0){
 					//No recombination has a chance of r[j]

@@ -102,6 +102,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      for (int i=0; i<Naug; i++)
      {  yi= y[i];
         wi= (*weight)[i];
+		//in the original version when we enable Dominance , we crash around here
         for (j=0; j<dimx; j++)
         {   xtwj= ((double)Xt[j][i]-48.0)*wi;
             XtWY[j]+= xtwj*yi;

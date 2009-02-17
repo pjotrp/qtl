@@ -56,7 +56,7 @@ void rmixture(cmatrix marker, vector weight, vector r,
                if ((position[j]=='L')||(position[j]=='M'))
                for (i=0; i<Naug; i++)
                {   
-				   double calc_i = prob(marker,r,i,j,marker[j+1][i],crosstype,0,0);
+				   double calc_i = prob(marker,r,i,j,marker[j+1][i],crosstype,0,0,0);
 				   weight[i]*=calc_i;
                }
            }
@@ -122,7 +122,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 	//Rprintf("QTLmixture called\n");
     int iem= 0, newNaug, i, j;
     char varknown, biasadj='n';
-	double Nrecom, oldlogL=-10000, delta=1.0, calc_i, logP=0.0, Pscale=1.75;
+	double oldlogL=-10000, delta=1.0, calc_i, logP=0.0, Pscale=1.75;
     
 	vector indweight, Ploci, Fy;
     
@@ -150,24 +150,17 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 			//Here we have ProbLeft
 		    if ((position[j]=='L')||(position[j]=='U')){
 				for (i=0; i<Naug; i++){
-					Ploci[i]*= (loci[j][i]=='1' ? 0.5 : 0.25);
+					calc_i= prob(loci,r,i,j,'1',crosstype,1,0,1);
+					Ploci[i]*= calc_i;
 				}
 			}
 		    if ((position[j]=='L')||(position[j]=='M')){
 				for (i=0; i<Naug; i++){
-					calc_i = prob(loci,r,i,j,loci[j+1][i],'F',0,0);
-					//Rprintf("(i,j) (%d,%d) -> Calc_i:%f Prob:%f\n",i,j,calc_i,pleft);
+					calc_i = prob(loci,r,i,j,loci[j+1][i],'F',0,0,0);
 					Ploci[i]*= calc_i;
 				}
 			}
 		}
-	//Rprintf("FitQTL=N Done\n");
-	//for (j=0; j<Nloci; j++){
-	//    for (i=0; i<Naug; i++){
-	//		Rprintf("%c ",loci[j][i]);
-	//	}
-	//	Rprintf("\n");
-	//}
 	}else{
 	//Rprintf("FitQTL=Y\n");	
      for (j=0; j<Nloci; j++)
@@ -176,44 +169,46 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
               // only for computational accuracy; see use of logP
           }
           if ((position[j]=='L')||(position[j]=='U'))
-          {  if (cofactor[j]<='1')
+          {  
+			//Here we still have some f2 dependancies
+			if (cofactor[j]<='1')
              for (i=0; i<Naug; i++)
-             {   calc_i= (loci[j][i]=='1' ? 0.5 : 0.25);
+             {   calc_i= prob(loci,r,i,j,'1',crosstype,1,0,1);
                  Ploci[i]*= calc_i; Ploci[i+Naug]*= calc_i; Ploci[i+2*Naug]*= calc_i;
              }
              else
              for (i=0; i<Naug; i++)
-             {   Ploci[i]*= 0.25; Ploci[i+Naug]*= 0.5; Ploci[i+2*Naug] *= 0.25; }
+             {  Ploci[i]*= 0.25; Ploci[i+Naug]*= 0.5; Ploci[i+2*Naug] *= 0.25; }
                  // QTL='0', '1' or'2'
           }
           if ((position[j]=='L')||(position[j]=='M'))
           {  if ((cofactor[j]<='1')&&(cofactor[j+1]<='1'))
              for (i=0; i<Naug; i++){  
-				calc_i = prob(loci,r,i,j,loci[j+1][i],crosstype,0,0);
+				calc_i = prob(loci,r,i,j,loci[j+1][i],crosstype,0,0,0);
                 Ploci[i]*= calc_i; Ploci[i+Naug]*= calc_i; Ploci[i+2*Naug]*= calc_i;
              }
              else if (cofactor[j]<='1') // locus j+1 == QTL
              for (i=0; i<Naug; i++)
              {  // QTL=='0'
-				calc_i = prob(loci,r,i,j,'0',crosstype,1,0);
+				calc_i = prob(loci,r,i,j,'0',crosstype,1,0,0);
                 Ploci[i]*= calc_i;
                 // QTL=='1'
-                calc_i = prob(loci,r,i,j,'1',crosstype,1,0);
+                calc_i = prob(loci,r,i,j,'1',crosstype,1,0,0);
                 Ploci[i+Naug]*= calc_i;
                 // QTL=='2'
-                calc_i = prob(loci,r,i,j,'2',crosstype,1,0);
+                calc_i = prob(loci,r,i,j,'2',crosstype,1,0,0);
                 Ploci[i+2*Naug]*= calc_i;
              }
              else // locus j == QTL
              for (i=0; i<Naug; i++)
              {  // QTL=='0'
-                calc_i = prob(loci,r,i,j+1,'0',crosstype,1,-1);
+                calc_i = prob(loci,r,i,j+1,'0',crosstype,1,-1,0);
                 Ploci[i]*= calc_i;
                 // QTL=='1'
-				calc_i = prob(loci,r,i,j+1,'1',crosstype,1,-1);
+				calc_i = prob(loci,r,i,j+1,'1',crosstype,1,-1,0);
                 Ploci[i+Naug]*= calc_i;
                 // QTL=='2'
-                calc_i = prob(loci,r,i,j+1,'2',crosstype,1,-1);
+                calc_i = prob(loci,r,i,j+1,'2',crosstype,1,-1,0);
                 Ploci[i+2*Naug]*= calc_i;
              }
           }
