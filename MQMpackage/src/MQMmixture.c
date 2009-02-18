@@ -179,6 +179,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
              else
              for (i=0; i<Naug; i++)
              {
+				//startvalues for each new chromosome
 				Ploci[i]*= start_prob(crosstype,'0');
 				Ploci[i+Naug]*= start_prob(crosstype,'1'); 
 				Ploci[i+2*Naug] *= start_prob(crosstype,'2');

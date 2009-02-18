@@ -31,6 +31,16 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 		return 
 	}
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
+		if(class(cross)[1] == "f2"){
+			ctype = 1
+		}
+		if(class(cross)[1] == "bc"){
+			ctype = 2
+		}
+		if(class(cross)[1] == "riself"){
+			ctype = 3
+		#	stop("Somethings still wrong in the algorithm, please analyse RIL as BC.")
+		}
 		cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
 		n.ind <- nind(cross)
 		n.chr <- nchr(cross)
@@ -91,7 +101,8 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 				as.integer(maxaug),
 				as.integer(maxiaug),
 				as.double(neglect),
-				as.integer(chr)
+				as.integer(chr),
+				as.integer(ctype)
 			    )
 		n.ind = result[[7]]
 		n.aug = result[[8]]	
