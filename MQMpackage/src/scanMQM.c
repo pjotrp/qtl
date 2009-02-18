@@ -81,7 +81,7 @@ void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno)
 void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo, 
 			 double **Dist, double **Pheno, int **Cofactors, int Backwards, int RMLorML,double Alfa,int Emiter,
 			 double Windowsize,double Steps,
-			 double Stepmi,double Stepma,int NRUN,int out_Naug,int **INDlist, double **QTL, int re_estimate,int crosstype){
+			 double Stepmi,double Stepma,int NRUN,int out_Naug,int **INDlist, double **QTL, int re_estimate,int crosstype,int domi){
 	
 	ivector f1genotype;
 	cmatrix markers;
@@ -133,6 +133,30 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 			}
 		}
 	}
+	for(int i=0; i< Nmark; i++){
+		for(int j=0; j< Nind; j++){
+			//Some lame ass checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
+			if(Geno[i][j] > 3 && crosstype != 1){
+				Rprintf("INFO: Stange genotype pattern, switching to F2\n");
+				crosstype = 1;
+				break;
+			}
+			if(Geno[i][j] == 3 && crosstype == 2){
+				Rprintf("INFO: Stange genotype pattern, switching from BC to F2\n");
+				crosstype = 1;
+				break;
+			}
+			//IF we have a RIL and find AB then Rqtl messed up, so we have a BC genotype
+			if(Geno[i][j] == 2 && crosstype == 3){
+				Rprintf("INFO: Stange genotype pattern, switching from RISELF to BC\n");
+				crosstype = 2;
+				break;
+			}
+			
+		}
+		//Rprintf("\n");
+	}
+	
 	char reestimate = 'y';
 	if(re_estimate == 0){
 		reestimate = 'n';
@@ -140,11 +164,19 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	char cross = 'F';
 	if(crosstype == 1){
 		cross = 'F';	
-	}else{
-		cross = 'R';	
 	}
+	if(crosstype == 2){
+		cross = 'B';	
+	}
+	if(crosstype == 3){
+		cross = 'R';	
+	}	
+	char dominance='n';
+	if(domi != 0){
+		dominance='y';
+	}	
 	Rprintf("We got all the needed information, so lets start with the MQM\n");   
-	analyseF2(Nind, Nmark, cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,cross);
+	analyseF2(Nind, Nmark, cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,cross,dominance);
 	//Rprintf("Starting Cleanup\n");
 	delcmatrix(markers,Nmark);
 	Free(f1genotype);
@@ -165,7 +197,7 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
 			   int *geno,int *chromo, double *dist, double *pheno, 
 			   int *cofactors, int *backwards, int *RMLorML,double *alfa,int *emiter,
 			   double *windowsize,double *steps,
-			   double *stepmi,double *stepma, int *nRun,int *out_Naug,int *indlist,  double *qtl,int *reestimate,int *crosstype){
+			   double *stepmi,double *stepma, int *nRun,int *out_Naug,int *indlist,  double *qtl,int *reestimate,int *crosstype,int *domi){
    int **Geno;
    int **Chromo;
    double **Dist;  
@@ -185,7 +217,7 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
    reorg_int(*out_Naug,1,indlist,&INDlist);  
    //Done with reorganising lets start executing
    
-   scanMQM(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,*crosstype);
+   scanMQM(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,*crosstype,*domi);
 } /* end of function R_scanMQM */
 
 

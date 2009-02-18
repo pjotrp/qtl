@@ -32,13 +32,13 @@
  */
 void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, 
 			   double **QTL,vector *mapdistance,int **Chromo,int Nrun,int RMLorML, double windowsize,double stepsize,
-			   double stepmin,double stepmax,double alfa,int em,int out_Naug,int **INDlist,char reestimate,char crosstype)
+			   double stepmin,double stepmax,double alfa,int em,int out_Naug,int **INDlist,char reestimate,char crosstype,char dominance)
 {    
     int Naug;
 	int run=0;
     cvector position;
 	vector informationcontent;
-	char dominance='n';
+	//char dominance='n';
 	char perm_simu='1';
 	ivector chr;
 	matrix Frun;

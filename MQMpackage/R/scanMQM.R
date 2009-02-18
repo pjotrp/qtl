@@ -23,7 +23,7 @@ cross <- read.cross("csv","","Test.csv")
 
 scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0,n.run=0,file="MQM_output.txt",doLOG=0,reestimate=0){
+					step.min=-20.0,step.max=220.0,n.run=0,file="MQM_output.txt",doLOG=0,reestimate=0,dominance=0){
     library(qtl)
 	if(is.null(cross)){
 		stop("Error: No cross file. Please supply a valid cross object.") 
@@ -31,8 +31,13 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
 		if(class(cross)[1] == "f2"){
 			ctype = 1
-		}else{
+		}
+		if(class(cross)[1] == "bc"){
 			ctype = 2
+		}
+		if(class(cross)[1] == "riself"){
+			ctype = 3
+		#	stop("Somethings still wrong in the algorithm, please analyse RIL as BC.")
 		}
 		cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
 		n.ind <- nind(cross)
@@ -161,7 +166,8 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 				as.integer(extra2),
 				QTL=as.double(rep(0,n.chr*qtlAchromo)),
 				as.integer(reestimate),
-				as.integer(ctype)
+				as.integer(ctype),
+				as.integer(dominance)
 			    )
 		# initialize output object
 		qtl <- NULL
@@ -190,3 +196,11 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 
 res <- scanMQM(cross)
 plot(res)
+
+bcqtl <- c(3,15,2)                                      # QTL at chromosome 3
+data(map10)                                             # Mouse genome
+bccross <- sim.cross(map10,bcqtl,n=100,type="bc")       # Simulate a BC Cross
+bcresult <- scanMQM(bccross)                            # Do a MQM scan of the genome
+plot(bcresult)                                          # Plot the results of the genome scan
+
+

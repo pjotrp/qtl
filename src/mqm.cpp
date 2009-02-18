@@ -1649,7 +1649,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      for (int i=0; i<Naug; i++)
      {   wi= weight[i]+ weight[i+Naug]+ weight[i+2*Naug];
          yi= y[i];
-         for (j=0; j<=dimx; j++)
+         for (j=0; j<dimx; j++)
          if (xtQTL[j]<='1')
          {  xtwj= ((double)Xt[j][i]-48.0)*wi;
             XtWY[j]+= xtwj*yi;

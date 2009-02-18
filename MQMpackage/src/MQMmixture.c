@@ -178,7 +178,11 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
              }
              else
              for (i=0; i<Naug; i++)
-             {  Ploci[i]*= 0.25; Ploci[i+Naug]*= 0.5; Ploci[i+2*Naug] *= 0.25; }
+             {
+				Ploci[i]*= start_prob(crosstype,'0');
+				Ploci[i+Naug]*= start_prob(crosstype,'1'); 
+				Ploci[i+2*Naug] *= start_prob(crosstype,'2');
+			 }
                  // QTL='0', '1' or'2'
           }
           if ((position[j]=='L')||(position[j]=='M'))
@@ -189,7 +193,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
              }
              else if (cofactor[j]<='1') // locus j+1 == QTL
              for (i=0; i<Naug; i++)
-             {  // QTL=='0'
+             {  // QTL=='0' What is the prob of finding an '0' at J=1
 				calc_i = prob(loci,r,i,j,'0',crosstype,1,0,0);
                 Ploci[i]*= calc_i;
                 // QTL=='1'
