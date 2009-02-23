@@ -10,6 +10,10 @@
  * Contains: 
  *
  **********************************************************************/
+ 
+ extern "C"
+{
+
 #include <R.h>
 #include <math.h>
 #include <R_ext/PrtUtil.h>
@@ -443,5 +447,6 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
      return maxF;
 }
 
+ }
  
 /* end of MQMsupport.c */

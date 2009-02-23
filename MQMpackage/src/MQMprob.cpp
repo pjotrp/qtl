@@ -10,6 +10,9 @@
  * Contains: 
  *
  **********************************************************************/
+ 
+ extern "C"
+{
 #include <R.h>
 #include <math.h>
 #include <R_ext/PrtUtil.h>
@@ -229,6 +232,8 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position){
 		}
         return prob0*probright('0',jloc+1,imarker,r,position) + prob1*probright('1',jloc+1,imarker,r,position) + prob2*probright('2',jloc+1,imarker,r,position);
     }
+}
+
 }
 
 /* end of MQMprob.c */

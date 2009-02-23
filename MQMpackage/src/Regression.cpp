@@ -10,6 +10,9 @@
  * Contains: 
  *
  **********************************************************************/
+ extern "C"
+{
+
 #include <R.h>
 #include <math.h>
 #include <R_ext/PrtUtil.h>
@@ -526,5 +529,5 @@ void sort1(int n, double *ra)
      }
 }
  
- 
+ }
 /* end of MQMsupport.c */

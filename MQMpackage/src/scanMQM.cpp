@@ -12,8 +12,11 @@
  *
  **********************************************************************/
 
+extern "C"
+{
 
 #include <R.h>
+#include <Rdefines.h>
 #include <R_ext/PrtUtil.h>
 #include <R_ext/RS.h> /* for Calloc, Realloc */
 #include <R_ext/Utils.h>
@@ -220,4 +223,4 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
    scanMQM(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,*crosstype,*domi);
 } /* end of function R_scanMQM */
 
-
+}

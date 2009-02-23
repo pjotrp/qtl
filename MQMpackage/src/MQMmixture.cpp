@@ -10,6 +10,10 @@
  * Contains: 
  *
  **********************************************************************/
+ 
+ extern "C"
+{
+
 #include <R.h>
 #include <math.h>
 #include <R_ext/PrtUtil.h>
@@ -338,4 +342,5 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
     return logL;
 }
  
+ }
 /* end of MQMmixture.c */

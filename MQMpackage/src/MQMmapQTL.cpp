@@ -10,6 +10,10 @@
  * Contains: 
  *
  **********************************************************************/
+ 
+ extern "C"
+{
+ 
 #include <R.h>
 #include <math.h>
 #include <R_ext/PrtUtil.h>
@@ -304,5 +308,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
     //Rprintf("MapQTL finished\n");
     return maxF; //QTLlikelihood;
 }
+ 
+ }
  
 /* end of MQMmapQTL.c */
