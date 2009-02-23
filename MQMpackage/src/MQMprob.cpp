@@ -27,42 +27,6 @@
 
 //extern long *idum; // for monte carlo simulation or permutation
 
-
-double probleft(char c, int jloc, cvector imarker, vector r, cvector position){
-	//This is for an F2 population, where 'c'==1 stands for H (so it has two times higher chance than A or B
-	double nrecom;
-	//IF position = L (start of chromosome) position = U (unknown position)
-    if ((position[jloc]=='L')||(position[jloc]=='U')){
-		if(c=='1'){
-			return 0.50;
-		}else{
-			return 0.25;
-		}
-	}else if ((c=='1')&&(imarker[jloc-1]=='1')){
-		//special case in which we observe a H after an H then we can't know if we recombinated or not
-		return r[jloc-1]*r[jloc-1]+(1.0-r[jloc-1])*(1.0-r[jloc-1]);
-	}else{
-		//The number of recombinations between observed marker and the previous marker
-		nrecom= absdouble(c-imarker[jloc-1]);
-        if(nrecom==0){
-			//No recombination
-			return (1.0-r[jloc-1])*(1.0-r[jloc-1]);
-		}else if (nrecom==1){
-			//1 recombination
-			if(c=='1'){
-				//the chances of having a H after 1 recombination are 2 times the chance of being either A or B
-				return 2.0*r[jloc-1]*(1.0-r[jloc-1]);
-			}else{
-				//Chance of 1 recombination
-				return r[jloc-1]*(1.0-r[jloc-1]);
-			}
-		}else{
-			//Both markers could have recombinated which has a very low chance
-			return r[jloc-1]*r[jloc-1];
-		}
-    }
-}
-
 double start_prob(char crosstype,char c){
 	switch(crosstype){
 		case 'F':
@@ -100,16 +64,20 @@ double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,
 				//Rprintf("before Nrecom\n",j);				
 				Nrecom= absdouble((double)loci[j][i]-(double)compareto);
 				if ((loci[j][i]=='1')&&(compareto=='1')){
+					//Rprintf("SCase %c <-> %c:\n",compareto,loci[j][i]);
 					calc_i= (r[j+ADJ]*r[j+ADJ]+(1.0-r[j+ADJ])*(1.0-r[j+ADJ]));}
 				else if (Nrecom==0) {
+					//Rprintf("Nrecom=0 %c <-> %c:\n",compareto,loci[j][i]);
 					calc_i= (1.0-r[j+ADJ])*(1.0-r[j+ADJ]);
 				}else if (Nrecom==1) {
+					//Rprintf("Nrecom=1 %c <-> %c:\n",compareto,loci[j][i]);
 					if(ADJ!=0){
 						calc_i= ((loci[j][i]=='1') ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
 					}else{
 						calc_i= ((compareto=='1') ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
 					}
 				}else {
+					//Rprintf("Nrecom=2 %c <-> %c:\n",compareto,loci[j][i]);
 					calc_i= r[j+ADJ]*r[j+ADJ];
 				}
 				//Rprintf("after IF\n",j);

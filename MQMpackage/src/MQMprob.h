@@ -11,7 +11,6 @@
  *
  **********************************************************************/
 
-double probleft(char c, int jloc, cvector imarker, vector r, cvector position);
 
 double probright(char c, int jloc, cvector imarker, vector r, cvector position);
 
