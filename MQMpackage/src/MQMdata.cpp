@@ -240,7 +240,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
            prob0left, prob1left, prob2left,
            prob0right, prob1right, prob2right;
     double probmax;
-	double  prob1left_t, prob2left_t;
+//	double  prob1left_t, prob2left_t;
     vector newprob, newprobmax;
     newprob= newvector(*Naug);
     newprobmax= newvector(*Naug);
@@ -258,15 +258,9 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
                for (int ii=saveiaug; ii<=maxiaug; ii++)
                {   if (newmarker[j][ii]=='3')
                    {  for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
-                      //prob1left= probleft('1',j,imarker,r,position);
-                      //prob2left= probleft('2',j,imarker,r,position);
-						if((position[j]=='L'||position[j]=='U')){
-						 prob1left= start_prob(crosstype,'1');
-						 prob2left= start_prob(crosstype,'2');  
-						}else{
-						 prob1left= prob(marker,r,i,j-1,'1',crosstype,1,0,0);
-						 prob2left= prob(marker,r,i,j-1,'2',crosstype,1,0,0);
-						}
+                      prob1left= probleft('1',j,imarker,r,position);
+                      prob2left= probleft('2',j,imarker,r,position);
+
                       prob1right= probright('1',j,imarker,r,position);
                       prob2right= probright('2',j,imarker,r,position);
                       prob1= prob1left*prob1right;
@@ -307,16 +301,10 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
                    }
                    else if (newmarker[j][ii]=='4')
                      {  for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
-                      //prob1left= probleft('0',j,imarker,r,position);
-                      //prob2left= probleft('1',j,imarker,r,position);
-						if((position[j]=='L'||position[j]=='U')){
-						 prob0left= start_prob(crosstype,'0');
-						 prob1left= start_prob(crosstype,'1');  
-						}else{
-						 prob0left= prob(marker,r,i,j-1,'0',crosstype,1,0,0);
-						 prob1left= prob(marker,r,i,j-1,'1',crosstype,1,0,0);
-						}
-                        prob0right= probright('0',j,imarker,r,position);
+						prob0left= probleft('0',j,imarker,r,position);
+						prob1left= probleft('1',j,imarker,r,position);
+                        
+						prob0right= probright('0',j,imarker,r,position);
                         prob1right= probright('1',j,imarker,r,position);
                         prob0= prob0left*prob0right;
                         prob1= prob1left*prob1right;
@@ -356,18 +344,10 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
                      }
                    else if (newmarker[j][ii]=='9')
                      {  for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
-                      //prob0left= probleft('0',j,imarker,r,position);
-                      //prob1left= probleft('1',j,imarker,r,position);
-					  //prob2left= probleft('2',j,imarker,r,position);
-						if((position[j]=='L'||position[j]=='U')){
-						 prob0left= start_prob(crosstype,'0');
-						 prob1left= start_prob(crosstype,'1');  
-						 prob2left= start_prob(crosstype,'2');  
-						}else{
-						 prob0left= prob(marker,r,i,j-1,'0',crosstype,1,0,0);
-						 prob1left= prob(marker,r,i,j-1,'1',crosstype,1,0,0);
-						 prob2left= prob(marker,r,i,j-1,'2',crosstype,1,0,0);
-						}
+						prob0left= probleft('0',j,imarker,r,position);
+						prob1left= probleft('1',j,imarker,r,position);
+						prob2left= probleft('2',j,imarker,r,position);
+						
                         prob0right= probright('0',j,imarker,r,position);
                         prob1right= probright('1',j,imarker,r,position);
                         prob2right= probright('2',j,imarker,r,position);
@@ -468,12 +448,12 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
 						double hoi = probleft(newmarker[j][ii],j,imarker,r,position);
 						newprob[ii]*= hoi;
 						//working on
-					  //	if((position[j]=='L'||position[j]=='U')){
+					  	//if((position[j]=='L'||position[j]=='U')){
 						// prob0left= start_prob(crosstype,newmarker[j][ii]);
 						//}else{
 						// prob0left= prob(marker,r,i,j-1,newmarker[j][ii],crosstype,1,0,0);
 						//}
-						//Rprintf("%d %d %d %d : %f %f\n",i,j,ii,jj,hoi,prob0left);
+						//
                    }
 
                    if (iaug+3>maxNaug)
