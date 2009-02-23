@@ -83,7 +83,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		for(int i=0; i< *Nmark; i++){
 		for(int j=0; j< *Nind; j++){
 			//Some lame ass checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
-			if(Geno[i][j] > 3 && (*crosstype) != 1){
+			if(Geno[i][j] == 3 && (*crosstype) != 1){
 				Rprintf("INFO: Stange genotype pattern, switching to F2\n");
 				(*crosstype) = 1;
 				break;
@@ -267,8 +267,8 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
 						 prob2left= prob(newmarker,r,ii,j-1,'2',crosstype,1,0,0);
 						}
 				
-                      prob1right= probright('1',j,imarker,r,position);
-                      prob2right= probright('2',j,imarker,r,position);
+                      prob1right= probright('1',j,imarker,r,position,crosstype);
+                      prob2right= probright('2',j,imarker,r,position,crosstype);
                       prob1= prob1left*prob1right;
                       prob2= prob2left*prob2right;
                       
@@ -316,8 +316,8 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
 						 prob1left= prob(newmarker,r,ii,j-1,'1',crosstype,1,0,0);
 						}
                     
-						prob0right= probright('0',j,imarker,r,position);
-                        prob1right= probright('1',j,imarker,r,position);
+						prob0right= probright('0',j,imarker,r,position,crosstype);
+                        prob1right= probright('1',j,imarker,r,position,crosstype);
                         prob0= prob0left*prob0right;
                         prob1= prob1left*prob1right;
 			
@@ -368,9 +368,9 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
 						 prob2left= prob(newmarker,r,ii,j-1,'2',crosstype,1,0,0);
 						}
 					
-                        prob0right= probright('0',j,imarker,r,position);
-                        prob1right= probright('1',j,imarker,r,position);
-                        prob2right= probright('2',j,imarker,r,position);
+                        prob0right= probright('0',j,imarker,r,position,crosstype);
+                        prob1right= probright('1',j,imarker,r,position,crosstype);
+                        prob2right= probright('2',j,imarker,r,position,crosstype);
                         prob0= prob0left*prob0right;
                         prob1= prob1left*prob1right;
                         prob2= prob2left*prob2right;
