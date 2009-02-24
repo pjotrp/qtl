@@ -24,7 +24,7 @@ Index:
 \preformatted{
 scanMQM                 scanMQM - Multiple QTL mapping for F2 crosses
 scanMQMall              scanMQMall - Multitrait analysis of a cross object
-bootstrapMQM			bootstrapMQM - Bootstrapping approach to obtain estimates of QTL significance
+bootstrapMQM		bootstrapMQM - Bootstrapping approach to obtain estimates of QTL significance
 MQMaugment              MQMaugment - Missing data augmentation routine for MQM
 MQMCofactors            MQMCofactors - Helper function to create cofactors to be used with scanMQM
 MQMCofactorsEach        MQMCofactorsEach - Helper function to create cofactors to be used with scanMQM
@@ -53,10 +53,13 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 ~~ Optionally other standard keywords, one per line, from file KEYWORDS in ~~
 ~~ the R documentation directory ~~
 \keyword{ package }
+
 \seealso{
-	\code{\link{MQMaugment}} - Dataaugmentation routine to estimate missing data
-	\code{\link{scanMQM}} - Function called to do single trait analysis
-	\code{\link{scanMQMall}} - Function called to do multiple trait analysis
+	\itemize{
+	\item	\code{\link{MQMaugment}} - Dataaugmentation routine to estimate missing data
+	\item	\code{\link{scanMQM}} - Function called to do single trait analysis
+	\item	\code{\link{scanMQMall}} - Function called to do multiple trait analysis
+	}
 }
 \examples{
 	library(MQMpackage)

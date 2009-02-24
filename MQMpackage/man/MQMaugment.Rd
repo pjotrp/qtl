@@ -1,9 +1,11 @@
 \name{MQMaugment}
 \alias{MQMaugment}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{ MQMaugment - Missing data augmentation routine for MQM }
+
+\title{ 
+	MQMaugment - Missing data augmentation routine for MQM 
+}
 \description{
-  
+  Estimates missing data, unlikely genotypes are kept when more likely than 1:Neglect
 }
 \usage{
 MQMaugment(cross = NULL, maxaug = 10000, maxiaug = 1000, neglect = 1000)
@@ -23,14 +25,16 @@ When the algorithm ends with an "DATASET TOO LARGE after augmentation", the cros
 \value{
 Cross object with 1 phenotype (indicated by setting the Phenot parameter) suitable for scanMQM from R/QTL
 }
-\references{ ~put references to the literature/web site here ~ }
-\author{ Danny Arends <Danny.Arends@gmail.com> }
+\references{ Danny Arends \email{Danny.Arends@gmail.com} }
+\author{ Danny Arends \email{Danny.Arends@gmail.com} }
 \note{
 If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }
-\seealso{ 
-	\code{\link{scanMQM}} - Function called to do single trait analysis
-	\code{\link{scanMQMall}} - Function called to do multiple trait analysis
+\seealso{
+	\itemize{
+	\item \code{\link{scanMQM}} - Function called to do single trait analysis
+	\item \code{\link{scanMQMall}} - Function called to do multiple trait analysis
+	}
 }
 \examples{
 	library(MQMpackage)
@@ -41,7 +45,7 @@ If u find anything wrong with the algorithm please notify me at: Danny.Arends@gm
 	result <- scanMQM(cross_good)						# Do a MQM scan of the genome
 	plot(result)								# Plot the results of the genome scan
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
+\keyword{ QTL }
+\keyword{ Mapping }
+\keyword{ Selection }

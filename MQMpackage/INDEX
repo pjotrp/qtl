@@ -6,14 +6,14 @@ MQMCofactors            MQMCofactors - Helper function to create
                         cofactors to be used with scanMQM
 MQMCofactorsEach        MQMCofactorsEach - Helper function to create
                         cofactors to be used with scanMQM
-MQMLoadanalysis         Enables loading of previous MQM analysis from
-                        file
+MQMLoadanalysis         MQMLoadanalysis : Enables loading of previous
+                        MQM analysis from file
 MQMlogPheno             MQMlogPheno - Helper function to logtransform
                         phenotypesin R/QTL cross objects
 MQMpackage              Tool for analyzing QTL experiments
 multitrait              Crossobject from R/QTL with multiple traits
 plot.MQMall             plot.MQMall - Plotting routine to display the
-                        results from a scanMQMall scan
+                        results from a scanMQMall / bootstrapMQM scan
 scanMQM                 scanMQM - Multiple qtl mapping for inbred
                         crosses
 scanMQMall              scanMQMall - Multitrait analysis of a cross

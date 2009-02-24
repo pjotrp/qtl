@@ -1,9 +1,11 @@
 \name{plot.MQMall}
 \alias{plot.MQMall}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{ plot.MQMall - Plotting routine to display the results from a scanMQMall scan }
+
+\title{ 
+	plot.MQMall - Plotting routine to display the results from a scanMQMall / bootstrapMQM scan 
+}
 \description{
-  Plotting routine to display the results from a scanMQMall scan, in either a contourmap or a multiple QTL plot from R/QTL plot.scanone
+  Plotting routine to display the results from a scanMQMall scan or a bootstrapMQM, in either a contourmap or a multiple QTL plot from R/QTL plot.scanone
 }
 \usage{
 plot.MQMall(cross = NULL, result = NULL, type = "C")
@@ -12,7 +14,7 @@ plot.MQMall(cross = NULL, result = NULL, type = "C")
 \arguments{
   \item{cross}{ Cross object from R/QTL }
   \item{result}{ Result object from scanMQMall }
-  \item{type}{ either "C" for contourplot or "P" for stacked R/QTL plot }
+  \item{type}{ "C" for contourplot, "P" for stacked R/QTL plot, "I" for a heatmapplot  }
 }
 \details{
   
@@ -20,13 +22,16 @@ plot.MQMall(cross = NULL, result = NULL, type = "C")
 \value{
 	No return, plotting routine
 }
-\references{  }
+\references{ Danny Arends \email{Danny.Arends@gmail.com} }
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }
 \note{ 
 	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
 \seealso{ 
-	\code{\link{scanMQMall}} - Function called to do multiple trait analysis
+\itemize{
+	\item \code{\link{scanMQMall}} - Function called to do multiple trait analysis
+	\item \code{\link{bootstrapMQM}} - Function called to estimate confidence interfalls for MQM
+}
 }
 \examples{
 	library(MQMpackage)
@@ -35,7 +40,8 @@ plot.MQMall(cross = NULL, result = NULL, type = "C")
 	plot.MQMall(cross,result,"P")
 	plot.MQMall(cross,result,"C")
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
+\keyword{ QTL }
+\keyword{ Mapping }
+\keyword{ Selection }
+

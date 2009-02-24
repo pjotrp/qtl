@@ -27,12 +27,23 @@
   \item{file}{ File to which the raw results are saved (MQM_output.txt) }
 }
 \details{
+Normal layout of MQM-QTL analysis
+\itemize{
+\item Load in experiment using formats supported by R/QTL
+\item Set trait under consideration as first trait in R/QTL format
+\item Fill in missing data using either the fill.geno or MQMaugmentdata routine
+\item Call scanMQM to do a genomescan
+\item Call scanMQM setting the n.run to get an estimate of ‘significant’ lod scores
+\item Set cofactors at ‘top scoring’ and not so ‘top scoring’ markers
+\item Rerun analysis with cofactors
+\item Bootstrap analysis with cofactors to get estimates of QTL significance
+}
 Using ML or Reduced ML the algorithm employs a forward- or backward selection strategy to identify QTL hotspot. The algorithm passes through the following stages:
 \itemize{
 \item Calculating relative marker positions
-\item Calculating recombinant frequencies
-\item Loglikelyhood estimated of full model
-\item IF(Cofactors) THEN Backward elimination & mapQTL
+\item (Re)Estimating recombinant frequencies
+\item LOGlikelyhood estimations of the full model using all cofactors
+\item IF(Cofactors) THEN Backward elimination of cofactors & mapQTL
 \item IF(No cofactors) THEN mapQTL function
 }
 Afterwards the Interval mapping of the QTL model is returned to the user
@@ -47,10 +58,12 @@ The phenotype under consideration is specified by the Phenot argument of the fun
 	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
 \seealso{
-	\code{\link{MQMaugment}} - Augmentationroutine to estimate missing data
-	\code{\link{MQMCofactors}} - Learn how to set Cofactors for the MQM algorithm
-	\code{\link{scanMQMall}} - Function called to do single trait analysis
-	\code{\link{bootstrapMQM}} - Function called to estimate confidence interfalls for MQM
+\itemize{
+	\item \code{\link{MQMaugment}} - Augmentationroutine to estimate missing data
+	\item \code{\link{MQMCofactors}} - Learn how to set Cofactors for the MQM algorithm
+	\item \code{\link{scanMQMall}} - Function called to do single trait analysis
+	\item \code{\link{bootstrapMQM}} - Function called to estimate confidence interfalls for MQM
+}
 }
 \examples{
 #Simulated F2 Population

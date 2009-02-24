@@ -32,7 +32,7 @@
 }
 
 \value{
-  Returns a MQMmulti object. this object is a list of scanone objects that can be plotted using plot.scanone(result[[trait]])
+  Returns a MQMmulti object. This object is a list of scanone objects that can be plotted using plot.scanone(result[[trait]])
 }
 
 \references{ Danny Arends <Danny.Arends@gmail.com> ; R.C. Janssen <r.c.jansen@rug.nl> ; Karl W. Brohamn <kbroman@biostat.wisc.edu>  }
@@ -42,9 +42,11 @@
 }
 
 \seealso{ 
-	\code{\link{multitrait}} - Dataset used in the example analysis
-	\code{\link{MQMaugment}} - Augmentationroutine to estimate missing data
-	\code{\link{scanMQM}} - Function called to do single trait analysis
+	\itemize{
+	\item \code{\link{multitrait}} - Dataset used in the example analysis
+	\item \code{\link{MQMaugment}} - Augmentationroutine to estimate missing data
+	\item \code{\link{scanMQM}} - Function called to do single trait analysis
+	}
 }
 
 \examples{

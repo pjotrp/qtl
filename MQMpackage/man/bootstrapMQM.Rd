@@ -40,9 +40,11 @@ bootstrapMQM(cross = NULL, cofactors = NULL, Phenot = 1, REMLorML = 0, alfa = 0.
 \note{ 
 	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
-\seealso{ 
-	\code{\link{MQMCofactors}} - Learn how to set Cofactors for the MQM algorithm
-	\code{\link{scanMQMall}} - Function called to do single trait analysis
+\seealso{
+	\itemize{
+	\item \code{\link{MQMCofactors}} - Learn how to set Cofactors for the MQM algorithm
+	\item \code{\link{scanMQMall}} - Function called to do single trait analysis
+	}
 }
 \examples{
 #Simulated F2 Population
