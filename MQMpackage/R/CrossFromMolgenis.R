@@ -17,7 +17,8 @@
 #
 ######################################################################
 
-CrossFromMolgenis <- function(DBpath=NULL,DBmarkerID=297,DBtraitID=181){
+CrossFromMolgenis <- function(DBmarkerID=297,DBtraitID=181,DBpath=NULL){
+	library("RCurl")
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
 		stop("Please install the package RCurl from bioconductor to use the molgenis interface\n")
 	}
@@ -71,7 +72,7 @@ CrossFromMolgenis <- function(DBpath=NULL,DBmarkerID=297,DBtraitID=181){
 	if(marker_row != "Marker"){
 		marker_data <- t(marker_data)
 	}
-	if(trait_col != "Individual" && trait_col != "Individual"){
+	if(trait_row != "Individual" && trait_col != "Individual"){
 		stop("No Individual in DBtraitID")
 	}
 	if(trait_col != "Individual"){
@@ -80,10 +81,12 @@ CrossFromMolgenis <- function(DBpath=NULL,DBmarkerID=297,DBtraitID=181){
 	cat("Number of individuals in Marker set:",dim(marker_data)[2],"\n")
 	cat("Number of individuals in Phenotype set:",dim(trait_data)[2],"\n")
 	
+	#We assume that if we have IND in markers = IND in trait that individuals match
 	if(dim(marker_data)[2] != dim(trait_data)[2]){
 		matchV <- match(colnames(trait_data)[1:dim(trait_data)[2]],colnames(marker_data))
+		marker_data <- marker_data[,matchV]
 	}
-	marker_data <- marker_data[,matchV]
+	
 	#Parse data towards the R/QTL format we need to convert all AA/AB/BB etc to 1,2,3
 	for(i in 1:dim(marker_data)[1]) {
 		for(j in 1:dim(marker_data)[2]) {
@@ -109,8 +112,12 @@ CrossFromMolgenis <- function(DBpath=NULL,DBmarkerID=297,DBtraitID=181){
 			}
 		}
 	}
-	
-	chr <- marker_info[,"chr"]
+	chr <- NULL
+	loc <- NULL
+	for(i in 1:dim(marker_data)[1]){
+		chr <- c(chr,marker_info[which(rownames(marker_data)[i]== marker_info$name),"chr"])
+		loc <- c(loc,marker_info[which(rownames(marker_data)[i]== marker_info$name),"cm"])
+	}
 	#FIX for NA in chromosome
 	remFromChr <- NULL
 	for(i in 1:length(chr)) {
@@ -119,6 +126,7 @@ CrossFromMolgenis <- function(DBpath=NULL,DBmarkerID=297,DBtraitID=181){
 		}
 	}
 	chr <- chr[-remFromChr]
+	loc <- loc[-remFromChr]
 	
 	#All in expected format, So we can begin filling our cross object
 	cross <- NULL
@@ -128,12 +136,12 @@ CrossFromMolgenis <- function(DBpath=NULL,DBmarkerID=297,DBtraitID=181){
 		map <- NULL
 		names <- NULL
 		for(j in which(chr==i)){
-			#For all markers on the chromosome do
-			matrix <- rbind(matrix,marker_data[j,])
-			map <- rbind(map,marker_info[j,"cm"])
+				#For all markers on the chromosome do
+				matrix <- rbind(matrix,marker_data[j,])
+				map <- rbind(map,loc[j])
 		}
 		names <- names(marker_data[,1])[which(chr==i)]
-		
+
 		#We got everything so lets start adding it to the cross object
 		length(cross$geno) <- length(cross$geno)+1
 		cross$geno[[i]]$data <- t(matrix)

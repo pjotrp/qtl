@@ -17,7 +17,8 @@
 #
 ######################################################################
 
-CrossToMolgenis <- function(DBpath=NULL,intervalQTLmap=NULL){
+CrossToMolgenis <- function(intervalQTLmap=NULL,DBpath=NULL){
+	library(RCurl)
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
 		stop("Please install the package RCurl from bioconductor to use the molgenis interface\n")
 	}
@@ -58,23 +59,63 @@ CrossToMolgenis <- function(DBpath=NULL,intervalQTLmap=NULL){
 	if(is.null(intervalQTLmap)){
 		stop("Please supply a QTL interval map\n")
 	}
-	
+	if(class(intervalQTLmap)[2] == "scanone"){
+		cat("Valid object from scanone, containing 1 phenotype\n")
+		num_pheno <- 1
+	}
+	if(class(intervalQTLmap)[2] == "MQMmulti"){
+		cat("Valid object from MultiQTL scan, containing ",length(intervalQTLmap)," phenotypes\n")
+		num_pheno <- length(intervalQTLmap)
+	}
 	investi <- find.investigation()
-	markers <- find.marker()
+	if("MQMQTL" %in% investi$name){
+		num <- find.investigation(name="MQMQTL")
+	}else{
+		num <- add.investigation(name="MQMQTL")
+	}
 	
-	for(i in 1:dim(intervalQTLmap)[1]) {
-		if(!colnames(intervalQTLmap)[i] %in% markers$name){
-			add.marker(name=colnames(intervalQTLmap)[i],chr=intervalQTLmap[i,"chr"],cm=intervalQTLmap[i,"pos (Cm)"])
+	markers <- find.marker()
+	if(num_pheno == 1){	
+		for(i in 1:dim(intervalQTLmap)[1]) {
+			if(!rownames(intervalQTLmap)[i] %in% markers$name){
+				add.marker(name=rownames(intervalQTLmap)[i],chr=intervalQTLmap[i,"chr"],cm=intervalQTLmap[i,"pos (Cm)"],investigation_id=num$id)
+			}
 		}
+	}else{
+		for(j in 1:num_pheno){
+			for(i in 1:dim(intervalQTLmap[[j]])[1]) {
+				if(!rownames(intervalQTLmap[[j]])[i] %in% markers$name){
+					add.marker(name=rownames(intervalQTLmap[[j]])[i],chr=intervalQTLmap[[j]][i,"chr"],cm=intervalQTLmap[[j]][i,"pos (Cm)"],investigation_id=num$id)
+				}
+			}
+		}		
 	}
 	#Markers are inside molgenis, now we need to get the QTL's in
-	class(intervalQTLmap) <- "matrix"
-	intervalQTLmap <- cbind(rownames(intervalQTLmap),intervalQTLmap)
-	intervalQTLmap <- cbind(intervalQTLmap,rep(investi,dim(intervalQTLmap)[1]))
-	colnames(intervalQTLmap) <- c("name","chr","pos","qtl","investigation")
 	
 	#Push QTL data into molgenis
-	add.data(intervalQTLmap)
-	
+	aaa <- add.data(name = "QTL",investigation_id=num$id,rowtype="Marker",coltype="Phenotype",totalrows=dim(intervalQTLmap)[1],totalcols=num_pheno,valuetype="Decimal")
+	if(!aaa){
+		#We failed making a new data holder thingie so lets look for it in the database
+		aaa <- find.data(name="QTL")
+	}
+	#We need to know which Phenotype (name) we were working on this is done by
+	colnam <- NULL
+	colnam <- colnames(intervalQTLmap)[3]
+	colnam <- substr(colnam,5,nchar(colnames(intervalQTLmap)[3]))
+	if(num_pheno == 1){
+		colnam <- colnames(intervalQTLmap)[3]
+		colnam <- substr(colnam,5,nchar(colnames(intervalQTLmap)[3]))	
+		for(i in 1:dim(intervalQTLmap)[1]) {
+			add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap)[i], rowindex=(i-1), colindex=0, value=intervalQTLmap[i,3])
+		}
+	}else{
+		for(j in 1:num_pheno){
+			colnam <- colnames(intervalQTLmap[[j]])[3]
+			colnam <- substr(colnam,5,nchar(colnames(intervalQTLmap[[j]])[3]))	
+			for(i in 1:dim(intervalQTLmap[[j]])[1]) {
+				add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap[[j]])[i], rowindex=(i-1), colindex=(j-1), value=intervalQTLmap[[j]][i,3])
+			}
+		}
+	}
 }
 

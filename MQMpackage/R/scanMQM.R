@@ -178,7 +178,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 			names <- c(names,paste("C",ceiling(i/qtlAchromo),"L",rep(seq(step.min,step.max,step.size),n.chr)[i],sep=""))
 		}
 		rownames(qtl) <- names
-		colnames(qtl) = c("chr","pos (Cm)","QTL")
+		colnames(qtl) = c("chr","pos (Cm)",paste("QTL",colnames(cross$pheno)[1]))
 		
 		#So we can use carls plotting routines
 		class(qtl) <- c(class(qtl),"scanone") 
