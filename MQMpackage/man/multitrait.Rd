@@ -1,7 +1,12 @@
 \name{multitrait}
 \alias{multitrait}
+
 \docType{data}
-\title{ Crossobject from R/QTL with multiple traits }
+
+\title{ 
+	Crossobject from R/QTL with multiple traits 
+}
+
 \description{
 	Cross object from R/QTL
 }

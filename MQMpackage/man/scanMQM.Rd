@@ -1,12 +1,14 @@
 \name{scanMQM}
 \alias{scanMQM}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{ scanMQM - Multiple qtl mapping for inbred crosses }
+
+\title{ 
+	scanMQM - Multiple qtl mapping for inbred crosses 
+}
 \description{
-Main multiQTL scanning function for the R/qtl package (for use with F2 / BC / RIL populations)
+	Main multiQTL scanning function for the R/qtl package (for use with F2 / BC / RIL populations)
 }
 \usage{
-scanMQM(cross = NULL, cofactors = NULL, doLOG = 0, Phenot = 1, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 0, file = "MQM_output.txt")
+	scanMQM(cross = NULL, cofactors = NULL, doLOG = 0, Phenot = 1, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 0, file = "MQM_output.txt")
 }
 \arguments{
   \item{cross}{ Cross object from R/QTL }
@@ -20,33 +22,35 @@ scanMQM(cross = NULL, cofactors = NULL, doLOG = 0, Phenot = 1, REMLorML = 0, alf
   \item{step.size}{ Step.size used for the generation of output QTL }
   \item{step.min}{ Begin this many Cm before the chromosome }
   \item{step.max}{ Maximum length in Cm }
-  \item{n.run}{ When setting n.run >= 1, a simple permuation of the data will occur, giving insight into the significance of the QTL }
+  \item{reestimate}{ Reestimation of the genetic map (est.rf in R/QTL) }
+  \item{dominance}{ Should dominance be taken into account ( 0= Additive  (DEFAULT)/ 1= Dominance) }  
   \item{file}{ File to which the raw results are saved (MQM_output.txt) }
 }
 \details{
-Using ML or Reduced ML the algorithm employs a forward- or backward selection strategy to identify QTL hotspot.
-The algoreithm passes through the following stages:
-Calculating relative marker positions
-Calculating recombinant frequencies
-IF(Missing data) THEN Fix for dataaugmentation
-Rmixture function
-Loglikelyhood estimated of full model
-IF(Cofactors) THEN Backward elimination & mapQTL
-IF(No cofactors) THEN mapQTL function
-IF(Nrun) THEN Bootstrapping either mapQTL or Backward elimination
-
+Using ML or Reduced ML the algorithm employs a forward- or backward selection strategy to identify QTL hotspot. The algorithm passes through the following stages:
+\itemize{
+\item Calculating relative marker positions
+\item Calculating recombinant frequencies
+\item Loglikelyhood estimated of full model
+\item IF(Cofactors) THEN Backward elimination & mapQTL
+\item IF(No cofactors) THEN mapQTL function
+}
+Afterwards the Interval mapping of the QTL model is returned to the user
 }
 \value{
 Returns a matrix with QTLscores for each location on the chromosome, which can be plotted using the plot.scanone function of R/QTL.
 The phenotype under consideration is specified by the Phenot argument of the function.
 }
 \references{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu} }
-\author{ Danny Arends \email{Danny.Arends@gmail.com} }
+\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} }
 \note{ 
 	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
-\seealso{  
-
+\seealso{
+	\code{\link{MQMaugment}} - Augmentationroutine to estimate missing data
+	\code{\link{MQMCofactors}} - Learn how to set Cofactors for the MQM algorithm
+	\code{\link{scanMQMall}} - Function called to do single trait analysis
+	\code{\link{bootstrapMQM}} - Function called to estimate confidence interfalls for MQM
 }
 \examples{
 #Simulated F2 Population

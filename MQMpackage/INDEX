@@ -1,3 +1,5 @@
+bootstrapMQM            bootstrapMQM - Bootstrapping approach to obtain
+                        estimates of QTL significance
 MQMaugment              MQMaugment - Missing data augmentation routine
                         for MQM
 MQMCofactors            MQMCofactors - Helper function to create

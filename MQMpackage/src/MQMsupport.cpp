@@ -294,6 +294,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
     idum[0]=-1;
 
 	 double savevariance= variance;
+	 Rprintf("Saved Variance:%f\n",savevariance);
      double *urand;
      vector maxF;
 	 maxF= newvector(Nrun);

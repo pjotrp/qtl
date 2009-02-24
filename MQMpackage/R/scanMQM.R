@@ -23,8 +23,9 @@ cross <- read.cross("csv","","Test.csv")
 
 scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0,n.run=0,file="MQM_output.txt",doLOG=0,reestimate=0,dominance=0){
+					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,reestimate=0,dominance=0){
     library(qtl)
+	n.run=0
 	if(is.null(cross)){
 		stop("Error: No cross file. Please supply a valid cross object.") 
 	}
@@ -56,7 +57,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		if(alfa <=0 || alfa >= 1){
 			stop("Error: Alfa must be between 0 and 1.")
 		}
-		if(n.run <0 || n.run >= 10000){
+		if(n.run !=0){
 			stop("Error: # of runs should be positive and < 10000.")
 		}
 		pheno <- cross$pheno[[Phenot]]

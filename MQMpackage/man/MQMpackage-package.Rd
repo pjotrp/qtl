@@ -22,22 +22,25 @@ Built: \tab R 2.8.1; i386-pc-mingw32; 2009-02-09 13:36:42; windows\cr
 
 Index:
 \preformatted{
+scanMQM                 scanMQM - Multiple QTL mapping for F2 crosses
+scanMQMall              scanMQMall - Multitrait analysis of a cross object
+bootstrapMQM			bootstrapMQM - Bootstrapping approach to obtain estimates of QTL significance
 MQMaugment              MQMaugment - Missing data augmentation routine for MQM
 MQMCofactors            MQMCofactors - Helper function to create cofactors to be used with scanMQM
 MQMCofactorsEach        MQMCofactorsEach - Helper function to create cofactors to be used with scanMQM
 multitrait              Crossobject from R/QTL with multiple traits
-scanMQM                 scanMQM - Multiple QTL mapping for F2 crosses
-scanMQMall              scanMQMall - Multitrait analysis of a cross object
 }
 Normal layout of MQM-QTL analysis
--Load in experiment using formats supported by R/QTL
--Set trait under consideration as first trait in R/QTL format
--Fill in missing data using either the fill.geno or MQMaugmentdata routine
--Call scanMQM to do a genomescan
--Call scanMQM setting the n.run to get an estimate of ‘significant’ lod scores
--Set cofactors at ‘top scoring’ and not so ‘top scoring’ markers
--Rerun analysis with cofactors
-
+\itemize{
+\item Load in experiment using formats supported by R/QTL
+\item Set trait under consideration as first trait in R/QTL format
+\item Fill in missing data using either the fill.geno or MQMaugmentdata routine
+\item Call scanMQM to do a genomescan
+\item Call scanMQM setting the n.run to get an estimate of ‘significant’ lod scores
+\item Set cofactors at ‘top scoring’ and not so ‘top scoring’ markers
+\item Rerun analysis with cofactors
+\item Bootstrap analysis with cofactors to get estimates of QTL significance
+}
 }
 \author{
 Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu}
