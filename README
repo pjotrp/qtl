@@ -1,1 +1,11 @@
 MQMpackage for integration of MultiQTL into the R/QTL package...
+
+Compile instructions:
+Have the following installed:
+R-2.8.0
+R-Tools
+Optional: MixTex for building the man files
+Windows:
+R CMD BUILD MQMpackage -binary
+Linux:
+R CMD BUILD MQMpackage
