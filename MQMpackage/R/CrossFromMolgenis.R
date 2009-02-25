@@ -159,3 +159,4 @@ CrossFromMolgenis <- function(DBmarkerID=297,DBtraitID=181,DBpath=NULL){
 	cross
 }
 
+# end of CrossFromMolgenis.R

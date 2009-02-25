@@ -1,6 +1,6 @@
 #####################################################################
 #
-# CrossToMolgenis.R
+# ResultsToMolgenis.R
 #
 # copyright (c) 2009, Danny Arends
 # last modified Fep, 2009
@@ -13,11 +13,11 @@
 
 ######################################################################
 #
-# CrossToMolgenis:
+# ResultsToMolgenis: Puts results from scanone scanMQM and scanALL into a molgenis database
 #
 ######################################################################
 
-CrossToMolgenis <- function(intervalQTLmap=NULL,name=NULL,DBpath=NULL,Fupdate=0){
+ResultsToMolgenis <- function(intervalQTLmap=NULL,name=NULL,DBpath=NULL,Fupdate=0){
 	library(RCurl)
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
 		stop("Please install the package RCurl from bioconductor to use the molgenis interface\n")
@@ -165,3 +165,4 @@ CrossToMolgenis <- function(intervalQTLmap=NULL,name=NULL,DBpath=NULL,Fupdate=0)
 	}
 }
 
+# end of ResultsToMolgenis.R

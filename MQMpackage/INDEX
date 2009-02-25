@@ -2,9 +2,6 @@ bootstrapMQM            bootstrapMQM - Bootstrapping approach to obtain
                         estimates of QTL significance
 CrossFromMolgenis       CrossFromMolgenis - Helperfunction to create a
                         cross-object from a molgenis database
-CrossToMolgenis         CrossToMolgenis - Helperfunction to store
-                        results from a MQM-qtl run into a a molgenis
-                        database
 MQMaugment              MQMaugment - Missing data augmentation routine
                         for MQM
 MQMCofactors            MQMCofactors - Helper function to create
@@ -19,6 +16,11 @@ MQMpackage              Tool for analyzing QTL experiments
 multitrait              Crossobject from R/QTL with multiple traits
 plot.MQMall             plot.MQMall - Plotting routine to display the
                         results from a scanMQMall / bootstrapMQM scan
+ResultsFromMolgenis     ResultsFromMolgenis - Helperfunction to
+                        retrieve results from a molgenis database
+ResultsToMolgenis       ResultsToMolgenis - Helperfunction to store
+                        results from a MQM-qtl run into a molgenis
+                        database
 scanMQM                 scanMQM - Multiple qtl mapping for inbred
                         crosses
 scanMQMall              scanMQMall - Multitrait analysis of a cross

@@ -1,12 +1,12 @@
-\name{CrossToMolgenis}
-\alias{CrossToMolgenis}
+\name{ResultsToMolgenis}
+\alias{ResultsToMolgenis}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ CrossToMolgenis - Helperfunction to store results from a MQM-qtl run into a a molgenis database }
+\title{ ResultsToMolgenis - Helperfunction to store results from a MQM-qtl run into a molgenis database }
 \description{
   Helperfunction to store results from a MQM-qtl run into a a molgenis database
 }
 \usage{
-CrossToMolgenis(intervalQTLmap = NULL, name = NULL, DBpath = NULL, Fupdate = 0)
+ResultsToMolgenis(intervalQTLmap = NULL, name = NULL, DBpath = NULL, Fupdate = 0)
 }
 \arguments{
   \item{intervalQTLmap}{ Results from either scanone, scanMQM or scanMQMall }
@@ -36,13 +36,13 @@ If u find anything wrong with the algorithm please notify me at: \email{Danny.Ar
 \itemize{
 	\item \code{\link{scanMQM}} - Function called to do single trait analysis
 	\item \code{\link{scanMQMall}} - Function called to do single trait analysis
-	\item \code{\link{CrossToMolgenis}} - Function called to store results to a molgenis database
+	\item \code{\link{CrossFromMolgenis}} - Function called to store results to a molgenis database
 }
 }
 \examples{
 cMol <- CrossFromMolgenis()			#Make a crossobject from the database
 result <- scanMQMall(cMol)			#Basic execution of scanMQMall
-CrossToMolgenis(result,"QTL-mqm")	#Store the result from MQM into molgenis database
+ResultsToMolgenis(result,"QTL-mqm")	#Store the result from MQM into molgenis database
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

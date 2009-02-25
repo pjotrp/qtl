@@ -29,7 +29,8 @@ MQMaugment              MQMaugment - Missing data augmentation routine for MQM
 MQMCofactors            MQMCofactors - Helper function to create cofactors to be used with scanMQM
 MQMCofactorsEach        MQMCofactorsEach - Helper function to create cofactors to be used with scanMQM
 CrossFromMolgenis       CrossFromMolgenis - Helperfunction to create a cross-object from a molgenis database
-CrossToMolgenis         CrossToMolgenis - Helperfunction to store results from a MQM-qtl run into a a molgenis database
+ResultsFromMolgenis     ResultsFromMolgenis - Helperfunction to retrieve results from a molgenis database
+ResultsToMolgenis       ResultsToMolgenis - Helperfunction to store results into a molgenis database
 multitrait              Crossobject from R/QTL with multiple traits
 }
 Normal layout of MQM-QTL analysis
