@@ -8,11 +8,10 @@
   Plotting routine to display the results from a scanMQMall scan or a bootstrapMQM, in either a contourmap or a multiple QTL plot from R/QTL plot.scanone
 }
 \usage{
-plot.MQMall(cross = NULL, result = NULL, type = "C")
+plot.MQMall(result = NULL, type = "C")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{cross}{ Cross object from R/QTL }
   \item{result}{ Result object from scanMQMall }
   \item{type}{ "C" for contourplot, "P" for stacked R/QTL plot, "I" for a heatmapplot  }
 }
@@ -37,8 +36,8 @@ plot.MQMall(cross = NULL, result = NULL, type = "C")
 	library(MQMpackage)
 	data(multitrait)
 	result <- scanMQMall(multitrait)
-	plot.MQMall(cross,result,"P")
-	plot.MQMall(cross,result,"C")
+	plot.MQMall(result,"P")
+	plot.MQMall(result,"C")
 }
 
 \keyword{ QTL }

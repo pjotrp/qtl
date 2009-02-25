@@ -77,12 +77,9 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 	}
 }
 
-plot.MQMall <- function(cross=NULL, result = NULL, type="C",theta=30,phi=15){
+plot.MQMall <- function(result = NULL, type="C",theta=30,phi=15){
 	#Helperfunction to plot MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
 	
-	if(is.null(cross)|| is.null(result)){
-		stop("Error: NO result or cross.") 
-	}
 	if(class(result)[2] == "MQMmulti"){
 		if(type=="C"){
 		#Countour plot
@@ -127,13 +124,13 @@ plot.MQMall <- function(cross=NULL, result = NULL, type="C",theta=30,phi=15){
 		}
 		if(type=="P"){
 		#Standard plotting option, Lineplot
-			n.pheno <- nphe(cross)
+			n.pheno <- length(result)
 			colors <- rainbow(n.pheno)
 			for(i in 1:n.pheno) {
 				if(i !=1 ){
 					plot(result[[i]],add=TRUE,col=colors[i])
 				}else{
-					plot(result[[i]],col=colors[i])
+					plot(result[[i]],col="black")
 				}
 			}
 		}			
