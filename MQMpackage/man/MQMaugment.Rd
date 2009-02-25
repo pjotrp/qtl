@@ -26,7 +26,7 @@ When the algorithm ends with an "DATASET TOO LARGE after augmentation", the cros
 Cross object with 1 phenotype (indicated by setting the Phenot parameter) suitable for scanMQM from R/QTL
 }
 \references{ Danny Arends \email{Danny.Arends@gmail.com} }
-\author{ Danny Arends \email{Danny.Arends@gmail.com} }
+\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl}}
 \note{
 If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }

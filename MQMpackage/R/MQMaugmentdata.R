@@ -13,16 +13,16 @@
 
 ######################################################################
 #
-# scanMQM:
+# MQMaugmentdata:
 #
 ######################################################################
-setwd("D:/")
-library(qtl)
-dyn.load("scanMQM.dll")
-qtl <- c(3,15,3,7)							# QTL at chromosome 3
-data(map10)									# Mouse genome
-cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
-data(listeria)
+#setwd("D:/")
+#library(qtl)
+#dyn.load("scanMQM.dll")
+#qtl <- c(3,15,3,7)							# QTL at chromosome 3
+#data(map10)									# Mouse genome
+#cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
+#data(listeria)
 
 MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 	library(qtl)
@@ -60,6 +60,7 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 		pheno <- cross$pheno
 		n.mark <- ncol(geno)
 		cat("INFO: Number of markers:",n.mark,".\n")
+		#Check for na genotypes and replace them with a 9
 		for(i in 1:n.ind) {
 			for(j in 1:n.mark) {
 				if(is.na(geno[i,j])){
@@ -134,11 +135,13 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 			cross$geno[[c]]$data <- matri
 			colnames(pheno) = phenonaam
 			cross$pheno <- as.data.frame(pheno)
+			#Store extra information (needed by the MQM algorithm) which individual was which original etc..
 			cross$extra$Nind <- n.ind
 			cross$extra$Naug <- n.aug
 			cross$extra$augIND <- result[[6]][1:n.aug]
 			markdone <- (markdone+markONchr)  
 		}
+		#RETURN THE RESULTS
 		cross
 	}else{
 		stop("Error: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
@@ -146,6 +149,7 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 }
 
 MQMlogPheno <- function(cross= NULL,Phenot=NULL){
+	#Helperfunction to logtransform a specific phenotype specified by the Phenot parameter
 	library(qtl)
 	if(is.null(cross)){
 		stop("Error: No cross file. Please supply a valid cross object.")
@@ -158,18 +162,18 @@ MQMlogPheno <- function(cross= NULL,Phenot=NULL){
 			pheno <- cross$pheno[[Phenot]]
 			logpheno <- log(pheno)
 			cross$pheno[[Phenot]] <- logpheno
-			cat("Phenotype:",Phenot,".\n")
-			cat("Before LOG MEAN:",mean(pheno,na.rm = TRUE),"VAR:",var(pheno,na.rm = TRUE),".\n")
-			cat("After LOG MEAN:",mean(logpheno,na.rm = TRUE),"VAR:",var(logpheno,na.rm = TRUE),".\n")
+			cat("INFO: Phenotype:",Phenot,".\n")
+			cat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"Variation:",var(pheno,na.rm = TRUE),".\n")
+			cat("INFO: After LOG transformation Mean:",mean(logpheno,na.rm = TRUE),"Variation:",var(logpheno,na.rm = TRUE),".\n")
 		}else{
 			n.pheno <- nphe(cross)
 			for(i in 1:n.pheno) {
 				pheno <- cross$pheno[[i]]
 				logpheno <- log(pheno)
 				cross$pheno[[i]] <- logpheno
-				cat("Phenotype:",i,".\n")
-				cat("Before LOG MEAN:",mean(pheno,na.rm = TRUE),"VAR:",var(pheno,na.rm = TRUE),".\n")
-				cat("After LOG MEAN:",mean(logpheno,na.rm = TRUE),"VAR:",var(logpheno,na.rm = TRUE),".\n")				
+				cat("INFO: Phenotype:",i,".\n")
+				cat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"Variation:",var(pheno,na.rm = TRUE),".\n")
+				cat("INFO: After LOG transformation Mean:",mean(logpheno,na.rm = TRUE),"Variation:",var(logpheno,na.rm = TRUE),".\n")				
 			}
 		}
 		cross
@@ -177,8 +181,8 @@ MQMlogPheno <- function(cross= NULL,Phenot=NULL){
 		stop("Error: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			
 }
-# end of MQMaugment.R
 
-	
 #cross_good <- MQMaugment(cross)
-listeria_good <- MQMaugment(listeria,maxaug=1000,maxiaug=10,neglect=10)
+#listeria_good <- MQMaugment(listeria,maxaug=1000,maxiaug=10,neglect=10)
+
+# end of MQMaugment.R

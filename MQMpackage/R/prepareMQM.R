@@ -196,3 +196,5 @@ readMQMout <- function(cross = NULL, file = "mqm_out.txt", plot = TRUE,chr = 1){
    data
    #should be pushed to the cross object
 }
+
+# end of prepareMQM.R

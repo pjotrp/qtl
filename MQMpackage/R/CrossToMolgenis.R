@@ -17,10 +17,13 @@
 #
 ######################################################################
 
-CrossToMolgenis <- function(intervalQTLmap=NULL,DBpath=NULL){
+CrossToMolgenis <- function(intervalQTLmap=NULL,name=NULL,DBpath=NULL,Fupdate=0){
 	library(RCurl)
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
 		stop("Please install the package RCurl from bioconductor to use the molgenis interface\n")
+	}
+	if(is.null(name)){
+		stop("Please supply a name to store these results\n")	
 	}
 	if(is.null(DBpath)){
 		#Source the interface
@@ -40,7 +43,7 @@ CrossToMolgenis <- function(intervalQTLmap=NULL,DBpath=NULL){
 		
 	}else{
 		#Source the interface
-		source("http://celtic.service.rug.nl:8080/molgenis4rsandbox/api/R/")
+		source(DBpath)
 		
 		#Set the path to molgenis
 		molgenispath <- paste(DBpath,"/api/R/",sep="")
@@ -68,17 +71,24 @@ CrossToMolgenis <- function(intervalQTLmap=NULL,DBpath=NULL){
 		num_pheno <- length(intervalQTLmap)
 	}
 	investi <- find.investigation()
+	cat("INFO: Found",dim(investi)[1],"investigations in the current database\n")
 	if("MQMQTL" %in% investi$name){
+		cat("INFO: Found MQMQTL investigation in the current database\n")
 		num <- find.investigation(name="MQMQTL")
 	}else{
+		cat("INFO: Created a new instance of an MQMQTL investigation in the current database\n")
 		num <- add.investigation(name="MQMQTL")
 	}
 	
+	#Get all the markers
 	markers <- find.marker()
+	cat("INFO: Found",dim(markers)[1],"markers in the current database\n")
+	cnt <- 0
 	if(num_pheno == 1){	
 		for(i in 1:dim(intervalQTLmap)[1]) {
 			if(!rownames(intervalQTLmap)[i] %in% markers$name){
 				add.marker(name=rownames(intervalQTLmap)[i],chr=intervalQTLmap[i,"chr"],cm=intervalQTLmap[i,"pos (Cm)"],investigation_id=num$id)
+				cnt=cnt+1
 			}
 		}
 	}else{
@@ -86,34 +96,70 @@ CrossToMolgenis <- function(intervalQTLmap=NULL,DBpath=NULL){
 			for(i in 1:dim(intervalQTLmap[[j]])[1]) {
 				if(!rownames(intervalQTLmap[[j]])[i] %in% markers$name){
 					add.marker(name=rownames(intervalQTLmap[[j]])[i],chr=intervalQTLmap[[j]][i,"chr"],cm=intervalQTLmap[[j]][i,"pos (Cm)"],investigation_id=num$id)
+					cnt=cnt+1
 				}
 			}
 		}		
 	}
+	cat("INFO: Added",cnt,"markers to the current database\n")	
 	#Markers are inside molgenis, now we need to get the QTL's in
 	
-	#Push QTL data into molgenis
-	aaa <- add.data(name = "QTL",investigation_id=num$id,rowtype="Marker",coltype="Phenotype",totalrows=dim(intervalQTLmap)[1],totalcols=num_pheno,valuetype="Decimal")
-	if(!aaa){
-		#We failed making a new data holder thingie so lets look for it in the database
-		aaa <- find.data(name="QTL")
+	#Try finding out data container "QTL" on molgenis
+	aaa <- find.data(name=name)
+	if(!dim(aaa)[1]){
+		#No find, so we'll create one
+		cat("INFO: Not matrix named",name,"found in the current database\n")
+		cat("INFO: Creating:",name,"in the current database\n")
+		aaa <- add.data(name = name,investigation_id=num$id,rowtype="Marker",coltype="Phenotype",totalrows=dim(intervalQTLmap)[1],totalcols=num_pheno,valuetype="Decimal")
+	}else{
+		cat("INFO: Matrix named",name,"found in the current database\n")
 	}
 	#We need to know which Phenotype (name) we were working on this is done by
 	colnam <- NULL
 	colnam <- colnames(intervalQTLmap)[3]
 	colnam <- substr(colnam,5,nchar(colnames(intervalQTLmap)[3]))
+	cat("INFO: Going to upload phenotype:",colnam,"\n")
+	
+	#Retrieve all the instances in the current DB
+	DD <- find.decimaldataelement(data_id=aaa$id)
 	if(num_pheno == 1){
 		colnam <- colnames(intervalQTLmap)[3]
 		colnam <- substr(colnam,5,nchar(colnames(intervalQTLmap)[3]))	
 		for(i in 1:dim(intervalQTLmap)[1]) {
-			add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap)[i], rowindex=(i-1), colindex=0, value=intervalQTLmap[i,3])
+			#Number (if it exists) is the location in the DD (DeciData-matrix)
+			number <- intersect(which(DD$rowindex==(i-1)),which(DD$colindex==0))
+			if(is.na(number&&1)){
+				add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap)[i], rowindex=(i-1), colindex=0, value=intervalQTLmap[i,3])
+			}else{
+				if(Fupdate==1){
+					#Forced update REMOVE elements and insert the new ones
+					remove.decimaldataelement(id=DD[number,]$id)
+					add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap)[i], rowindex=(i-1), colindex=0, value=intervalQTLmap[i,3])
+					cat("Updated (",i-1,",0) because it already existed\n")	
+				}else{
+					cat("Not gonna add (",i-1,",0) because it already exist\n")
+				}
+			}
 		}
 	}else{
 		for(j in 1:num_pheno){
 			colnam <- colnames(intervalQTLmap[[j]])[3]
 			colnam <- substr(colnam,5,nchar(colnames(intervalQTLmap[[j]])[3]))	
 			for(i in 1:dim(intervalQTLmap[[j]])[1]) {
-				add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap[[j]])[i], rowindex=(i-1), colindex=(j-1), value=intervalQTLmap[[j]][i,3])
+				#Number (if it exists) is the location in the DD (DeciData-matrix)
+				number <- intersect(which(DD$rowindex==(i-1)),which(DD$colindex==(j-1)))
+				if(is.na(number&&1)){
+					add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap[[j]])[i], rowindex=(i-1), colindex=(j-1), value=intervalQTLmap[[j]][i,3])
+				}else{
+					if(Fupdate==1){
+						#Forced update REMOVE elements and insert the new ones
+						remove.decimaldataelement(id=DD[number,]$id)
+						add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap[[j]])[i], rowindex=(i-1), colindex=(j-1), value=intervalQTLmap[[j]][i,3])
+						cat("Updated (",i-1,",",j-1,") because it already existed\n")	
+					}else{
+						cat("Not gonna add (",i-1,",",j-1,") because it already exist\n")
+					}
+				}
 			}
 		}
 	}

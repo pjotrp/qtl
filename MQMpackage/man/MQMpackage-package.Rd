@@ -28,6 +28,8 @@ bootstrapMQM		bootstrapMQM - Bootstrapping approach to obtain estimates of QTL s
 MQMaugment              MQMaugment - Missing data augmentation routine for MQM
 MQMCofactors            MQMCofactors - Helper function to create cofactors to be used with scanMQM
 MQMCofactorsEach        MQMCofactorsEach - Helper function to create cofactors to be used with scanMQM
+CrossFromMolgenis       CrossFromMolgenis - Helperfunction to create a cross-object from a molgenis database
+CrossToMolgenis         CrossToMolgenis - Helperfunction to store results from a MQM-qtl run into a a molgenis database
 multitrait              Crossobject from R/QTL with multiple traits
 }
 Normal layout of MQM-QTL analysis
@@ -43,7 +45,7 @@ Normal layout of MQM-QTL analysis
 }
 }
 \author{
-Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu}
+Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu} ; M.A. Swertz \email{m.a.swertz@rug.nl}
 
 Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 }

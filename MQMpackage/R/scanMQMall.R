@@ -16,6 +16,7 @@
 # scanMQMall: Contains scanMQMall routine and the plot.MQMall routine
 #
 ######################################################################
+
 scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
 					step.min=-20.0,step.max=220.0,n.clusters=2,doLOG=0){
@@ -33,6 +34,7 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 			#we use the augmentation routinge to make a list where data[i] has trait[i] and a crossfile
 			data[[i]] <- MQMaugment(cross,i)
 		}
+		#Some tests from scanMQM repeated here so they are not hidden when using snow
 		if((step.min+step.size) > step.max){
 				stop("Error: current Step setting would crash the algorithm")
 		}
@@ -42,6 +44,7 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 		if(step.size < 1){
 				stop("Error: Step.size needs to be larger than 1")
 		}
+		#TEST FOR SNOW CAPABILITIES
 		if("snow" %in% installed.packages()[1:dim(installed.packages())[1]]){
 			cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 			library(snow)
@@ -50,9 +53,13 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 			res <- parLapply(cl,data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG)
 			stopCluster(cl)
 		}else{
+			#Apply scanMQM to the data with the specified settings		
 			cat("INFO: Library snow not found, so going into singlemode.\n")
 			res <- lapply(data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG)
 		}
+		
+		#All done now plot the results
+		
 		colors <- rainbow(n.pheno)
 		for(i in 1:n.pheno) {
 			if(i !=1 ){
@@ -61,6 +68,8 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 				plot(res[[i]],col=colors[i])
 			}
 		}
+		
+		#Return the results
 		class(res) <- c(class(res),"MQMmulti")
 		res
 	}else{
@@ -68,16 +77,18 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 	}
 }
 
-# end of scanMQMall
-
 plot.MQMall <- function(cross=NULL, result = NULL, type="C",theta=30,phi=15){
+	#Helperfunction to plot MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
+	
 	if(is.null(cross)|| is.null(result)){
 		stop("Error: NO result or cross.") 
 	}
 	if(class(result)[2] == "MQMmulti"){
 		if(type=="C"){
+		#Countour plot
 			c <- NULL
 			for(i in 1:length(result)){
+				#Collect all the "QTL PHENO_TYPE" colums of the result
 				c <- rbind(c,result[[i]][,3])
 			}
 			c <- t(c)
@@ -91,6 +102,7 @@ plot.MQMall <- function(cross=NULL, result = NULL, type="C",theta=30,phi=15){
 			)
 		}
 		if(type=="I"){
+		#Image plot
 			c <- NULL
 			for(i in 1:length(result)){
 				c <- rbind(c,result[[i]][,3])
@@ -103,6 +115,7 @@ plot.MQMall <- function(cross=NULL, result = NULL, type="C",theta=30,phi=15){
 		
 		}
 		if(type=="D"){
+		#3D perspective plot
 			c <- NULL
 			for(i in 1:length(result)){
 				c <- rbind(c,result[[i]][,3])
@@ -113,6 +126,7 @@ plot.MQMall <- function(cross=NULL, result = NULL, type="C",theta=30,phi=15){
 				  col="gray", xlab = "Markers", ylab = "Traits", zlab = "QTL")
 		}
 		if(type=="P"){
+		#Standard plotting option, Lineplot
 			n.pheno <- nphe(cross)
 			colors <- rainbow(n.pheno)
 			for(i in 1:n.pheno) {
@@ -128,4 +142,4 @@ plot.MQMall <- function(cross=NULL, result = NULL, type="C",theta=30,phi=15){
 	}
 }
 
-# end of plot.MQMall
+# end of scanMQMall.R

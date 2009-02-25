@@ -17,10 +17,10 @@
 #
 ######################################################################
 
-setwd("D:/")
-library(qtl)
-dyn.load("scanMQM.dll")
-cross <- read.cross("csv","","Test.csv")
+#setwd("D:/")
+#library(qtl)
+#dyn.load("scanMQM.dll")
+#cross <- read.cross("csv","","Test.csv")
 
 MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
 	if(is.null(cross)){
@@ -113,4 +113,6 @@ MQMCofactorsEach <- function(cross = NULL,each = 3){
     cofactorlist
 }
 
-a <- MQMCofactors(cross,c(10,20,30,40,50,60,70,80),c(186,187))
+#a <- MQMCofactors(cross,c(10,20,30,40,50,60,70,80),c(186,187))
+
+# end of cofactorsMQM.R

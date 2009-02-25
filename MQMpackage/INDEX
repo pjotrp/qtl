@@ -1,5 +1,10 @@
 bootstrapMQM            bootstrapMQM - Bootstrapping approach to obtain
                         estimates of QTL significance
+CrossFromMolgenis       CrossFromMolgenis - Helperfunction to create a
+                        cross-object from a molgenis database
+CrossToMolgenis         CrossToMolgenis - Helperfunction to store
+                        results from a MQM-qtl run into a a molgenis
+                        database
 MQMaugment              MQMaugment - Missing data augmentation routine
                         for MQM
 MQMCofactors            MQMCofactors - Helper function to create

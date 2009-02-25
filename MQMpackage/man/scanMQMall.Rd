@@ -35,8 +35,8 @@
   Returns a MQMmulti object. This object is a list of scanone objects that can be plotted using plot.scanone(result[[trait]])
 }
 
-\references{ Danny Arends <Danny.Arends@gmail.com> ; R.C. Janssen <r.c.jansen@rug.nl> ; Karl W. Brohamn <kbroman@biostat.wisc.edu>  }
-\author{ Danny Arends \email{Danny.Arends@gmail.com} }
+\references{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu}  }
+\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl}}
 \note{ 
 	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }

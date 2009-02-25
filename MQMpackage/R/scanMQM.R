@@ -13,13 +13,13 @@
 
 ######################################################################
 #
-# scanMQM:
+# scanMQM: main scanning function to the MQMpackage
 #
 ######################################################################
-setwd("D:/")
-library(qtl)
-dyn.load("scanMQM.dll")
-cross <- read.cross("csv","","Test.csv")
+#setwd("D:/")
+#library(qtl)
+#dyn.load("scanMQM.dll")
+#cross <- read.cross("csv","","Test.csv")
 
 scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
@@ -60,11 +60,19 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		if(n.run !=0){
 			stop("Error: # of runs should be positive and < 10000.")
 		}
+		#CHECK if the phenotype exists
+		if(Phenot != 1){
+			cat("INFO: Selected phenotype ",Phenot,".\n")
+			cat("INFO: # of phenotypes in object ",nphe(cross),".\n")
+			if(nphe(cross) < Phenot || Phenot < 1){
+				stop("Error: No such phenotype")
+			}			
+		}
 		pheno <- cross$pheno[[Phenot]]
-		cat("Before LOG MEAN:",mean(pheno,na.rm = TRUE),"VAR:",var(pheno,na.rm = TRUE),".\n")
 		if(var(pheno,na.rm = TRUE)> 1000){
 			if(doLOG == 0){
-				warning("We should LOG-transform this phenotype, please set parameter: doLOG=1 to correct this error")
+				cat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"variation:",var(pheno,na.rm = TRUE),".\n")
+				warning("INFO: Perhaps we should LOG-transform this phenotype, please set parameter: doLOG=1 to correct this error")
 			}
 		}
 		if(doLOG != 0){
@@ -96,6 +104,8 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 			geno <- geno[-dropped,]  
 			pheno <- pheno[-dropped]
 		}
+		
+		#CHECK for previously augmented dataset
 		if(!is.null(cross$extra)){
 			cat("INFO: previously augmented dataset.\n")			
 			cat("INFO: Individuals before augmentation",cross$extra$Nind,".\n")
@@ -106,7 +116,8 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 			extra1 <- n.ind
 			extra2 <- 0:n.ind
 		}
-		#check if we have cofactors, so we can do backward elimination
+		
+		#CHECK if we have cofactors, so we can do backward elimination
 		backward <- 0;
 		if(is.null(cofactors)){
 			cat("INFO: No cofactors, setting cofactors to 0\n")
@@ -127,13 +138,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 				}
 			}
 		}
-		if(Phenot != 1){
-			cat("INFO: Selected phenotype ",Phenot,".\n")
-			cat("INFO: # of phenotypes in object ",nphe(cross),".\n")
-			if(nphe(cross) < Phenot || Phenot < 1){
-				stop("Error: No such phenotype")
-			}			
-		}
+
 		if((step.min+step.size) > step.max){
 				stop("Error: current Step setting would crash the algorithm")
 		}
@@ -144,7 +149,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 				stop("Error: Step.size needs to be larger than 1")
 		}
 		qtlAchromo <- length(seq(step.min,step.max,step.size))
-		cat("Number of locations per chromosome: ",qtlAchromo, "\n")
+		cat("INFO: Number of locations per chromosome: ",qtlAchromo, "\n")
 		result <- .C("R_scanMQM",
 				as.integer(n.ind),
                 as.integer(n.mark),
@@ -174,18 +179,21 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		qtl <- NULL
 		names <- NULL
 		for(i in 1:(n.chr*qtlAchromo)) {
+			#Store the result in the qtl object
 			qtl <- rbind(qtl,c(ceiling(i/qtlAchromo),rep(seq(step.min,step.max,step.size),n.chr)[i],result$QTL[i]))
+			#make names in the form: C L
 			names <- c(names,paste("C",ceiling(i/qtlAchromo),"L",rep(seq(step.min,step.max,step.size),n.chr)[i],sep=""))
 		}
+		
 		rownames(qtl) <- names
-		colnames(qtl) = c("chr","pos (Cm)",paste("QTL",colnames(cross$pheno)[1]))
+		colnames(qtl) = c("chr","pos (Cm)",paste("QTL",colnames(cross$pheno)[Phenot]))
 		
 		#So we can use carls plotting routines
 		class(qtl) <- c(class(qtl),"scanone") 
 		
 		cat("Saving output to file: ",file, "\n")
 		write.table(qtl,file)
-		#return QTL
+		#Return the results
 		qtl
 	
 	}else{
@@ -193,10 +201,8 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 	}			
 }
 
-# end of scanMQM.R
-
-res <- scanMQM(cross)
-plot(res)
+#res <- scanMQM(cross)
+#plot(res)
 
 #bcqtl <- c(3,15,2)                                      # QTL at chromosome 3
 #data(map10)                                             # Mouse genome
@@ -204,4 +210,4 @@ plot(res)
 #bcresult <- scanMQM(bccross)                            # Do a MQM scan of the genome
 #plot(bcresult)                                          # Plot the results of the genome scan
 
-
+# end of scanMQM.R
