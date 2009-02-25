@@ -43,7 +43,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
     cvector position;
 	vector informationcontent;
 	//char dominance='n';
-	char perm_simu='1';
+	//char perm_simu='1';
 	ivector chr;
 	matrix Frun;
 
@@ -289,65 +289,6 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
          logLfull= mapQTL(Nind, Nmark, cofactor, cofactor, marker, position,
                   (*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype); // printout=='n'
 
-	long *idum;
-    idum = (long *)Calloc(1, long*);
-    idum[0]=-1;
-
-	 double savevariance= variance;
-	 Rprintf("Saved Variance:%f\n",savevariance);
-     double *urand;
-     vector maxF;
-	 maxF= newvector(Nrun);
-     ivector indorder; // individu 0...Nind-1; order will be permuted
-     vector yoriginal;
-     indorder= newivector(Nind);
-     yoriginal= newvector(Nind);
-	 urand= newvector(Naug);
-	// printf("Gonna start bootstrapping??? Nrun:%d\n",Nrun);
-	//This is gonna be removed and put into R
-     if (Nrun>0){  
-        urand[0]= ran2(idum);
-        for (int i=0; i<Naug; i++) yoriginal[ind[i]]= y[i];
-
-        for (run=1; run<Nrun; run++)
-        {   
-		    R_CheckUserInterrupt(); /* check for ^C */
-			Rprintf("Run = %d\n",run);
-            if (perm_simu=='0')
-            {  for (int i=0; i<Nind; i++) indorder[i]= i;
-               for (int i=0; i<Nind; i++) urand[i]= ran2(idum);
-               sort2(Nind,urand,indorder);  // y[individu 0...Nind-1] are permuted
-               for (int i=0; i<Naug; i++) // indorder[ind[i]]== new individu number
-                   y[i]= yoriginal[indorder[ind[i]]];
-            }
-            else
-            {  // cout << "Parametric bootstrap" << endl;
-               for (int i=0; i<Nind; i++) yoriginal[i]= pow(savevariance,0.5)*randomnormal(idum);
-               for (int i=0; i<Naug; i++) y[i]= yoriginal[ind[i]];
-            }
-            variance= -1.0;
-            // logLfull= QTLmixture(marker,cofactor,r,position,y,ind,Nind,Naug,Nmark,variance,em,weight);
-			if (Backwards==1){ 
-                  maxF[run]= backward(Nind, Nmark, cofactor, marker, y, weight, ind, Naug, logLfull,
-                    variance, F1, F2, &selcofactor, r, position,&informationcontent, mapdistance,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype);
-			}
-			if (Backwards==0){
-                  maxF[run]= mapQTL(Nind, Nmark, cofactor, cofactor, marker, position,
-                  (*mapdistance), y, r, ind, Naug, variance, 'n',&informationcontent,&Frun,run,REMLorML, fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype);
-			}
-            // cout << "run " << run <<" ready; maxF= " << maxF[run] << endl;
-        }
-	}
-	//administration and such (should be also)... however we do need the Cumulative distribution of maximum test statistic value
-    if (Nrun > 0){
-		sort1(Nrun,maxF);
-		Rprintf("Cumulative distribution of maximum test statistic value in %d permutations or simulations\n",Nrun);
-		for (int i=1; i<Nrun+1; i++){   
-			Rprintf(" %f %f\n",( (double)i/( (double)Nrun+1.0) ),maxF[i-1]);
-			R_ProcessEvents();
-			R_FlushConsole();
-        }
-    }	
 	Rprintf("Analysis of data finished\n");
   // ---- Write output / send it back to R
 	double moveQTL= stepmin;
@@ -365,17 +306,12 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 			chrnumber++; 
 		}
     }
-	Free(urand);
-	Free(indorder);
-	Free(yoriginal);
-	Free(maxF);
 	Free(position);
 	Free(weight);
 	Free(ind);
 	delcmatrix(marker,Nmark);
 	Free(y);
 	Free(selcofactor);
-	Free(idum);
 	return;
 }
 

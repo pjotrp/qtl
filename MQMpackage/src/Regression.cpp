@@ -156,8 +156,8 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      for (jj=j+1; jj<dimx; jj++) XtWX[j][jj]= XtWX[jj][j];
 
      /* solve equations */
-    // Rprintf("solve equations\n");
-     // printmatrix(XtWX,dimx,dimx);
+     //Rprintf("Solve equations\nPrintinf matrix XiWX\n");
+     //printmatrix(XtWX,dimx,dimx);
      int d;
      ivector indx;
      indx= newivector(dimx);

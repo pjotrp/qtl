@@ -249,6 +249,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position,c
 				}
 			break;
 	}
+	return 0.0;
 }
 
 }
