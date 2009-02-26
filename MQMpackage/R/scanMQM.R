@@ -129,7 +129,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 			if(length(cofactors) != n.mark){
 				cat("Error: # Cofactors != # Markers\n")		
 			}else{
-				cat("INFO:#",length(cofactors),"Cofactors received")
+				cat("INFO:#",length(cofactors),"Cofactors received\n")
 				if(sum(cofactors) > 0){
 					cat("INFO: Doing backward elimination of selected cofactors.\n")
 					cat("INFO: Not doing permutation of data.\n")
