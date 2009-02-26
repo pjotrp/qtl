@@ -33,9 +33,5 @@ double gammln(double xx);
 double betai(double a, double b, double x);
 double betacf(double a, double b, double x);
 double inverseF(int df1, int df2, double alfa);
-double ran2(long *idum);
-double randomnormal(long *idum);
-void sort1(int n, vector ra);
-void sort2(int n, double *ra, ivector rb);
 
 /* end of MQMsupport.h */
