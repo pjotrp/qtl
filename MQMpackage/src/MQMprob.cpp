@@ -11,8 +11,9 @@
  *
  **********************************************************************/
  
- extern "C"
+extern "C"
 {
+
 #include <R.h>
 #include <math.h>
 #include <R_ext/PrtUtil.h>

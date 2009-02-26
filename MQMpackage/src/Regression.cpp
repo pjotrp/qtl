@@ -155,17 +155,33 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      for (j=0; j<dimx; j++)
      for (jj=j+1; jj<dimx; jj++) XtWX[j][jj]= XtWX[jj][j];
 
-     /* solve equations */
-     //Rprintf("Solve equations\nPrintinf matrix XiWX\n");
-     //printmatrix(XtWX,dimx,dimx);
+     
      int d;
      ivector indx;
      indx= newivector(dimx);
-     ludcmp(XtWX,dimx,indx,&d);
-     lusolve(XtWX,dimx,indx,XtWY);
+     /* solve equations */
+     //Rprintf("LUcmp equations\nPrintinf matrix XiWX\n");
+    // printmatrix(XtWX,dimx,dimx);
+    // Rprintf("LUcmp equations\nPrintinf indX\n");	 
+	// for (jj=0; jj<dimx; jj++){
+	//	Rprintf("%f",indx);
+	 //}
+	 //Rprintf("\n");	 
+	 
+	 ludcmp(XtWX,dimx,indx,&d);
+     
+	 //Rprintf("LUsolve equations\nPrintinf indX\n");	 
+	 //for (jj=0; jj<dimx; jj++){
+	//	Rprintf("%f",indx);
+	 //}
+	 //Rprintf("\n");		 
+     
+	 lusolve(XtWX,dimx,indx,XtWY);
      // luinvert(xtwx, inv, dimx, indx);
-     // cout << "Parameter estimates" << endl;
-     // for (jj=0; jj<dimx; jj++) cout << jj << " " << XtWY[jj] << endl;
+     //Rprintf("Parameter Estimates\n");
+	 //for (jj=0; jj<dimx; jj++){ 
+	//	Rprintf("%d %f\n",jj,XtWY[jj]);
+	// }
 
      long double *indL;
     // long double indL[Nind];
@@ -265,9 +281,10 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
     }
     for (int i=0; i<Nind; i++){
 		//Sum up log likelyhoods for each individual
+		
 		logL+= log(indL[i]);
 	}
-
+	//Rprintf("LLhood: %f\n",logL);
 	Free(indL);
     Free(indx);
     Free(xtQTL);

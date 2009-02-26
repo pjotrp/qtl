@@ -11,7 +11,7 @@
  *
  **********************************************************************/
  
- extern "C"
+extern "C"
 {
  
 #include <R.h>
@@ -309,6 +309,6 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
     return maxF; //QTLlikelihood;
 }
  
- }
+}
  
 /* end of MQMmapQTL.c */

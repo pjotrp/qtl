@@ -16,10 +16,10 @@
 # scanMQM: main scanning function to the MQMpackage
 #
 ######################################################################
-#setwd("D:/")
-#library(qtl)
-#dyn.load("scanMQM.dll")
-#cross <- read.cross("csv","","Test.csv")
+setwd("D:/")
+library(qtl)
+dyn.load("scanMQM.dll")
+cross <- read.cross("csv","","Test.csv")
 
 # Smap <- sim.map(len=rep(200,20), n.mar=10)
 # Bmap <- sim.map(len=rep(200,20), n.mar=1000)
@@ -204,13 +204,13 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 	}			
 }
 
-#res <- scanMQM(cross)
-#plot(res)
+res <- scanMQM(cross)
+plot(res)
 
-#bcqtl <- c(3,15,2)                                      # QTL at chromosome 3
-#data(map10)                                             # Mouse genome
-#bccross <- sim.cross(map10,bcqtl,n=100,type="bc")       # Simulate a BC Cross
-#bcresult <- scanMQM(bccross)                            # Do a MQM scan of the genome
-#plot(bcresult)                                          # Plot the results of the genome scan
+bcqtl <- c(3,15,2)                                      # QTL at chromosome 3
+data(map10)                                             # Mouse genome
+bccross <- sim.cross(map10,bcqtl,n=100,type="bc")       # Simulate a BC Cross
+bcresult <- scanMQM(bccross)                            # Do a MQM scan of the genome
+plot(bcresult)                                          # Plot the results of the genome scan
 
 # end of scanMQM.R

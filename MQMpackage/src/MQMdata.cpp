@@ -11,7 +11,7 @@
  *
  **********************************************************************/
  
- extern "C"
+extern "C"
 {
 
 #include <R.h>
@@ -565,7 +565,7 @@ void printmatrix(matrix m, int rows, int cols){
       
 	for (int r=0; r<rows; r++){
 		for (int c=0; c<cols; c++){
-			Rprintf("%f",m[r][c]);
+			Rprintf("%f\t",m[r][c]);
 		}
         Rprintf("\n");
 	}

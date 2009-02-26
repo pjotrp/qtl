@@ -166,13 +166,18 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	}
 	char cross = 'F';
 	if(crosstype == 1){
-		cross = 'F';	
+		cross = 'F';
+		domi = domi;
 	}
 	if(crosstype == 2){
-		cross = 'B';	
+		cross = 'B';
+		Rprintf("BackCross, dominance set to 0\n");   		
+		domi = 0;
 	}
 	if(crosstype == 3){
 		cross = 'R';	
+		Rprintf("RIL, dominance set to 0\n");   		
+		domi = 0;
 	}	
 	char dominance='n';
 	if(domi != 0){
