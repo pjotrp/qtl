@@ -48,8 +48,8 @@ ResultsToMolgenis(result,"QTL-mqm")	#Store the result from MQM into molgenis dat
 \references{
 	http://www.molgenis.org \& http://www.Xgap.org	
 	\itemize{
-		\item Swertz MA, Jansen RC. (2007), Beyond standardization: dynamic software infrastructures for systems biology. \emp{Nat Rev Genet.} \bold{3}, 235--243.
-		\item Swertz MA, De Brock EO, Van Hijum SA, De Jong A, Buist G, Baerends RJ, Kok J, Kuipers OP, Jansen RC. (2004), Molecular Genetics Information System (MOLGENIS): alternatives in developing local experimental genomics databases. \emp{Bioinformatics},\bold{13}, 2075--2083.
+		\item Swertz MA, Jansen RC. (2007), Beyond standardization: dynamic software infrastructures for systems biology. \emph{Nat Rev Genet.} \bold{3}, 235--243.
+		\item Swertz MA, De Brock EO, Van Hijum SA, De Jong A, Buist G, Baerends RJ, Kok J, Kuipers OP, Jansen RC. (2004), Molecular Genetics Information System (MOLGENIS): alternatives in developing local experimental genomics databases. \emph{Bioinformatics},\bold{13}, 2075--2083.
 	}
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
