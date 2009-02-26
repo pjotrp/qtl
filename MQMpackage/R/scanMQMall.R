@@ -58,19 +58,11 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 			res <- lapply(data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG)
 		}
 		
-		#All done now plot the results
-		
-		colors <- rainbow(n.pheno)
-		for(i in 1:n.pheno) {
-			if(i !=1 ){
-				plot(res[[i]],add=TRUE,col=colors[i])
-			}else{
-				plot(res[[i]],col=colors[i])
-			}
-		}
-		
+
 		#Return the results
 		class(res) <- c(class(res),"MQMmulti")
+		#All done now plot the results
+		plot.MQMall(res,"P")
 		res
 	}else{
 		stop("Error: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")

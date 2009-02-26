@@ -21,10 +21,11 @@ MQMlogPheno(cross = NULL, Phenot = NULL)
 \value{
 	Cross object with log transformed phenotypes (specified bij Phenot, or all are transformed when Phenot=NULL) 
 }
-\references{ Danny Arends \email{Danny.Arends@gmail.com}  }
-\author{  Danny Arends \email{Danny.Arends@gmail.com} }
-\note{ 
 
+\author{  Danny Arends \email{Danny.Arends@gmail.com} }
+
+\note{ 
+	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
 \seealso{ 
 \itemize{

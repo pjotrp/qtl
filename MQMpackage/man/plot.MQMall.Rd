@@ -10,7 +10,7 @@
 \usage{
 plot.MQMall(result = NULL, type = "C")
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{result}{ Result object from scanMQMall }
   \item{type}{ "C" for contourplot, "P" for stacked R/QTL plot, "I" for a heatmapplot  }
@@ -39,7 +39,11 @@ plot.MQMall(result = NULL, type = "C")
 	plot.MQMall(result,"P")
 	plot.MQMall(result,"C")
 }
-
+\references{
+\itemize{
+	\item Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988), The New S Language. Wadsworth & Brooks/Cole.
+}
+}
 \keyword{ QTL }
 \keyword{ Mapping }
 \keyword{ Selection }

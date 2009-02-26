@@ -14,13 +14,12 @@ ResultsFromMolgenis(DBqtlName = NULL, DBpath = NULL)
   \item{DBpath}{ Path to the molgenis database }
 }
 \details{
-
+The library RCurl from bioconductor should be installed to use a molgenis interface.
 }
 \value{
   Returns a MQMmulti or a scanone object.
 }
-\references{ http://www.molgenis.org \& http://www.Xgap.org }
-\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; M.A. Swertz \email{m.a.swertz@rug.nl} }
+\author{ Danny Arends \email{Danny.Arends@gmail.com} ; M.A. Swertz \email{m.a.swertz@rug.nl} ; R.C. Janssen \email{r.c.jansen@rug.nl} }
 \note{ 
 The library RCurl from bioconductor should be installed.
 \itemize{
@@ -42,6 +41,13 @@ result <- scanMQMall(cMol)				#Basic execution of scanMQMall
 ResultsToMolgenis(result,"QTL-mqm")			#Store the result from MQM into molgenis database
 r_res <- ResultsFromMolgenis("QTL-mqm")		#Store the result from MQM into molgenis database
 
+}
+\references{
+	http://www.molgenis.org \& http://www.Xgap.org	
+	\itemize{
+		\item Swertz MA, Jansen RC. (2007), Beyond standardization: dynamic software infrastructures for systems biology. \emp{Nat Rev Genet.} \bold{3}, 235--243.
+		\item Swertz MA, De Brock EO, Van Hijum SA, De Jong A, Buist G, Baerends RJ, Kok J, Kuipers OP, Jansen RC. (2004), Molecular Genetics Information System (MOLGENIS): alternatives in developing local experimental genomics databases. \emp{Bioinformatics},\bold{13}, 2075--2083.
+	}
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

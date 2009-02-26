@@ -4,11 +4,11 @@
 \docType{data}
 
 \title{ 
-	Crossobject from R/QTL with multiple traits 
+	Example Cross object from R/QTL with multiple traits.
 }
 
 \description{
-	Cross object from R/QTL
+	Cross object from R/QTL, an object of class \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details.
 }
 \usage{data(multitrait)}
 \format{

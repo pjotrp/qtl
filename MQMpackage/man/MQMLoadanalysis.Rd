@@ -25,7 +25,12 @@ MQMLoadanalysis(file = "MQM_output.txt")
 \note{ 	
 	If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }
-\seealso{  }
+\seealso{ 
+\itemize{
+	\item \code{\link{scanMQM}} - Function called to do single trait analysis
+	\item \code{\link{scanMQMall}} - Function called to do multiple trait analysis
+}
+}
 \examples{
 library(MQMpackage)
 qtl <- c(3,15,3,7)					# QTL at chromosome 3
@@ -33,7 +38,6 @@ data(map10)						# Mouse genome
 cross <- sim.cross(map10,qtl,n=100)			# Simulate a Cross
 result <- scanMQM(cross,file="aaa.txt")			# Do a MQM scan of the genome and save it to aaa.txt
 res_reloaded <- MQMLoadanalysis("aaa.txt")		#Reads in and plots the file aaa.txt
-
 }
 
 \keyword{ QTL }
