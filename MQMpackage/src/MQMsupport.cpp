@@ -26,13 +26,8 @@ extern "C"
 #include "MQMmapQTL.h"
 #include "MQMmixture.h"
 
-//extern long *idum; // for monte carlo simulation or permutation
-
-
-
 /*
- * analyseF2 - analyse one F2 family
- *
+ * analyseF2 - analyse one F2/RIL/BC family
  */
 void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, 
 			   double **QTL,vector *mapdistance,int **Chromo,int Nrun,int RMLorML, double windowsize,double stepsize,
@@ -54,7 +49,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
     char fitQTL='n';
 	
 	chr= newivector(Nmark);
-	Rprintf("Starting MQM analysis\n\n");
+	Rprintf("Starting C-part of the MQM analysis\n\n");
     Rprintf("Filling the chromosome matrix\n");
 	for(int i=0; i< Nmark; i++){
 		chr[i] = Chromo[0][i];
@@ -153,7 +148,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 		if ((position[j]=='L')||(position[j]=='M')){
 			r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
 			if (r[j]<0){
-				Rprintf("error: recombination frequency is negative\n");
+				Rprintf("ERROR: recombination frequency is negative\n");
 				Rprintf("chr=%d mapdistance=%d\n",chr[j],(*mapdistance)[j]); 
 				Rprintf("position=%d r[j]=%d\n",position[j], r[j]);
 				return;
@@ -183,17 +178,6 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 			newmarker[j][i]= marker[j][i];
 		}
     }
-//	 if(augdata(marker,y,&newmarker,&newy,&newind,&Nind,&Naug,Nmark,position,r,maxNaug,imaxNaug,neglect)==1){
-//		Rprintf("Data augmentation finished succesfull\n");
-//		Rprintf("# Unique individuals before augmentation:%d\n",prior);
-//		Rprintf("# Unique selected individuals:%d\n",Nind);
-//		Rprintf("# Marker p individual:%d\n",Nmark);
-//		Rprintf("# Individuals after augmentation:%d\n",Naug);
-//	}else{
-//		Rprintf("Data augmentation failed\n");
-//		return;
-//	}
-//    Rprintf("Naug:%d\n",Naug);
 
     vector newweight;
     newweight= newvector(Naug);
@@ -206,16 +190,13 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 		if ((position[j]=='L')||(position[j]=='M')){
 			r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
 			if (r[j]<0){
-				Rprintf("error: recombination frequency is negative\n");
+				Rprintf("ERROR: recombination frequency is negative\n");
 				Rprintf("j=%d chr=%d mapdistance=%f mapdistance=%f\n",j,chr[j],(*mapdistance)[j+1],(*mapdistance)[j]); 
 				Rprintf("position=%d r[j]=%f\n",position[j], r[j]);
 				return;
 			}
 		}
     }
-	//for (int j=0; j<Nmark; j++){
-	//	Rprintf("r(%d)= %f\n",j,r[j]);
-	//}
     /* eliminate individuals with missing trait values */
     //We can skip this part iirc because R throws out missing phenotypes beforehand
 	int oldNind=Nind;
@@ -321,69 +302,80 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
    analoog vector XtWY wordt full xtwy genoemd;
 */
 double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector weight, int* ind, int Naug, double logLfull, double variance, double F1, double F2, cvector* newcofactor, vector r, cvector position,vector *informationcontent,vector *mapdistance,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance,int em, double windowsize,double stepsize,
-			  double stepmin,double stepmax,char crosstype)
-{    int dropj=0, Ncof=0;
-     double maxlogL, savelogL, maxF=0.0; //, minlogL=logLfull, maxFtest=0.0;
-     char finished='n'; //, biasadj='n';
-     vector logL;
-     logL = newvector(Nmark);
-     savelogL= logLfull;
-     maxlogL= logLfull-10000;
-	 //Rprintf("Backward started\n");
-     for (int j=0; j<Nmark; j++)
-     {   (*newcofactor)[j]= cofactor[j];
-         Ncof+=(cofactor[j]!='0');
-     }
-     while ((Ncof>0)&&(finished=='n'))
-     {     for (int j=0; j<Nmark; j++)
-           {   if ((*newcofactor)[j]=='1')
-               {  //Rprintf("Drop marker %d\n",j);
-                  (*newcofactor)[j]='0';
-                  if (REMLorML=='1') variance= -1.0;
-                  logL[j]= QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
-                  (*newcofactor)[j]='1';
-               }
-               else if ((*newcofactor)[j]=='2')
-               {  //Rprintf("Drop marker %d\n",j);
-                  (*newcofactor)[j]='0';
-                  if (REMLorML=='1') variance= -1.0;
-                  logL[j]=  QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
-                  (*newcofactor)[j]='2';
-               }
-               else if ((*newcofactor)[j]!='0') Rprintf("Something is wrong");
-           }
-           /* nu bepalen welke cofactor 0 kan worden (=verwijderd) */
-           maxlogL= logLfull-10000.0;
-           for (int j=0; j<Nmark; j++)
-           {   if ((*newcofactor)[j]!='0')
-               if (logL[j]>maxlogL) { maxlogL= logL[j]; dropj = j; }
-           }
-           if  ( ((*newcofactor)[dropj]=='1') && ( F2> 2.0*(savelogL-maxlogL)) )
-           {   savelogL= maxlogL;
-               (*newcofactor)[dropj]= '0'; Ncof-=1;
-               Rprintf("Marker %d is dropped, resulting in logL of reduced model = %f\n",(dropj+1),savelogL);
-           }
-           else if  ( ((*newcofactor)[dropj]=='2') && (F1> 2.0*(savelogL-maxlogL)) )
-           {   savelogL= maxlogL;
-               (*newcofactor)[dropj]= '0'; Ncof-=1;
-               Rprintf("marker %d is dropped, resulting in logL of reduced model = %f\n",(dropj+1),savelogL);
-           }
-           else /* ready */
-           {   finished='y';
-               for (int j=0; j<Nmark; j++)
-               if ((*newcofactor)[j]=='1') Rprintf("Marker %d is selected\n",(j+1));
-           }
-     }
-     for (int j=0; j<Nmark; j++)
-     if ((*newcofactor)[j]!='0') Rprintf("Marker %d is in final model\n",(j+1));
+			  double stepmin,double stepmax,char crosstype){
+	int dropj=0, Ncof=0;
+    double maxlogL, savelogL, maxF=0.0; //, minlogL=logLfull, maxFtest=0.0;
+    char finished='n'; //, biasadj='n';
+    vector logL;
+    logL = newvector(Nmark);
+    savelogL= logLfull;
+    maxlogL= logLfull-10000;
+	Rprintf("Backward elimination of cofactors started\n");
+    for (int j=0; j<Nmark; j++){
+		(*newcofactor)[j]= cofactor[j];
+        Ncof+=(cofactor[j]!='0');
+    }
+    while ((Ncof>0)&&(finished=='n'))
+    {   for (int j=0; j<Nmark; j++){
+			if ((*newcofactor)[j]=='1'){
+				//Rprintf("Drop marker %d\n",j);
+				(*newcofactor)[j]='0';
+				if (REMLorML=='1') variance= -1.0;
+				logL[j]= QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
+				(*newcofactor)[j]='1';
+			}else if ((*newcofactor)[j]=='2'){
+				//Rprintf("Drop marker %d\n",j);
+				(*newcofactor)[j]='0';
+				if (REMLorML=='1') variance= -1.0;
+				logL[j]=  QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
+				(*newcofactor)[j]='2';
+			}else if ((*newcofactor)[j]!='0'){
+				Rprintf("ERROR: Something is wrong when trying to parse the newcofactorslist.\n");
+			}
+		}
+		/* nu bepalen welke cofactor 0 kan worden (=verwijderd) */
+		maxlogL= logLfull-10000.0;
+		for (int j=0; j<Nmark; j++){
+			if ((*newcofactor)[j]!='0'){
+				if (logL[j]>maxlogL) { 
+					maxlogL= logL[j]; dropj = j; 
+				}
+			}
+		}
+		if  ( ((*newcofactor)[dropj]=='1') && ( F2> 2.0*(savelogL-maxlogL)) ){   
+			savelogL= maxlogL;
+			(*newcofactor)[dropj]= '0'; Ncof-=1;
+			//Rprintf("Marker %d is dropped, resulting in logL of reduced model = %f\n",(dropj+1),savelogL);
+		}else if  ( ((*newcofactor)[dropj]=='2') && (F1> 2.0*(savelogL-maxlogL)) ){   
+			savelogL= maxlogL;
+			(*newcofactor)[dropj]= '0'; 
+			Ncof-=1;
+			//Rprintf("marker %d is dropped, resulting in logL of reduced model = %f\n",(dropj+1),savelogL);
+		}else{
+			Rprintf("INFO: Backward selection of markers to be used as cofactors has finished.\n");
+			finished='y';
+			for (int j=0; j<Nmark; j++){
+				if ((*newcofactor)[j]=='1'){
+					//Rprintf("Marker %d is selected\n",(j+1));
+				}
+			}
+        }
+    }
+	Rprintf("----------------------:MODEL:----------------------\n");
+    for (int j=0; j<Nmark; j++){
+		if ((*newcofactor)[j]!='0'){
+			Rprintf("MODEL: Marker %d is selected in final model\n",(j+1));
+		}
+	}
+	Rprintf("--------------------:END MODEL:--------------------\n");
 
-     maxF= mapQTL(Nind, Nmark, cofactor, (*newcofactor), marker, position,
+    maxF= mapQTL(Nind, Nmark, cofactor, (*newcofactor), marker, position,
            (*mapdistance), y, r, ind, Naug, variance, 'n', informationcontent,Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype); // printoutput='n'
-     //Rprintf("Backward selection finished\n");
-     Free(logL);
-     return maxF;
+    //Rprintf("Backward selection finished\n");
+    Free(logL);
+    return maxF;
 }
 
- }
+}
  
 /* end of MQMsupport.c */

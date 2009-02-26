@@ -44,8 +44,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
        weight= newvector(Naug);
        weight[0]= -1.0;
 
-       /* fit QTL on top of markers (but: should also be done with routine QTLmixture()
-       for exact ML) */
+       /* fit QTL on top of markers (but: should also be done with routine QTLmixture() for exact ML) */
 
        cvector newcofactor;
        newcofactor= newcvector(Nmark);
@@ -60,17 +59,14 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
        }
        double savelogL=999.0; // log-likelihood of model with all selected cofactors
 
-
-      // ofstream fff("mqm_out.txt", ios::out | ios::app);
-      // cout << endl << endl;
-	//   Rprintf("DEBUG testing_1");
        /* fit QTL on top of markers (full ML)   fit QTL between markers (full ML) */
        // cout << "please wait (mixture calculus may take quite a lot of time)" << endl;
        /* estimate variance in mixture model with all marker cofactors */
        // cout << "estimate variance in mixture model with all cofactors" << endl;
+
        variance= -1.0;
        savelogL= 2.0*QTLmixture(marker,cofactor,r,position, y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
-	   Rprintf("log-likelihood of full model= %f\n",savelogL/2);
+	   //Rprintf("log-likelihood of full model= %f\n",savelogL/2);
        Nloci= Nmark+1;
        // augment data for missing QTL observations (x 3)
        fitQTL='y';
@@ -243,7 +239,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
               {  if ((position[j]=='L')&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= '2';
                  else QTLcofactor[j+1]= '2';
                  QTLlikelihood= -2.0*QTLmixture(QTLloci,QTLcofactor,QTLr,QTLposition,y,ind,Nind,Naug,Nloci,&variance,em,&weight0,REMLorML,fitQTL,dominance,crosstype);
-				 Rprintf("log-likelihood of NO QTL model= %f\n",QTLlikelihood/-2);
+				 //Rprintf("log-likelihood of NO QTL model= %f\n",QTLlikelihood/-2);
 				 weight0[0]= -1.0;
                  savebaseNoQTLModel= QTLlikelihood;
                  if ((position[j]=='L')&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= '0';
@@ -261,7 +257,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
               QTLlikelihood+=2.0*QTLmixture(QTLloci,QTLcofactor,QTLr,QTLposition,y,ind,Nind,Naug,Nloci,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
 			  //this is the place we error at, because the likelyhood is not correct.
 			  if (QTLlikelihood<-0.05) { 
-				Rprintf(" Negative QTLlikelihood=%f  versus BASE MODEL:%f QTL at %d\n",QTLlikelihood,savebaseNoQTLModel,j); //return 0;}	
+				Rprintf("WARNING: Negative QTLlikelihood=%f versus BASE MODEL: %f\nThis applies to the QTL at %d\n",QTLlikelihood,savebaseNoQTLModel,j); //return 0;}	
 			  }
               maxF= (maxF<QTLlikelihood ? QTLlikelihood : maxF);
               if (run>0) (*Frun)[step][run]+= QTLlikelihood;

@@ -174,7 +174,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
           }
           if ((position[j]=='L')||(position[j]=='U'))
           {  
-			//Here we still have some f2 dependancies
+			//Here we don't have any f2 dependancies anymore by using the prob function
 			if (cofactor[j]<='1')
              for (i=0; i<Naug; i++)
              {   calc_i= prob(loci,r,i,j,'1',crosstype,1,0,1);
