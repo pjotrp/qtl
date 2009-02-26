@@ -21,6 +21,9 @@
 #dyn.load("scanMQM.dll")
 #cross <- read.cross("csv","","Test.csv")
 
+# Smap <- sim.map(len=rep(200,20), n.mar=10)
+# Bmap <- sim.map(len=rep(200,20), n.mar=1000)
+
 scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
 					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,reestimate=0,dominance=0){
