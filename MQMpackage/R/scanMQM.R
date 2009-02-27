@@ -16,13 +16,21 @@
 # scanMQM: main scanning function to the MQMpackage
 #
 ######################################################################
-setwd("D:/")
-library(qtl)
-dyn.load("scanMQM.dll")
-cross <- read.cross("csv","","Test.csv")
 
-# Smap <- sim.map(len=rep(200,20), n.mar=10)
-# Bmap <- sim.map(len=rep(200,20), n.mar=1000)
+test.scanMQM <- function(){
+	setwd("D:/")
+	library(qtl)
+	dyn.load("scanMQM.dll")
+	cross <- read.cross("csv","","Test.csv")
+	res <- scanMQM(cross)
+	plot(res)
+
+	bcqtl <- c(3,15,2)                                      # QTL at chromosome 3
+	data(map10)                                             # Mouse genome
+	bccross <- sim.cross(map10,bcqtl,n=100,type="bc")       # Simulate a BC Cross
+	bcresult <- scanMQM(bccross)                            # Do a MQM scan of the genome
+	plot(bcresult)                                          # Plot the results of the genome scan
+}
 
 scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
@@ -203,14 +211,5 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		stop("Error: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			
 }
-
-res <- scanMQM(cross)
-plot(res)
-
-bcqtl <- c(3,15,2)                                      # QTL at chromosome 3
-data(map10)                                             # Mouse genome
-bccross <- sim.cross(map10,bcqtl,n=100,type="bc")       # Simulate a BC Cross
-bcresult <- scanMQM(bccross)                            # Do a MQM scan of the genome
-plot(bcresult)                                          # Plot the results of the genome scan
 
 # end of scanMQM.R
