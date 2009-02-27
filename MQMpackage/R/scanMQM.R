@@ -60,12 +60,10 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		chr <- NULL
 		dist <- NULL
 		out.qtl <- NULL	
-		makr.chr <- NULL
 		for(i in 1:n.chr) {
 			geno <- cbind(geno,cross$geno[[i]]$data)
 			chr <- c(chr,rep(i,dim(cross$geno[[i]]$data)[2]))
 			dist <- c(dist,cross$geno[[i]]$map)
-			makr.chr <- c(makr.chr,length(cross$geno[[i]]$map))
 		}
 		if(alfa <=0 || alfa >= 1){
 			stop("ERROR: Alfa must be between 0 and 1.")
@@ -197,8 +195,8 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 			names <- c(names,paste("C",ceiling(i/qtlAchromo),"L",rep(seq(step.min,step.max,step.size),n.chr)[i],sep=""))
 		}
 		if(reestimate){
-			aa <- nmar(pull.map(f2cross))
 			new_map <- pull.map(cross)
+			aa <- nmar(new_map)
 			sum <- 1
 			for(i in 1:length(aa)) {
 				for(j in 1:aa[[i]]) {
@@ -207,7 +205,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 				}
 			}
 			cat("INFO: Viewing the user supplied map versus genetic map used during analysis.\n")
-			plot.map(pull.map(cross), new_map,main="supplied map versus re-estimated map")
+			plot.map(pull.map(cross), new_map,main="Supplied map versus re-estimated map")
 		}
 		rownames(qtl) <- names
 		colnames(qtl) = c("chr","pos (Cm)",paste("QTL",colnames(cross$pheno)[Phenot]))
