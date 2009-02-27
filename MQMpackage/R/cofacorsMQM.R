@@ -24,11 +24,11 @@
 
 MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
 	if(is.null(cross)){
-      stop("Error: No cross file. Please supply a valid cross object.")
+      stop("ERROR: No cross file. Please supply a valid cross object.")
 	  return 
 	}
 	if(is.null(cofactors)){
-      stop("Error: Cofactors to set. Please supply a list of markers to serve as cofactors.")
+      stop("ERROR: Cofactors to set. Please supply a list of markers to serve as cofactors.")
 	  return 
 	}
 		
@@ -43,23 +43,23 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
 	n.mark <- ncol(geno)
 
 	if(max(cofactors) > n.mark){
-      stop("Error: Trying to set a non-existent marker as a cofactor.")
+      stop("ERROR: Trying to set a non-existent marker as a cofactor.")
 	  return 	  
 	}
 
 	if(min(cofactors) <= 0){
-      stop("Error: Trying to set a non-existent marker as a cofactor.")
+      stop("ERROR: Trying to set a non-existent marker as a cofactor.")
 	  return 	  
 	}
 	
 	if(!is.null(sexfactors)){
 	if(max(sexfactors) > n.mark){
-      stop("Error: Trying to set a non-existent marker as a sexfactor.")
+      stop("ERROR: Trying to set a non-existent marker as a sexfactor.")
 	  return 	  
 	}
 	
 	if(min(sexfactors) <= 0){
-      stop("Error: Trying to set a non-existent marker as a sexfactor.")
+      stop("ERROR: Trying to set a non-existent marker as a sexfactor.")
 	  return 	  
 	}
 	}	
@@ -78,13 +78,13 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
 
 MQMCofactorsEach <- function(cross = NULL,each = 3){
 	if(is.null(cross)){
-      stop("Error: No cross file. Please supply a valid cross object.")
+      stop("ERROR: No cross file. Please supply a valid cross object.")
 	  return 
 	}
 
 
 	if(each < 2){
-      stop("Error: Can't set cofactors that often.")
+      stop("ERROR: Can't set cofactors that often.")
 	  return 
 	}
 
@@ -100,7 +100,7 @@ MQMCofactorsEach <- function(cross = NULL,each = 3){
 	n.mark <- ncol(geno)
 
 	if(each > n.mark){
-      stop("Error: Not enough markers to place cofactors at.")
+      stop("ERROR: Not enough markers to place cofactors at.")
 	  return 
 	}	
 	

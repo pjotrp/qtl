@@ -32,7 +32,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	double **NEWPheno;
 	int **NEWIND;
 	int prior = *Nind;
-	Rprintf("Starting C-part of the dataaugmentation routine\n");
+	Rprintf("INFO: Starting C-part of the dataaugmentation routine\n");
 	ivector new_ind;
     vector new_y,r,mapdistance;
 	cvector position;
@@ -114,12 +114,12 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	if((*crosstype) == 3){
 		cross = 'R';	
 	}
-	Rprintf("Filling the chromosome matrix\n");
+	Rprintf("INFO: Filling the chromosome matrix\n");
 
 	for(int i=0; i<(*Nmark); i++){
 		chr[i] = Chromo[0][i];
 	}
-	Rprintf("Calculating relative genomepositions of the markers\n");
+	Rprintf("INFO: Calculating relative genomepositions of the markers\n");
 
     for (int j=0; j<(*Nmark); j++)
     {   
@@ -132,15 +132,15 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
         else
         { if (chr[j]==chr[j+1]) position[j]='L'; else position[j]='U'; }
     }
-	Rprintf("Estimating recombinant frequencies\n");
+	Rprintf("INFO: Estimating recombinant frequencies\n");
 
 	for (int j=0; j<(*Nmark); j++){   
 		r[j]= 999.0;
 		if ((position[j]=='L')||(position[j]=='M')){
 			r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
 			if (r[j]<0){
-				Rprintf("error: recombination frequency is negative\n");
-				Rprintf("position=%d r[j]=%d\n",position[j], r[j]);
+				Rprintf("ERROR: Recombination frequency is negative\n");
+				Rprintf("ERROR: Position=%d r[j]=%d\n",position[j], r[j]);
 				return;
 			}
 		}
@@ -178,7 +178,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		Free(position);
 		Free(r);
 		Free(chr);
-		Rprintf("Data augmentation finished succesfull\n");
+		Rprintf("INFO: Data augmentation finished succesfull\n");
 		Rprintf("# Unique individuals before augmentation:%d\n",prior);
 		Rprintf("# Unique selected individuals:%d\n",*Nind);
 		Rprintf("# Marker p individual:%d\n",*Nmark);
@@ -243,8 +243,8 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
     vector newprob, newprobmax;
     newprob= newvector(*Naug);
     newprobmax= newvector(*Naug);
-	Rprintf("Crosstype:%c:\n",crosstype);
-	Rprintf("Parameters: MAXaug=%d,MAXindaug=%d,Neglect=%f\n",maxNaug, imaxNaug, neglect);
+	Rprintf("INFO: Crosstype determined by the algorithm:%c:\n",crosstype);
+	Rprintf("INFO: Augmentation parameters: Maximum augmentation=%d,Maximum augmentation per individual=%d,Neglect=%f\n",maxNaug, imaxNaug, neglect);
     // ---- foreach individual create one in the newmarker matrix
     for (int i=0; i<(*Nind); i++)
     {   newind[iaug]=i-((*Nind)-newNind);  // index of individuals
@@ -478,8 +478,8 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
 
                    if (iaug+3>maxNaug)
                    {       
-                    Rprintf("ERROR in augmentation routine: dataset too large after augmentation\n");
-                    Rprintf("Recall procedure with larger value for parameter maxaug or lower for the parameter neglect\n");
+                    Rprintf("ERROR: Dataset too large after augmentation\n");
+                    Rprintf("INFO: Recall procedure with larger value for augmentation parameters or lower the parameter neglect\n");
 					// Better not free them, we don't know if the arrays already contain something, perhaps not... then we would segfault in R
 					//Free(newy);
 					//Free(newmarker);
@@ -493,7 +493,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
              if ((iaug-saveiaug+1)>imaxNaug)
              {  newNind-= 1;
                 iaug= saveiaug-1;
-				Rprintf("Individual %d is eliminated\n",i);
+				Rprintf("INFO: Individual %d is eliminated\n",i);
              }
              sumprob= 0.0;
              for (int ii=saveiaug; ii<=iaug; ii++) sumprob+= newprob[ii];
@@ -575,7 +575,7 @@ void printcmatrix(cmatrix m, int rows, int cols){
       
 	for (int r=0; r<rows; r++){   
 		for (int c=0; c<cols; c++){
-			Rprintf("%c",m[r][c]);
+			Rprintf("%c\t",m[r][c]);
 		}
         Rprintf("\n");
 	}

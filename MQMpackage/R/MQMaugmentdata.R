@@ -27,7 +27,7 @@
 MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 	library(qtl)
 	if(is.null(cross)){
-		stop("Error: No cross file. Please supply a valid cross object.")
+		stop("ERROR: No cross file. Please supply a valid cross object.")
 		return 
 	}
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
@@ -72,7 +72,7 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 		dropped <- NULL
 		for(i in 1:dim(pheno)[1]) {
 			if(is.na(pheno[i,Phenot])){
-				cat("Dropped individual ",i ," with missing phenotype.\n")
+				cat("INFO: Dropped individual ",i ," with missing phenotype.\n")
 				dropped <- c(dropped,i) 
 				n.ind = n.ind-1
 			}
@@ -87,7 +87,7 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 			cat("INFO: Selected phenotype ",Phenot," -> ",phenonaam,".\n")
 			cat("INFO: # of phenotypes in object ",nphe(cross),".\n")
 			if(nphe(cross) < Phenot || Phenot < 1){
-				stop("Error: No such phenotype")
+				stop("ERROR: No such phenotype in cross object.\n")
 			}			
 		}
 		result <- .C("R_augdata",
@@ -144,7 +144,7 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 		#RETURN THE RESULTS
 		cross
 	}else{
-		stop("Error: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			
 }
 
@@ -152,7 +152,7 @@ MQMlogPheno <- function(cross= NULL,Phenot=NULL){
 	#Helperfunction to logtransform a specific phenotype specified by the Phenot parameter
 	library(qtl)
 	if(is.null(cross)){
-		stop("Error: No cross file. Please supply a valid cross object.")
+		stop("ERROR: No cross file. Please supply a valid cross object.")
 		return 
 	}
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
@@ -178,7 +178,7 @@ MQMlogPheno <- function(cross= NULL,Phenot=NULL){
 		}
 		cross
 	}else{
-		stop("Error: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			
 }
 

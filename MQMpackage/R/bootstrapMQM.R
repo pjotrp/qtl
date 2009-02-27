@@ -28,15 +28,15 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 {
 	
 	if(is.null(cross)){
-		stop("Error: No cross file. Please supply a valid cross object.") 
+		stop("ERROR: No cross file. Please supply a valid cross object.") 
 	}
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
 		#Echo back the cross type
 		cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
 		if(!parametric){
-			cat("Shuffleling traits between individuals.\n")
+			cat("INFO: Shuffleling traits between individuals.\n")
 		}else{
-			cat("Parametric bootstrapping\nCalculating new traits for each individual.\n")
+			cat("INFO: Parametric bootstrapping\nINFO: Calculating new traits for each individual.\n")
 		}
 		n.pheno <- nphe(cross)
 		data <- NULL
@@ -63,13 +63,13 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		}
 		#Some tests from scanMQM repeated here so they are not hidden when using snow
 		if((step.min+step.size) > step.max){
-				stop("Error: current Step setting would crash the algorithm")
+				stop("ERROR: current Step setting would crash the algorithm")
 		}
 		if(step.min>0){
-				stop("Error: step.min needs to be smaller than 0")
+				stop("ERROR: step.min needs to be smaller than 0")
 		}		
 		if(step.size < 1){
-				stop("Error: Step.size needs to be larger than 1")
+				stop("ERROR: Step.size needs to be larger than 1")
 		}
 		#TEST FOR SNOW CAPABILITIES
 		if("snow" %in% installed.packages()[1:dim(installed.packages())[1]]){
@@ -92,7 +92,7 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		#Return the results	
 		res
 	}else{
-		stop("Error: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}
 }
 

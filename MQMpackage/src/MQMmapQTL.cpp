@@ -29,7 +29,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
 			  vector r, ivector ind, int Naug, double variance, char printoutput,vector *informationcontent,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance,int em, double windowsize,double stepsize,
 			  double stepmin,double stepmax,char crosstype)
 {      
-       Rprintf("mapQTL function called\n");
+       Rprintf("INFO: mapQTL function called.\n");
        int Nloci, j, jj, jjj=0;
        vector Fy;
        Fy= newvector(Naug);

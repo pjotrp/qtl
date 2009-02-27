@@ -20,13 +20,13 @@
 ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox",Fupdate=0){
 	library(RCurl)
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
-		stop("Please install the package RCurl from bioconductor to use the molgenis interface\n")
+		stop("ERROR: Please install the package RCurl from bioconductor to use the molgenis interface\n")
 	}
 	if(is.null(name)){
-		stop("Please supply a name to store these results\n")	
+		stop("ERROR: Please supply a name to store these results\n")	
 	}
 	if(is.null(DBpath)){
-		stop("Please provide a valid DBpath\n")
+		stop("ERROR: Please provide a valid DBpath\n")
 	}else{
 		#Set the path to molgenis
 		molgenispath <- paste(DBpath,"/api/R/",sep="")
@@ -46,14 +46,14 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",DBpath="http
 
 	#get data from server
 	if(is.null(intervalQTLmap)){
-		stop("Please supply a QTL interval map\n")
+		stop("ERROR: Please supply a QTL interval map\n")
 	}
 	if(class(intervalQTLmap)[2] == "scanone"){
-		cat("Valid object from scanone, containing 1 phenotype\n")
+		cat("INFO: Valid object from scanone, containing 1 phenotype\n")
 		num_pheno <- 1
 	}
 	if(class(intervalQTLmap)[2] == "MQMmulti"){
-		cat("Valid object from MultiQTL scan, containing ",length(intervalQTLmap)," phenotypes\n")
+		cat("INFO: Valid object from MultiQTL scan, containing ",length(intervalQTLmap)," phenotypes\n")
 		num_pheno <- length(intervalQTLmap)
 	}
 	investi <- find.investigation()
@@ -121,9 +121,9 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",DBpath="http
 					#Forced update REMOVE elements and insert the new ones
 					remove.decimaldataelement(id=DD[number,]$id)
 					add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap)[i], rowindex=(i-1), colindex=0, value=intervalQTLmap[i,3])
-					cat("Updated (",i-1,",0) because it already existed\n")	
+					cat("INFO: Updated (",i-1,",0) because it already existed\n")	
 				}else{
-					cat("Not gonna add (",i-1,",0) because it already exist\n")
+					cat("INFO: Not gonna add (",i-1,",0) because it already exist\n")
 				}
 			}
 		}
@@ -141,9 +141,9 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",DBpath="http
 						#Forced update REMOVE elements and insert the new ones
 						remove.decimaldataelement(id=DD[number,]$id)
 						add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap[[j]])[i], rowindex=(i-1), colindex=(j-1), value=intervalQTLmap[[j]][i,3])
-						cat("Updated (",i-1,",",j-1,") because it already existed\n")	
+						cat("INFO: Updated (",i-1,",",j-1,") because it already existed\n")	
 					}else{
-						cat("Not gonna add (",i-1,",",j-1,") because it already exist\n")
+						cat("INFO: Not gonna add (",i-1,",",j-1,") because it already exist\n")
 					}
 				}
 			}

@@ -109,10 +109,10 @@ void rmixture(cmatrix marker, vector weight, vector r,
 			}else{
 				(*mapdistance)[j]= -50*log(1-2.0*r[j]);
 			}
-			Rprintf("r(%d)= %f -> %f\n",j,r[j],(*mapdistance)[j]);
+			//Rprintf("r(%d)= %f -> %f\n",j,r[j],(*mapdistance)[j]);
 		}
 	}
-	Rprintf("Re-estimation took %d iterations, rdelta= %f\n",iem,rdelta);
+	Rprintf("INFO: Re-estimation of the genetic map took %d iterations, to reach a rdelta of %f\n",iem,rdelta);
 	Free(indweight);
 }
 
@@ -138,7 +138,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 	varknown= (((*variance)==-1.0) ? 'n' : 'y' );
     Ploci= newvector(newNaug);	
     if ((REMLorML=='0')&&(varknown=='n')){ 
-		Rprintf("variance is being estimated and bias adjusted\n");
+		Rprintf("INFO: Variance is being estimated and bias adjusted\n");
 	}
     if (REMLorML=='1') { 
 		varknown='n'; biasadj='n'; 

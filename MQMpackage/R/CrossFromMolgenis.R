@@ -20,10 +20,10 @@
 CrossFromMolgenis <- function(DBmarkerID=297,DBtraitID=181,DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox"){
 	library("RCurl")
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
-		stop("Please install the package RCurl from bioconductor to use the molgenis interface\n")
+		stop("ERROR: Please install the package RCurl from bioconductor to use the molgenis interface\n")
 	}
 	if(is.null(DBpath)){
-		stop("Please provide a valid DBpath\n")
+		stop("ERROR: Please provide a valid DBpath\n")
 	}else{
 		#Set the path to molgenis
 		molgenispath <- paste(DBpath,"/api/R/",sep="")
@@ -59,13 +59,13 @@ CrossFromMolgenis <- function(DBmarkerID=297,DBtraitID=181,DBpath="http://celtic
 		marker_data <- t(marker_data)
 	}
 	if(trait_row != "Individual" && trait_col != "Individual"){
-		stop("No Individual in DBtraitID")
+		stop("ERROR: No Individual in DBtraitID")
 	}
 	if(trait_col != "Individual"){
 		trait_data <- t(trait_data)
 	}
-	cat("Number of individuals in Marker set:",dim(marker_data)[2],"\n")
-	cat("Number of individuals in Phenotype set:",dim(trait_data)[2],"\n")
+	cat("INFO: Number of individuals in Marker set:",dim(marker_data)[2],"\n")
+	cat("INFO: Number of individuals in Phenotype set:",dim(trait_data)[2],"\n")
 	
 	#We assume that if we have IND in markers = IND in trait that individuals match
 	if(dim(marker_data)[2] != dim(trait_data)[2]){

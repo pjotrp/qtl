@@ -171,20 +171,26 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	}
 	if(crosstype == 2){
 		cross = 'B';
-		Rprintf("BackCross, dominance set to 0\n");   		
+		Rprintf("INFO: BackCross, dominance setting ignored (dominance=0)\n");   		
 		domi = 0;
 	}
 	if(crosstype == 3){
 		cross = 'R';	
-		Rprintf("RIL, dominance set to 0\n");   		
+		Rprintf("INFO: RIL, dominance setting ignored (dominance=0)\n");   		
 		domi = 0;
 	}	
 	char dominance='n';
 	if(domi != 0){
 		dominance='y';
 	}	
-	Rprintf("We got all the needed information, so lets start with the MQM\n");   
+	Rprintf("INFO: All the needed information, so lets start with the MQM\n");   
 	analyseF2(Nind, Nmark, cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,cross,dominance);
+	if(re_estimate){
+		Rprintf("INFO: Sending back the reestimated map used during analysis\n");
+		for(int i=0; i< Nmark; i++){
+			Dist[0][i]=mapdistance[i];
+		}
+	}
 	//Rprintf("Starting Cleanup\n");
 	delcmatrix(markers,Nmark);
 	Free(f1genotype);

@@ -49,8 +49,8 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
     char fitQTL='n';
 	
 	chr= newivector(Nmark);
-	Rprintf("Starting C-part of the MQM analysis\n\n");
-    Rprintf("Filling the chromosome matrix\n");
+	Rprintf("INFO: Starting C-part of the MQM analysis\n");
+    Rprintf("INFO: Receiving the chromosome matrix from R\n");
 	for(int i=0; i< Nmark; i++){
 		chr[i] = Chromo[0][i];
 	}
@@ -59,7 +59,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 		REMLorML='1';
 	}
 
-	Rprintf("Calculating relative genomepositions of the markers\n");
+	Rprintf("INFO: Calculating relative genomepositions of the markers\n");
 	for (int j=0; j<Nmark; j++){
         if (j==0)
         { if (chr[j]==chr[j+1]) position[j]='L'; else position[j]='U'; }
@@ -71,7 +71,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
         { if (chr[j]==chr[j+1]) position[j]='L'; else position[j]='U'; }
     }
     
-	Rprintf("Estimating recombinant frequencies\n");	
+	Rprintf("INFO: Estimating recombinant frequencies\n");	
     for (int j=0; j<Nmark; j++){   
 		r[j]= 999.0;
 		if ((position[j]=='L')||(position[j]=='M')){
@@ -79,7 +79,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 		}
     }
 	
-	Rprintf("Initialize Frun and informationcontent to 0.0\n");	// ---- Initialize Frun and informationcontent to 0.0
+	Rprintf("INFO: Initialize Frun and informationcontent to 0.0\n");	// ---- Initialize Frun and informationcontent to 0.0
 	int Nsteps;
 	Nsteps= chr[Nmark-1]*((stepmax-stepmin)/stepsize+1);	
     Frun= newmatrix(Nsteps,Nrun+1);
@@ -129,7 +129,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
             position[jj]= position[j];
             jj++;
         }else if (cofactor[j]=='1'){  
-            Rprintf("cofactor at chr %d is dropped\n",chr[j]);
+            Rprintf("INFO: Cofactor at chr %d is dropped\n",chr[j]);
         }
     }
     Nmark= jj;
@@ -148,9 +148,8 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 		if ((position[j]=='L')||(position[j]=='M')){
 			r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
 			if (r[j]<0){
-				Rprintf("ERROR: recombination frequency is negative\n");
-				Rprintf("chr=%d mapdistance=%d\n",chr[j],(*mapdistance)[j]); 
-				Rprintf("position=%d r[j]=%d\n",position[j], r[j]);
+				Rprintf("ERROR: Recombination frequency is negative\n");
+				Rprintf("ERROR: Position=%d r[j]=%d\n",position[j], r[j]);
 				return;
 			}
 		}
@@ -163,8 +162,6 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
     ymean/= Nind;
     for (int i=0; i<Nind; i++) yvari += pow(y[i]-ymean,2);
     yvari/= (Nind-1);
-    Rprintf("ymean=%f yvari=%f\n",ymean,yvari);
-	
 	//Fix for not doing dataaugmentation, we just copy the current as the augmented and set Naug to Nind
 	Naug=Nind;
 	Nind=out_Naug;
@@ -190,9 +187,8 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 		if ((position[j]=='L')||(position[j]=='M')){
 			r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
 			if (r[j]<0){
-				Rprintf("ERROR: recombination frequency is negative\n");
-				Rprintf("j=%d chr=%d mapdistance=%f mapdistance=%f\n",j,chr[j],(*mapdistance)[j+1],(*mapdistance)[j]); 
-				Rprintf("position=%d r[j]=%f\n",position[j], r[j]);
+				Rprintf("ERROR: Recombination frequency is negative\n");
+				Rprintf("ERROR: Position=%d r[j]=%d\n",position[j], r[j]);
 				return;
 			}
 		}
@@ -253,15 +249,16 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      double F1, F2;
      F1= inverseF(1,Nind-dimx,alfa);
      F2= inverseF(2,Nind-dimx,alfa);
-     Rprintf("F(%f,1,%d)=%f\n",F1,(Nind-dimx),alfa);
-     Rprintf("F(%f,2,%d)=%f\n",F2,(Nind-dimx),alfa);
+	 Rprintf("INFO: F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa\n");
+     Rprintf("INFO: F(%f,1,%d)=%f\n",F1,(Nind-dimx),alfa);
+     Rprintf("INFO: F(%f,2,%d)=%f\n",F2,(Nind-dimx),alfa);
      F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
      weight[0]= -1.0;
      logLfull= QTLmixture(marker,cofactor,r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
-     Rprintf("log-likelihood of full model= %f\n",logLfull);
-     Rprintf("residual variance= %f\n",variance);
-     Rprintf("Trait mean= %f \nTrait variation= %f\n",ymean,yvari);
+     Rprintf("INFO: Log-likelihood of full model= %f\n",logLfull);
+     Rprintf("INFO: Residual variance= %f\n",variance);
+     Rprintf("INFO: Trait mean= %f \nINFO: Trait variation= %f\n",ymean,yvari);
 
      if (Backwards==1)    // use only selected cofactors
          logLfull= backward(Nind, Nmark, cofactor, marker, y, weight, ind, Naug, logLfull,
@@ -270,12 +267,12 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
          logLfull= mapQTL(Nind, Nmark, cofactor, cofactor, marker, position,
                   (*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype); // printout=='n'
 
-	Rprintf("Analysis of data finished\n");
+	Rprintf("INFO: Analysis of data finished\n");
   // ---- Write output / send it back to R
 	double moveQTL= stepmin;
 	int chrnumber=1;
   
-	Rprintf("-1- %d %d\n",Nsteps,Nrun);
+	//Rprintf("-1- %d %d\n",Nsteps,Nrun);
 	//Printout output to QTL for usage in R
 	//we want the first run we did
 	for (int ii=0; ii<Nsteps; ii++){   
@@ -310,7 +307,7 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
     logL = newvector(Nmark);
     savelogL= logLfull;
     maxlogL= logLfull-10000;
-	Rprintf("Backward elimination of cofactors started\n");
+	Rprintf("INFO: Backward elimination of cofactors started\n");
     for (int j=0; j<Nmark; j++){
 		(*newcofactor)[j]= cofactor[j];
         Ncof+=(cofactor[j]!='0');
@@ -361,13 +358,13 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
 			}
         }
     }
-	Rprintf("----------------------:MODEL:----------------------\n");
+	Rprintf("MODEL: ----------------------:MODEL:----------------------\n");
     for (int j=0; j<Nmark; j++){
 		if ((*newcofactor)[j]!='0'){
 			Rprintf("MODEL: Marker %d is selected in final model\n",(j+1));
 		}
 	}
-	Rprintf("--------------------:END MODEL:--------------------\n");
+	Rprintf("MODEL: --------------------:END MODEL:--------------------\n");
 
     maxF= mapQTL(Nind, Nmark, cofactor, (*newcofactor), marker, position,
            (*mapdistance), y, r, ind, Naug, variance, 'n', informationcontent,Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype); // printoutput='n'

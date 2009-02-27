@@ -23,7 +23,7 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 
 	
 	if(is.null(cross)){
-		stop("Error: No cross file. Please supply a valid cross object.") 
+		stop("ERROR: No cross file. Please supply a valid cross object.") 
 	}
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
 		cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
@@ -36,13 +36,13 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 		}
 		#Some tests from scanMQM repeated here so they are not hidden when using snow
 		if((step.min+step.size) > step.max){
-				stop("Error: current Step setting would crash the algorithm")
+				stop("ERROR: current Step setting would crash the algorithm")
 		}
 		if(step.min>0){
-				stop("Error: step.min needs to be smaller than 0")
+				stop("ERROR: step.min needs to be smaller than 0")
 		}		
 		if(step.size < 1){
-				stop("Error: Step.size needs to be larger than 1")
+				stop("ERROR: Step.size needs to be larger than 1")
 		}
 		#TEST FOR SNOW CAPABILITIES
 		if("snow" %in% installed.packages()[1:dim(installed.packages())[1]]){
@@ -65,11 +65,11 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 		plot.MQMall(res,"P")
 		res
 	}else{
-		stop("Error: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}
 }
 
-plot.MQMall <- function(result = NULL, type="C",theta=30,phi=15){
+plot.MQMall <- function(result = NULL, type="C", theta=30, phi=15){
 	#Helperfunction to plot MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
 	
 	if(class(result)[2] == "MQMmulti"){
@@ -127,7 +127,7 @@ plot.MQMall <- function(result = NULL, type="C",theta=30,phi=15){
 			}
 		}			
 	}else{
-		stop("Error: wrong type of result file.") 
+		stop("ERROR: Wrong type of result file, please supply a valid MQMmulti object.") 
 	}
 }
 
