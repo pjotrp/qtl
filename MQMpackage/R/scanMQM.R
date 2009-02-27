@@ -196,7 +196,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		}
 		if(reestimate){
 			new_map <- pull.map(cross)
-			aa <- nmar(new_map)
+			aa <- nmar(cross)
 			sum <- 1
 			for(i in 1:length(aa)) {
 				for(j in 1:aa[[i]]) {
