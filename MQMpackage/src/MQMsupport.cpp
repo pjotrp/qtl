@@ -342,12 +342,12 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
 		if  ( ((*newcofactor)[dropj]=='1') && ( F2> 2.0*(savelogL-maxlogL)) ){   
 			savelogL= maxlogL;
 			(*newcofactor)[dropj]= '0'; Ncof-=1;
-			//Rprintf("Marker %d is dropped, resulting in logL of reduced model = %f\n",(dropj+1),savelogL);
+			Rprintf("INFO: Marker %d is dropped, resulting in logL of reduced model = %f\n",(dropj+1),savelogL);
 		}else if  ( ((*newcofactor)[dropj]=='2') && (F1> 2.0*(savelogL-maxlogL)) ){   
 			savelogL= maxlogL;
 			(*newcofactor)[dropj]= '0'; 
 			Ncof-=1;
-			//Rprintf("marker %d is dropped, resulting in logL of reduced model = %f\n",(dropj+1),savelogL);
+			Rprintf("INFO: Marker %d is dropped, resulting in logL of reduced model = %f\n",(dropj+1),savelogL);
 		}else{
 			Rprintf("INFO: Backward selection of markers to be used as cofactors has finished.\n");
 			finished='y';

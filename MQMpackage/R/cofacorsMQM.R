@@ -35,7 +35,9 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
 	n.chr <- nchr(cross)
 	geno <- NULL
 	cofactorlist <- NULL
-
+	individuals <- nind(cross)
+	cat("INFO: Found",individuals,"individuals in the cross object.\n")
+	cat("INFO: Mamimum amount of cofactors",(individuals-5),"leaves 5 Degrees of Freedom.\n")
 	for(i in 1:n.chr) {
       geno <- cbind(geno,cross$geno[[i]]$data)
 	}
@@ -73,6 +75,10 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
 	    cofactorlist[sexfactors[i]]=2
 	  }
 	}
+    if(sum(cofactorlist) > (individuals-5)){
+		stop("ERROR: Trying to set: ",sum(cofactorlist)," markers as cofactor. This leaves less than 5 Degrees of Freedom.\n")
+		return
+	}
     cofactorlist
 }
 
@@ -82,22 +88,19 @@ MQMCofactorsEach <- function(cross = NULL,each = 3){
 	  return 
 	}
 
-
-	if(each < 2){
-      stop("ERROR: Can't set cofactors that often.")
-	  return 
-	}
-
-	
-	n.chr <- nchr(cross)
+	individuals <- nind(cross)
+		n.chr <- nchr(cross)
 	geno <- NULL
 	cofactorlist <- NULL
 
 	for(i in 1:n.chr) {
       geno <- cbind(geno,cross$geno[[i]]$data)
 	}
-	
 	n.mark <- ncol(geno)
+	
+	cat("INFO: Found",individuals,"individuals in the cross object.\n")
+	cat("INFO: Mamimum amount of cofactors",(individuals-5)," (each =",ceiling(sum(n.mark)/(individuals-5)),") leaves 5 Degrees of Freedom.\n")
+
 
 	if(each > n.mark){
       stop("ERROR: Not enough markers to place cofactors at.")
@@ -110,7 +113,11 @@ MQMCofactorsEach <- function(cross = NULL,each = 3){
 			cofactorlist[i] = 1
 		}
 	}
-    cofactorlist
+    if(sum(cofactorlist) > (individuals-5)){
+		stop("ERROR: Trying to set: ",ceiling(sum(n.mark)/each)," markers as cofactor. This leaves less than 5 Degrees of Freedom.\n")
+		return
+	}
+	cofactorlist
 }
 
 #a <- MQMCofactors(cross,c(10,20,30,40,50,60,70,80),c(186,187))
