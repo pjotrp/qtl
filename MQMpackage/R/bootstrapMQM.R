@@ -77,12 +77,12 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 			library(snow)
 			cl <- makeCluster(n.clusters)
 			clusterEvalQ(cl, library(MQMpackage))
-			res <- parLapply(cl,data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG,reestimate=reestimate)
+			res <- parLapply(cl,data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG,reestimate=reestimate,plot=FALSE)
 			stopCluster(cl)
 		}else{
 			#Apply scanMQM to the data with the specified settings
 			cat("INFO: Library snow not found, so going into singlemode.\n")
-			res <- lapply(data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG,reestimate=reestimate)
+			res <- lapply(data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG,reestimate=reestimate,plot=FALSE)
 		}
 		
 		#Set the class of the result to MQMmulti (so we can use our plotting routines)

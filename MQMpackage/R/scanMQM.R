@@ -27,7 +27,7 @@
 	
 scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,reestimate=0,dominance=0){
+					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,reestimate=0,dominance=0,plot=TRUE){
     library(qtl)
 	n.run=0
 	if(is.null(cross)){
@@ -187,41 +187,56 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 			#make names in the form: C L
 			names <- c(names,paste("C",ceiling(i/qtlAchromo),"L",rep(seq(step.min,step.max,step.size),n.chr)[i],sep=""))
 		}
-		if(reestimate){
-			new_map <- pull.map(cross)
-			aa <- nmar(cross)
-			sum <- 1
-			for(i in 1:length(aa)) {
-				for(j in 1:aa[[i]]) {
-					new_map[[i]][j] <- result$DIST[sum]
-					sum <- sum+1
+		if(plot){
+			if(reestimate && backward){
+				op <- par(mfrow = c(3,1))
+			}else{
+				if(reestimate || backward){
+					op <- par(mfrow = c(2,1))
+				}else{
+					op <- par(mfrow = c(1,1))
 				}
 			}
-			cat("INFO: Viewing the user supplied map versus genetic map used during analysis.\n")
-			plot.map(pull.map(cross), new_map,main="Supplied map versus re-estimated map")
-		}
-		if(backward){
-			new_map <- pull.map(cross)
-			aa <- nmar(cross)			
-			sum <- 1
-			qc <- NULL
-			qp <- NULL
-			qn <- NULL
-			for(i in 1:length(aa)) {
-				for(j in 1:aa[[i]]) {
-					#cat("INFO ",sum," ResultCOF:",result$COF[sum],"\n")
-					if(result$COF[sum] != 48){
-						cat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new_map)[sum])," Cm\n")
-						qc <- c(qc, as.character(i))
-						qp <- c(qp, as.double(unlist(new_map)[sum]))
-						qn <- c(qn, substr(names(unlist(new_map))[sum],3,nchar(names(unlist(new_map))[sum])))
+			if(reestimate){
+				new_map <- pull.map(cross)
+				aa <- nmar(cross)
+				sum <- 1
+				for(i in 1:length(aa)) {
+					for(j in 1:aa[[i]]) {
+						new_map[[i]][j] <- result$DIST[sum]
+						sum <- sum+1
 					}
-					sum <- sum+1
+				}
+				cat("INFO: Viewing the user supplied map versus genetic map used during analysis.\n")
+				plot.map(pull.map(cross), new_map,main="Supplied map versus re-estimated map")
+			}
+			if(backward){
+				if(!reestimate){
+					new_map <- pull.map(cross)
+				}
+				aa <- nmar(cross)			
+				sum <- 1
+				qc <- NULL
+				qp <- NULL
+				qn <- NULL
+				for(i in 1:length(aa)) {
+					for(j in 1:aa[[i]]) {
+						#cat("INFO ",sum," ResultCOF:",result$COF[sum],"\n")
+						if(result$COF[sum] != 48){
+							cat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new_map)[sum])," Cm\n")
+							qc <- c(qc, as.character(i))
+							qp <- c(qp, as.double(unlist(new_map)[sum]))
+							qn <- c(qn, substr(names(unlist(new_map))[sum],3,nchar(names(unlist(new_map))[sum])))
+						}
+						sum <- sum+1
+					}
+				}
+				why <- sim.geno(cross)
+				if(!is.null(qc)){
+					qtlplot <- makeqtl(why, qc, qp, qn, what="draws")
+					plot(qtlplot)
 				}
 			}
-			why <- sim.geno(cross)
-			qtlplot <- makeqtl(why, qc, qp, qn, what="draws")
-			plot(qtlplot)
 		}
 		rownames(qtl) <- names
 		colnames(qtl) = c("chr","pos (Cm)",paste("QTL",colnames(cross$pheno)[Phenot]))
@@ -231,9 +246,13 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		
 		cat("INFO: Saving output to file: ",file, "\n")
 		write.table(qtl,file)
-		#Return the results
+		#Reset plotting and return the results
+		if(plot){
+			plot(qtl)
+		}
+		#Reset the plotting window to contain 1 plot
+		op <- par(mfrow = c(1,1))
 		qtl
-	
 	}else{
 		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			

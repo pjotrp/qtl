@@ -50,12 +50,12 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 			library(snow)
 			cl <- makeCluster(n.clusters)
 			clusterEvalQ(cl, library(MQMpackage))
-			res <- parLapply(cl,data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG)
+			res <- parLapply(cl,data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG,plot=FALSE)
 			stopCluster(cl)
 		}else{
 			#Apply scanMQM to the data with the specified settings		
 			cat("INFO: Library snow not found, so going into singlemode.\n")
-			res <- lapply(data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG)
+			res <- lapply(data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG,plot=FALSE)
 		}
 		
 
@@ -66,68 +66,6 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 		res
 	}else{
 		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
-	}
-}
-
-plot.MQMall <- function(result = NULL, type="C", theta=30, phi=15){
-	#Helperfunction to plot MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
-	
-	if(class(result)[2] == "MQMmulti"){
-		if(type=="C"){
-		#Countour plot
-			c <- NULL
-			for(i in 1:length(result)){
-				#Collect all the "QTL PHENO_TYPE" colums of the result
-				c <- rbind(c,result[[i]][,3])
-			}
-			c <- t(c)
-			contour(
-				x=seq(1,dim(c)[1]),
-				y=seq(1,dim(c)[2]),
-				c,
-				xlab="Markers",ylab="Trait",
-				col=rainbow((max(c)/5)+25,1,1.0,0.1),
-				nlevels=(max(c)/5)
-			)
-		}
-		if(type=="I"){
-		#Image plot
-			c <- NULL
-			for(i in 1:length(result)){
-				c <- rbind(c,result[[i]][,3])
-			}
-			c <- t(c)
-			image(x=1:dim(c)[1],y=1:dim(c)[2],c,
-				  xlab="Markers",ylab="Trait",
-				  col=rainbow((max(c)/5)+25,1,1.0,0.1),
-			)
-		
-		}
-		if(type=="D"){
-		#3D perspective plot
-			c <- NULL
-			for(i in 1:length(result)){
-				c <- rbind(c,result[[i]][,3])
-			}
-			c <- t(c)
-			persp(x=1:dim(c)[1],y=1:dim(c)[2],c,
-				  theta = theta, phi = phi, expand = 1,
-				  col="gray", xlab = "Markers", ylab = "Traits", zlab = "QTL")
-		}
-		if(type=="P"){
-		#Standard plotting option, Lineplot
-			n.pheno <- length(result)
-			colors <- rainbow(n.pheno)
-			for(i in 1:n.pheno) {
-				if(i !=1 ){
-					plot(result[[i]],add=TRUE,col=colors[i])
-				}else{
-					plot(result[[i]],col="black")
-				}
-			}
-		}			
-	}else{
-		stop("ERROR: Wrong type of result file, please supply a valid MQMmulti object.") 
 	}
 }
 

@@ -267,36 +267,31 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
          logLfull= mapQTL(Nind, Nmark, (*cofactor), (*cofactor), marker, position,
                   (*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype); // printout=='n'
 
-	Rprintf("INFO: Analysis of data finished\n");
-  // ---- Write output / send it back to R
-	double moveQTL= stepmin;
-	int chrnumber=1;
+	
+	// ---- Write output / send it back to R
+	//Cofactors that made it to the final model
     for (int j=0; j<Nmark; j++){
 		if (selcofactor[j]=='1'){
-			//Rprintf("Cofactors %d to be send back\n",j);
 			(*cofactor)[j]='1';
 		}else{
 			(*cofactor)[j]='0';
 		}
 	}
-	//Rprintf("-1- %d %d\n",Nsteps,Nrun);
-	//Printout output to QTL for usage in R
-	//we want the first run we did
+	//QTL likelyhood for each location
 	for (int ii=0; ii<Nsteps; ii++){   
 		QTL[0][ii] = Frun[ii][0];
-		if (moveQTL+stepsize<=stepmax){
-			moveQTL+= stepsize;
-		} else { 
-			moveQTL= stepmin; 
-			chrnumber++; 
-		}
+		//QTL[1][ii] = informationcontent[ii];
     }
+	
 	Free(position);
 	Free(weight);
 	Free(ind);
 	delcmatrix(marker,Nmark);
 	Free(y);
 	Free(selcofactor);
+	
+	Rprintf("INFO: Analysis of data finished\n");
+	
 	return;
 }
 
