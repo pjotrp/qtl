@@ -40,13 +40,13 @@ Normal layout of MQM-QTL analysis
 \item Fill in missing data using either the fill.geno or MQMaugmentdata routine
 \item Call scanMQM to do a genomescan
 \item Call scanMQM setting the n.run to get an estimate of ‘significant’ lod scores
-\item Set cofactors at ‘top scoring’ and not so ‘top scoring’ markers
+\item Set cofactors at ‘Top scoring’ and not so ‘Top scoring’ markers
 \item Rerun analysis with cofactors
 \item Bootstrap analysis with cofactors to get estimates of QTL significance
 }
 }
 \author{
-Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu} ; M.A. Swertz \email{m.a.swertz@rug.nl}
+Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu} ; Rutger Brouwer \email{R.W.W.Brouwer@rug.nl} ; M.A. Swertz \email{m.a.swertz@rug.nl}
 
 Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 }

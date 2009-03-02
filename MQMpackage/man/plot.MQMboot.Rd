@@ -19,7 +19,7 @@ plot.MQMboot(result = NULL)
 \value{
 	No return, plotting routine
 }
-\author{ Rutger Brouwer \email{R.W.W.Brouwer@rug.nl}Danny Arends \email{Danny.Arends@gmail.com} }
+\author{ Rutger Brouwer \email{R.W.W.Brouwer@rug.nl} ; Danny Arends \email{Danny.Arends@gmail.com} }
 \note{ 	
 	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
