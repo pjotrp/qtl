@@ -29,7 +29,7 @@ extern "C"
 /*
  * analyseF2 - analyse one F2/RIL/BC family
  */
-void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, 
+void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y, ivector f1genotype, int Backwards, 
 			   double **QTL,vector *mapdistance,int **Chromo,int Nrun,int RMLorML, double windowsize,double stepsize,
 			   double stepmin,double stepmax,double alfa,int em,int out_Naug,int **INDlist,char reestimate,char crosstype,char dominance)
 {    
@@ -101,7 +101,7 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
     for (int j=0; j<Nmark; j++){
 		if (mod(f1genotype[j],11)!=0){
 			dropj='n';
-		}else if (cofactor[j]=='0'){
+		}else if ((*cofactor)[j]=='0'){
 			dropj='y';
 		}else if (position[j]=='L'){
 			// (cofactor[j]!='0') cofactor at non-segregating marker
@@ -122,13 +122,13 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
         }
 		if (dropj=='n'){  
             marker[jj]= marker[j];
-            cofactor[jj]= cofactor[j];
+            (*cofactor)[jj]= (*cofactor)[j];
             (*mapdistance)[jj]= (*mapdistance)[j];
             chr[jj]= chr[j];
             r[jj]= r[j];
             position[jj]= position[j];
             jj++;
-        }else if (cofactor[j]=='1'){  
+        }else if ((*cofactor)[j]=='1'){  
             Rprintf("INFO: Cofactor at chr %d is dropped\n",chr[j]);
         }
     }
@@ -240,9 +240,9 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
 
     int dimx=1;
     for (int j=0; j<Nmark; j++){
-		if (cofactor[j]=='1'){
+		if ((*cofactor)[j]=='1'){
 			dimx+= (dominance=='n' ? 1 : 2);  // per QTL only additivity !!
-		}else if (cofactor[j]=='2'){
+		}else if ((*cofactor)[j]=='2'){
 			dimx+=1;  /* sex of the mouse */
 		}
 	}
@@ -255,23 +255,30 @@ void analyseF2(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, 
      F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
      weight[0]= -1.0;
-     logLfull= QTLmixture(marker,cofactor,r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
+     logLfull= QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
      Rprintf("INFO: Log-likelihood of full model= %f\n",logLfull);
      Rprintf("INFO: Residual variance= %f\n",variance);
      Rprintf("INFO: Trait mean= %f \nINFO: Trait variation= %f\n",ymean,yvari);
 
      if (Backwards==1)    // use only selected cofactors
-         logLfull= backward(Nind, Nmark, cofactor, marker, y, weight, ind, Naug, logLfull,
+         logLfull= backward(Nind, Nmark, (*cofactor), marker, y, weight, ind, Naug, logLfull,
                     variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype);
      if (Backwards==0) // use all cofactors
-         logLfull= mapQTL(Nind, Nmark, cofactor, cofactor, marker, position,
+         logLfull= mapQTL(Nind, Nmark, (*cofactor), (*cofactor), marker, position,
                   (*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype); // printout=='n'
 
 	Rprintf("INFO: Analysis of data finished\n");
   // ---- Write output / send it back to R
 	double moveQTL= stepmin;
 	int chrnumber=1;
-  
+    for (int j=0; j<Nmark; j++){
+		if (selcofactor[j]=='1'){
+			//Rprintf("Cofactors %d to be send back\n",j);
+			(*cofactor)[j]='1';
+		}else{
+			(*cofactor)[j]='0';
+		}
+	}
 	//Rprintf("-1- %d %d\n",Nsteps,Nrun);
 	//Printout output to QTL for usage in R
 	//we want the first run we did

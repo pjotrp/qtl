@@ -188,13 +188,19 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 		dominance='y';
 	}	
 	Rprintf("INFO: All the needed information, so lets start with the MQM\n");   
-	analyseF2(Nind, Nmark, cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,cross,dominance);
+	analyseF2(Nind, Nmark, &cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,cross,dominance);
 	if(re_estimate){
 		Rprintf("INFO: Sending back the reestimated map used during analysis\n");
 		for(int i=0; i< Nmark; i++){
 			Dist[0][i]=mapdistance[i];
 		}
 	}
+	if(Backwards){
+		Rprintf("INFO: Sending back the model\n");
+		for(int i=0; i< Nmark; i++){
+			Cofactors[0][i]=cofactor[i];
+		}
+	}	
 	//Rprintf("Starting Cleanup\n");
 	delcmatrix(markers,Nmark);
 	Free(f1genotype);

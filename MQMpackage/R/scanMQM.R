@@ -17,21 +17,14 @@
 #
 ######################################################################
 
-test.scanMQM <- function(){
-	setwd("D:/")
-	library(qtl)
-	dyn.load("scanMQM.dll")
-	cross <- read.cross("csv","","Test.csv")
-	res <- scanMQM(cross)
-	plot(res)
-
-	bcqtl <- c(3,15,2)                                      # QTL at chromosome 3
-	data(map10)                                             # Mouse genome
-	bccross <- sim.cross(map10,bcqtl,n=100,type="bc")       # Simulate a BC Cross
-	bcresult <- scanMQM(bccross)                            # Do a MQM scan of the genome
-	plot(bcresult)                                          # Plot the results of the genome scan
-}
-
+#setwd("D:/")
+#library(qtl)
+#library(MQMpackage)
+#dyn.load("scanMQM.dll")
+#cross <- read.cross("csv","","Test.csv")
+#cof <- MQMCofactorsEach(cross,10)
+	
+	
 scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
 					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,reestimate=0,dominance=0){
@@ -168,7 +161,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 				as.integer(chr),
 				DIST=as.double(dist),
 				as.double(pheno),
-				as.integer(cofactors),
+				COF=as.integer(cofactors),
 				as.integer(backward),
 				as.integer(REMLorML),
 				as.double(alfa),
@@ -207,6 +200,29 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 			cat("INFO: Viewing the user supplied map versus genetic map used during analysis.\n")
 			plot.map(pull.map(cross), new_map,main="Supplied map versus re-estimated map")
 		}
+		if(backward){
+			new_map <- pull.map(cross)
+			aa <- nmar(cross)			
+			sum <- 1
+			qc <- NULL
+			qp <- NULL
+			qn <- NULL
+			for(i in 1:length(aa)) {
+				for(j in 1:aa[[i]]) {
+					#cat("INFO ",sum," ResultCOF:",result$COF[sum],"\n")
+					if(result$COF[sum] != 48){
+						cat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new_map)[sum])," Cm\n")
+						qc <- c(qc, as.character(i))
+						qp <- c(qp, as.double(unlist(new_map)[sum]))
+						qn <- c(qn, substr(names(unlist(new_map))[sum],3,nchar(names(unlist(new_map))[sum])))
+					}
+					sum <- sum+1
+				}
+			}
+			why <- sim.geno(cross)
+			qtlplot <- makeqtl(why, qc, qp, qn, what="draws")
+			plot(qtlplot)
+		}
 		rownames(qtl) <- names
 		colnames(qtl) = c("chr","pos (Cm)",paste("QTL",colnames(cross$pheno)[Phenot]))
 		
@@ -222,5 +238,9 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			
 }
+
+#res <- scanMQM(cross,cof)
+#plot(res)
+
 
 # end of scanMQM.R
