@@ -88,7 +88,7 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		#Set the class of the result to MQMmulti (so we can use our plotting routines)
 		class(res) <- c(class(res),"MQMmulti")
 		#All done now plot the results
-		plot.MQMall(res,"P")
+		plot.MQMboot(res)
 		#Return the results	
 		res
 	}else{

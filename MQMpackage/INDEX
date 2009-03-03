@@ -17,8 +17,12 @@ multitrait              Example Cross object from R/QTL with multiple
                         traits.
 plot.MQMall             plot.MQMall - Plotting routine to display the
                         results from a scanMQMall / bootstrapMQM scan
-plot.MQMboot            plot.MQMall - Plotting routine to display the
+plot.MQMboot            plot.MQMboot - Plotting routine to display the
                         results from a bootstrapMQM scan
+plot.MQMnice            plot.MQMnice - Plotting routine to display the
+                        results from a bootstrapMQM or scanMQMall scan
+plot.MQMone             plot.MQMone - Plotting routine to display the
+                        results from a MQMscan
 ResultsFromMolgenis     ResultsFromMolgenis - Helperfunction to
                         retrieve results from a molgenis database
 ResultsToMolgenis       ResultsToMolgenis - Helperfunction to store

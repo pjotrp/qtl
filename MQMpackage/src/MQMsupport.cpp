@@ -278,9 +278,11 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 		}
 	}
 	//QTL likelyhood for each location
+	Rprintf("INFO: Number of output datapoints: %d\n",Nsteps);	
 	for (int ii=0; ii<Nsteps; ii++){   
 		QTL[0][ii] = Frun[ii][0];
-		//QTL[1][ii] = informationcontent[ii];
+		QTL[0][Nsteps+ii] = informationcontent[ii];
+		//Rprintf("INFO:LOC: %d QTL: %f INFO: %f\n",ii,QTL[0][ii],QTL[0][Nsteps+ii]);	
     }
 	
 	Free(position);

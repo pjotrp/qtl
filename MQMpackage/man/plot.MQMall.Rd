@@ -16,7 +16,7 @@ plot.MQMall(result = NULL, type = "C")
   \item{type}{ "C" for contourplot, "P" for stacked R/QTL plot, "I" for a heatmapplot  }
 }
 \details{
-  
+  ~~ If necessary, more details than the description above ~~ 
 }
 \value{
 	No return, plotting routine

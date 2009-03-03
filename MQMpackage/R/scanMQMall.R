@@ -62,7 +62,7 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 		#Return the results
 		class(res) <- c(class(res),"MQMmulti")
 		#All done now plot the results
-		plot.MQMall(res,"P")
+		plot.MQMnice(res)
 		res
 	}else{
 		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")

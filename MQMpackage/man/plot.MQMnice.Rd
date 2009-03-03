@@ -1,18 +1,18 @@
-\name{plot.MQMboot}
-\alias{plot.MQMboot}
+\name{plot.MQMnice}
+\alias{plot.MQMnice}
 
-\title{ plot.MQMboot - Plotting routine to display the results from a bootstrapMQM scan  }
+\title{ plot.MQMnice - Plotting routine to display the results from a bootstrapMQM or scanMQMall scan  }
 
 \description{
-	Plotting routine to display the results from a bootstrapMQM scan 
+	Plotting routine to display the results from a bootstrapMQM or scanMQMall scan
 }
 \usage{
-plot.MQMboot(result = NULL,\dots)
+plot.MQMnice(result = NULL,\dots)
 }
 
 \arguments{
   \item{result}{ Result object from scanMQMall }
-  \item{\dots}{ Extra argument passed to the polyplot methode of R. Brouwer }    
+  \item{\dots}{ Extra argument passed to the polyplot methode of R. Brouwer. Use legendloc=1 to plot legend outside of plotting area }   
 }
 \details{
   ~~ If necessary, more details than the description above ~~
@@ -26,6 +26,7 @@ plot.MQMboot(result = NULL,\dots)
 }
 \seealso{ 
 \itemize{
+	\item \code{\link{scanMQMall}} - Function called to do single trait analysis
 	\item \code{\link{bootstrapMQM}} - Function called to estimate confidence interfalls for MQM
 }
 }
@@ -36,7 +37,7 @@ plot.MQMboot(result = NULL,\dots)
 	data(map10)                                             # Mouse genome
 	f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
 	f2result <- bootstrapMQM(f2cross)                       # Bootstrap MQM to obtain confidence intervals
-	plot.MQMboot(f2result)									# Use the nice bootstrap plotting methodes
+	plot.MQMnice(f2result)									# Use the nice plotting methodes
 }
 \keyword{ QTL }
 \keyword{ Mapping }

@@ -173,17 +173,19 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 				as.integer(n.run),
 				as.integer(extra1),
 				as.integer(extra2),
-				QTL=as.double(rep(0,n.chr*qtlAchromo)),
+				QTL=as.double(rep(0,2*n.chr*qtlAchromo)),
 				as.integer(reestimate),
 				as.integer(ctype),
 				as.integer(dominance)
 			    )
 		# initialize output object
 		qtl <- NULL
+		info <- NULL
 		names <- NULL
 		for(i in 1:(n.chr*qtlAchromo)) {
 			#Store the result in the qtl object
 			qtl <- rbind(qtl,c(ceiling(i/qtlAchromo),rep(seq(step.min,step.max,step.size),n.chr)[i],result$QTL[i]))
+			info <- rbind(info,result$QTL[(n.chr*qtlAchromo)+i])
 			#make names in the form: C L
 			names <- c(names,paste("C",ceiling(i/qtlAchromo),"L",rep(seq(step.min,step.max,step.size),n.chr)[i],sep=""))
 		}
@@ -239,8 +241,9 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 			}
 		}
 		rownames(qtl) <- names
-		colnames(qtl) = c("chr","pos (Cm)",paste("QTL",colnames(cross$pheno)[Phenot]))
-		
+		qtl <- cbind(qtl,1/(min(info))*(info-min(info)))
+		qtl <- cbind(qtl,1/(min(info))*(info-min(info))*qtl[,3])
+		colnames(qtl) = c("chr","pos (Cm)",paste("QTL",colnames(cross$pheno)[Phenot]),"Info","QTL*INFO")
 		#So we can use carls plotting routines
 		class(qtl) <- c(class(qtl),"scanone") 
 		
@@ -248,7 +251,11 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		write.table(qtl,file)
 		#Reset plotting and return the results
 		if(plot){
-			plot(qtl)
+			info_c <- qtl
+			info_c[,3]<- info_c[,5]
+			plot(qtl,info_c,lwd=1)
+			labels <- c(paste("QTL",colnames(cross$pheno)[Phenot]),"QTL * Info")
+			legend("topright", labels,col=c("black","blue"),lty=c(1,1))
 		}
 		#Reset the plotting window to contain 1 plot
 		op <- par(mfrow = c(1,1))

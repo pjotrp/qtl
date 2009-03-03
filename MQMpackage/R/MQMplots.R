@@ -12,9 +12,15 @@
 #
 ######################################################################
 
-polyplot <- function( x, type='b', legend=T, labels=NULL, cex = par("cex"), pch = 19, gpch = 21, bg = par("bg"), color = par("fg"), col=NULL, ylim=range(x[is.finite(x)]), xlim = NULL, 
+polyplot <- function( x, type='b', legend=T,legendloc=0, labels=NULL, cex = par("cex"), pch = 19, gpch = 21, bg = par("bg"), color = par("fg"), col=NULL, ylim=range(x[is.finite(x)]), xlim = NULL, 
 					  main = NULL, xlab = NULL, ylab = NULL, add=F, ... ){
-	#if (!add) dev.off()
+	#Addition by Danny Arends
+	if (legendloc){
+		op <- par(mfrow = c(1,2))
+	}else{
+		op <- par(mfrow = c(1,1))
+	}
+	#End of addition
 	if ( is.vector(x) ) {
 		x <- t( as.matrix(x) )
 		if (is.null(labels) ) {
@@ -64,14 +70,22 @@ polyplot <- function( x, type='b', legend=T, labels=NULL, cex = par("cex"), pch 
 	
 	axis(1)																# add the x axis
 	axis(2)																# add the y axis
-	if (legend) legend("topright", labels, col=col, pch=pch)			# add a legend if requested
+	
 	title(main=main, xlab=xlab, ylab=ylab, ...)							# add the title and axis labels
+	#Addition by Danny Arends
+	if (legendloc){		
+		plot.new()
+	}
+	#End of addition	
+	if (legend){
+		legend("topright", labels, col=col, pch=pch)			# add a legend if requested
+	}
+	op <- par(mfrow = c(1,1))
 	invisible()															# return the plot
 }
 
 plot.MQMall <- function(result = NULL, type="C", theta=30, phi=15,...){
 	#Helperfunction to plot MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
-	
 	if(class(result)[2] == "MQMmulti"){
 		if(type=="C"){
 		#Countour plot
@@ -120,18 +134,20 @@ plot.MQMall <- function(result = NULL, type="C", theta=30, phi=15,...){
 			colors <- rainbow(n.pheno)
 			for(i in 1:n.pheno) {
 				if(i !=1 ){
-					plot(result[[i]],add=TRUE,col=colors[i],...)
+					plot(result[[i]],add=TRUE,col=colors[i],lwd=1,...)
 				}else{
-					plot(result[[i]],col="black",...)
+					plot(result[[i]],col="black",lwd=1,...)
 				}
 			}
-		}			
+		}
 	}else{
 		stop("ERROR: Wrong type of result file, please supply a valid MQMmulti object.") 
 	}
 }
 
-plot.MQMboot <- function(result = NULL){
+plot.MQMboot <- function(result = NULL,...){
+	#Helperfunction to show MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
+	#This function should only be used for bootstrapped data
 	matrix <- NULL
 	row1 <- NULL
 	row2 <- NULL
@@ -152,15 +168,19 @@ plot.MQMboot <- function(result = NULL){
 			matrix <- cbind(matrix,rbind(row1,row2))
 		}
 		rownames(matrix) <- c("QTL trait","Bootstrap")
-		polyplot(matrix)
+		#Because bootstrap only has 2 rows of data we can use black n blue
+		polyplot(matrix,col=c(rgb(0,0,0,1),rgb(0,0,1,0.35)),...)
 	}else{
 		stop("ERROR: Wrong type of result file, please supply a valid MQMmulti object.") 
 	}	
 }
 
-plot.MQMnice <- function(result = NULL){
+plot.MQMnice <- function(result = NULL,...){
+	#Helperfunction to show MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
 	matrix <- NULL
-	if(class(result)[2] == "MQMmulti"){			
+	names <- NULL
+	i <- 1
+	if(class(result)[2] == "MQMmulti"){		
 	for( j in 1:length( result[[i]][,3] ) ) {
 		row <- NULL
 		for( i in 1:length( result ) ) {
@@ -168,9 +188,48 @@ plot.MQMnice <- function(result = NULL){
 		}
 		matrix <- rbind(matrix,row)
 	}
-	polyplot(matrix)
+	for( i in 1:length( result ) ) {
+		if(colnames(result[[i]])[3] == "QTL phenotype"){
+			if(i==1){
+				names <- "QTL Phenotype"
+			}else{
+				names <- c(names,paste("Bootstrap run",(i-1)))
+			}
+		}else{
+			names <- c(names,colnames(result[[i]])[3])
+		}
+	}
+	matrix <- t(matrix)
+	colnames(matrix) <- c(1:dim(matrix)[2])
+	rownames(matrix) <- names
+	if(length(names) > 10){
+		polyplot(matrix,legendloc=1,...)
+	}else{
+		polyplot(matrix,...)
+	}
 	}else{
 		stop("ERROR: Wrong type of result file, please supply a valid MQMmulti object.") 
+	}
+}
+
+plot.MQMone <- function(result = NULL,extended=0,...){
+	#Helperfunction to show scanone objects made by doing scanMQM runs
+	if(class(result)[2] == "scanone"){
+		info_c <- result
+		info_c[,3]<- info_c[,5]
+		if(extended){
+			info_l <- result
+			info_l[,3] <- result[,4]
+			plot(result,info_c,info_l,lwd=1,col=c("black","blue","red"),...)
+			labels <- c(colnames(result)[3],colnames(result)[5],colnames(result)[4])
+			legend("topright", labels,col=c("black","blue","red"),lty=c(1,1,1))		
+		}else{
+			plot(result,info_c,lwd=1,...)
+			labels <- c(colnames(result)[3],colnames(result)[5])
+			legend("topright", labels,col=c("black","blue"),lty=c(1,1))
+		}
+	}else{
+		stop("ERROR: Wrong type of result file, please supply a valid scanone (from MQM) object.") 
 	}
 }
 

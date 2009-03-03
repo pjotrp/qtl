@@ -8,7 +8,7 @@
 	Main multiQTL scanning function for the R/qtl package (for use with F2 / BC / RIL populations)
 }
 \usage{
-	scanMQM(cross = NULL, cofactors = NULL, doLOG = 0, Phenot = 1, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 0, file = "MQM_output.txt")
+	scanMQM(cross = NULL, cofactors = NULL, doLOG = 0, Phenot = 1, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 0, file = "MQM_output.txt",plot=TRUE)
 }
 \arguments{
   \item{cross}{ Cross object, an object of class \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
@@ -25,6 +25,7 @@
   \item{reestimate}{ Reestimation of the genetic map (est.rf in R/QTL) }
   \item{dominance}{ Should dominance be taken into account ( 0= Additive  (DEFAULT)/ 1= Dominance) }  
   \item{file}{ File to which the raw results are saved (MQM_output.txt) }
+  \item{plot}{ Plotting of the results ? ( T= TRUE  (DEFAULT)/ F= FALSE) }
 }
 \details{
 Normal layout of MQM-QTL analysis
@@ -34,7 +35,7 @@ Normal layout of MQM-QTL analysis
 \item Fill in missing data using either the fill.geno or MQMaugmentdata routine
 \item Call scanMQM to do a genomescan
 \item Call scanMQM setting the n.run to get an estimate of ‘significant’ lod scores
-\item Set cofactors at ‘top scoring’ and not so ‘top scoring’ markers
+\item Set cofactors at ‘Top scoring’ and not so ‘Top scoring’ markers
 \item Rerun analysis with cofactors
 \item Bootstrap analysis with cofactors to get estimates of QTL significance
 }
@@ -49,7 +50,7 @@ Using ML or Reduced ML the algorithm employs a forward- or backward selection st
 Afterwards the Interval mapping of the QTL model is returned to the user
 }
 \value{
-Returns a matrix with QTLscores for each location on the chromosome, which can be plotted using the plot.scanone function of R/QTL.
+Returns a matrix with QTLscores,Informationcontent,QTL*Informationcontent for each location on the chromosome, which can be plotted using the plot.scanone function of R/QTL or plot.MQMone to also visualize the QTL*informationcontent
 The phenotype under consideration is specified by the Phenot argument of the function.
 }
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu} }
@@ -71,7 +72,6 @@ f2qtl <- c(3,15,3,7)					# QTL at chromosome 3
 data(map10)						# Mouse genome
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
 f2result <- scanMQM(f2cross)				# Do a MQM scan of the genome
-plot(f2result)						# Plot the results of the genome scan
 
 #Simulated BC Population
 library(MQMpackage)
@@ -79,7 +79,6 @@ bcqtl <- c(3,15,2)					# QTL at chromosome 3
 data(map10)						# Mouse genome
 bccross <- sim.cross(map10,bcqtl,n=100,type="bc")	# Simulate a BC Cross
 bcresult <- scanMQM(bccross)				# Do a MQM scan of the genome
-plot(bcresult)						# Plot the results of the genome scan
 
 }
 \references{
