@@ -15,8 +15,12 @@
 polyplot <- function( x, type='b', legend=T,legendloc=0, labels=NULL, cex = par("cex"), pch = 19, gpch = 21, bg = par("bg"), color = par("fg"), col=NULL, ylim=range(x[is.finite(x)]), xlim = NULL, 
 					  main = NULL, xlab = NULL, ylab = NULL, add=F, ... ){
 	#Addition by Danny Arends
-	if (legendloc){
-		op <- par(mfrow = c(1,2))
+	if(legend){
+		if(legendloc){
+			op <- par(mfrow = c(1,2))
+		}else{
+			op <- par(mfrow = c(1,1))
+		}
 	}else{
 		op <- par(mfrow = c(1,1))
 	}
@@ -73,13 +77,13 @@ polyplot <- function( x, type='b', legend=T,legendloc=0, labels=NULL, cex = par(
 	
 	title(main=main, xlab=xlab, ylab=ylab, ...)							# add the title and axis labels
 	#Addition by Danny Arends
-	if (legendloc){		
-		plot.new()
-	}
-	#End of addition	
 	if (legend){
+		if(legendloc){
+			plot.new()
+		}
 		legend("topright", labels, col=col, pch=pch)			# add a legend if requested
 	}
+	#End of addition
 	op <- par(mfrow = c(1,1))
 	invisible()															# return the plot
 }
@@ -202,17 +206,13 @@ plot.MQMnice <- function(result = NULL,...){
 	matrix <- t(matrix)
 	colnames(matrix) <- c(1:dim(matrix)[2])
 	rownames(matrix) <- names
-	if(length(names) > 10){
-		polyplot(matrix,legendloc=1,...)
-	}else{
-		polyplot(matrix,...)
-	}
+	polyplot(matrix,...)
 	}else{
 		stop("ERROR: Wrong type of result file, please supply a valid MQMmulti object.") 
 	}
 }
 
-plot.MQMone <- function(result = NULL,extended=0,...){
+plot.MQMone <- function(result = NULL,result2 = NULL, extended=0,...){
 	#Helperfunction to show scanone objects made by doing scanMQM runs
 	if(class(result)[2] == "scanone"){
 		info_c <- result
@@ -224,9 +224,17 @@ plot.MQMone <- function(result = NULL,extended=0,...){
 			labels <- c(colnames(result)[3],colnames(result)[5],colnames(result)[4])
 			legend("topright", labels,col=c("black","blue","red"),lty=c(1,1,1))		
 		}else{
-			plot(result,info_c,lwd=1,...)
-			labels <- c(colnames(result)[3],colnames(result)[5])
-			legend("topright", labels,col=c("black","blue"),lty=c(1,1))
+			if(class(result2)[1] == "scanone"){
+				#MAX 3 scanone objects
+				plot(result,info_c,result2,lwd=1,...)
+				labels <- c(colnames(result)[3],colnames(result)[5],colnames(result2)[3])
+				legend("topright", labels,col=c("black","blue"),lty=c(1,1))
+			}else{
+				#MAX 3 scanone objects (here we now have 2)
+				plot(result,info_c,lwd=1,...)
+				labels <- c(colnames(result)[3],colnames(result)[5])
+				legend("topright", labels,col=c("black","blue"),lty=c(1,1))			
+			}
 		}
 	}else{
 		stop("ERROR: Wrong type of result file, please supply a valid scanone (from MQM) object.") 
