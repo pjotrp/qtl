@@ -58,7 +58,8 @@ ResultsFromMolgenis <- function(DBqtlName=NULL,DBpath="http://celtic.service.rug
 			returnObj <- cbind(as.numeric(marker_info$chr),as.numeric(marker_info$cm),as.numeric(data[,1]))
 			colnames(returnobject) <- c("chr","cm","QTL")
 			returnObj <- returnObj[order(returnObj[,"chr"],returnObj[,"cm"]),]
-			class(returnObj) <- c(class(returnObj),"scanone")
+			returnObj <- as.data.frame(returnObj)
+			class(returnObj) <- c("scanone",class(returnObj))
 		}else{	
 			for(i in 1:dim(data)[2]) {
 				tempObj <- cbind(as.numeric(marker_info$chr),as.numeric(marker_info$cm),as.numeric(data[,i]))

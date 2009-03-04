@@ -214,7 +214,7 @@ plot.MQMnice <- function(result = NULL,...){
 
 plot.MQMone <- function(result = NULL,result2 = NULL, extended=0,...){
 	#Helperfunction to show scanone objects made by doing scanMQM runs
-	if(class(result)[2] == "scanone"){
+	if(any(class(result) == "scanone")){
 		info_c <- result
 		info_c[,3]<- info_c[,5]
 		if(extended){
@@ -224,7 +224,7 @@ plot.MQMone <- function(result = NULL,result2 = NULL, extended=0,...){
 			labels <- c(colnames(result)[3],colnames(result)[5],colnames(result)[4])
 			legend("topright", labels,col=c("black","blue","red"),lty=c(1,1,1))		
 		}else{
-			if(class(result2)[1] == "scanone"){
+			if (any(class(result) == "scanone")){
 				#MAX 3 scanone objects
 				plot(result,info_c,result2,lwd=1,...)
 				labels <- c(colnames(result)[3],colnames(result)[5],colnames(result2)[3])

@@ -25,9 +25,9 @@
 #cof <- MQMCofactorsEach(cross,10)
 	
 	
-scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
+scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,reestimate=0,dominance=0,plot=TRUE){
+					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=TRUE){
     library(qtl)
 	n.run=0
 	if(is.null(cross)){
@@ -65,14 +65,14 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 			stop("ERROR: # of runs should be positive and < 10000.")
 		}
 		#CHECK if the phenotype exists
-		if(Phenot != 1){
-			cat("INFO: Selected phenotype ",Phenot,".\n")
+		if(pheno.col != 1){
+			cat("INFO: Selected phenotype ",pheno.col,".\n")
 			cat("INFO: Number of phenotypes in object ",nphe(cross),".\n")
-			if(nphe(cross) < Phenot || Phenot < 1){
+			if(nphe(cross) < pheno.col || pheno.col < 1){
 				stop("ERROR: No such phenotype in cross object.\n")
 			}			
 		}
-		pheno <- cross$pheno[[Phenot]]
+		pheno <- cross$pheno[[pheno.col]]
 		if(var(pheno,na.rm = TRUE)> 1000){
 			if(doLOG == 0){
 				cat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"variation:",var(pheno,na.rm = TRUE),".\n")
@@ -81,8 +81,8 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		}
 		if(doLOG != 0){
 				#transform the cross file
-				cross <- MQMlogPheno(cross,Phenot)
-				pheno <- cross$pheno[[Phenot]]
+				cross <- MQMlogPheno(cross,pheno.col)
+				pheno <- cross$pheno[[pheno.col]]
 		}
 		n.mark <- ncol(geno)
 		cat("INFO: Number of markers:",n.mark,"\n")
@@ -174,7 +174,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 				as.integer(extra1),
 				as.integer(extra2),
 				QTL=as.double(rep(0,2*n.chr*qtlAchromo)),
-				as.integer(reestimate),
+				as.integer(est.map),
 				as.integer(ctype),
 				as.integer(dominance)
 			    )
@@ -190,16 +190,16 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 			names <- c(names,paste("C",ceiling(i/qtlAchromo),"L",rep(seq(step.min,step.max,step.size),n.chr)[i],sep=""))
 		}
 		if(plot){
-			if(reestimate && backward){
+			if(est.map && backward){
 				op <- par(mfrow = c(3,1))
 			}else{
-				if(reestimate || backward){
+				if(est.map || backward){
 					op <- par(mfrow = c(2,1))
 				}else{
 					op <- par(mfrow = c(1,1))
 				}
 			}
-			if(reestimate){
+			if(est.map){
 				new_map <- pull.map(cross)
 				aa <- nmar(cross)
 				sum <- 1
@@ -213,7 +213,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 				plot.map(pull.map(cross), new_map,main="Supplied map versus re-estimated map")
 			}
 			if(backward){
-				if(!reestimate){
+				if(!est.map){
 					new_map <- pull.map(cross)
 				}
 				aa <- nmar(cross)			
@@ -243,9 +243,10 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		rownames(qtl) <- names
 		qtl <- cbind(qtl,1/(min(info))*(info-min(info)))
 		qtl <- cbind(qtl,1/(min(info))*(info-min(info))*qtl[,3])
-		colnames(qtl) = c("chr","pos (Cm)",paste("QTL",colnames(cross$pheno)[Phenot]),"Info","QTL*INFO")
+		colnames(qtl) = c("chr","pos (Cm)",paste("QTL",colnames(cross$pheno)[pheno.col]),"Info","QTL*INFO")
 		#So we can use carls plotting routines
-		class(qtl) <- c(class(qtl),"scanone") 
+		qtl <- as.data.frame(qtl)
+		class(qtl) <- c("scanone",class(qtl)) 
 		
 		cat("INFO: Saving output to file: ",file, "\n")
 		write.table(qtl,file)
@@ -254,7 +255,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 			info_c <- qtl
 			info_c[,3]<- info_c[,5]
 			plot(qtl,info_c,lwd=1)
-			labels <- c(paste("QTL",colnames(cross$pheno)[Phenot]),"QTL * Info")
+			labels <- c(paste("QTL",colnames(cross$pheno)[pheno.col]),"QTL * Info")
 			legend("topright", labels,col=c("black","blue"),lty=c(1,1))
 		}
 		#Reset the plotting window to contain 1 plot

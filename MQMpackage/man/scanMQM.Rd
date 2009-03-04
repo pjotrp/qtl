@@ -8,12 +8,12 @@
 	Main multiQTL scanning function for the R/qtl package (for use with F2 / BC / RIL populations)
 }
 \usage{
-	scanMQM(cross = NULL, cofactors = NULL, doLOG = 0, Phenot = 1, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 0, file = "MQM_output.txt",plot=TRUE)
+	scanMQM(cross = NULL, cofactors = NULL, doLOG = 0, pheno.col = 1, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 0, file = "MQM_output.txt",plot=TRUE)
 }
 \arguments{
   \item{cross}{ Cross object, an object of class \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
   \item{cofactors}{ List of cofactors with length marker (0:no cofactor, 1:cofactor, 2:sexfactor) }
-  \item{Phenot}{ Phenotype under analysis is specified by the Phenot parameter }    
+  \item{pheno.col}{ Phenotype under analysis is specified by the pheno.col parameter }    
   \item{doLOG}{ Indicate if the algorithm should LOG transform traitdata (DEFAULT 0 = off | 1 = on) }    
   \item{REMLorML}{ Lets the algorithm use reduced maximum likelyhood (0) or maximum likelyhood (1) }
   \item{alfa}{ Global p-value (0<= alfa <= 1) }
@@ -51,7 +51,7 @@ Afterwards the Interval mapping of the QTL model is returned to the user
 }
 \value{
 Returns a matrix with QTLscores,Informationcontent,QTL*Informationcontent for each location on the chromosome, which can be plotted using the plot.scanone function of R/QTL or plot.MQMone to also visualize the QTL*informationcontent
-The phenotype under consideration is specified by the Phenot argument of the function.
+The phenotype under consideration is specified by the pheno.col argument of the function.
 }
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu} }
 \note{ 

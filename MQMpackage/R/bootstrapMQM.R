@@ -22,7 +22,7 @@
 #library(MQMpackage)
 #cross <- read.cross("csv","","Test.csv")
 
-bootstrapMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
+bootstrapMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
 					step.min=-20.0,step.max=220.0,n.run=10,file="MQM_output.txt",doLOG=0,reestimate=0,dominance=0,n.clusters=2,parametric=0)
 {
@@ -41,7 +41,7 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		n.pheno <- nphe(cross)
 		data <- NULL
 		#Set the Phenotype under intrest as the first
-		cross$pheno[[1]] <- cross$pheno[[Phenot]]
+		cross$pheno[[1]] <- cross$pheno[[pheno.col]]
 		#Set the first run to not do anything with the data
 		data[[1]] <- cross
 		for(i in 2:n.run) {
@@ -93,6 +93,23 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,Phenot=1,REMLorML=0,
 		res
 	}else{
 		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+	}
+}
+
+MQMpermObject <- function(MQMbootresult = NULL){
+	if(class(MQMbootresult)[2] == "MQMmulti"){
+		result <- NULL
+		names <- NULL
+		for(i in 2:length(MQMbootresult)) {
+			result <- rbind(result,max(MQMbootresult[[i]][,3]))
+			names <- c(names,i-1)
+		}
+		result <- as.matrix(result)
+		rownames(result) <- names
+		class(result) <- c("scanoneperm",class(result))
+	}else{
+		stop("Invalid object.")
+	
 	}
 }
 

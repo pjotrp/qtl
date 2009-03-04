@@ -24,7 +24,7 @@
 #cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
 #data(listeria)
 
-MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
+MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10){
 	library(qtl)
 	if(is.null(cross)){
 		stop("ERROR: No cross file. Please supply a valid cross object.")
@@ -47,7 +47,7 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 		n.aug <- maxaug
 		cat("INFO: Number of individuals:",n.ind,".\n")
 		cat("INFO: Number of chr:",n.chr,".\n")
-		phenonaam <- colnames(cross$pheno)[Phenot]
+		phenonaam <- colnames(cross$pheno)[pheno.col]
 		geno <- NULL
 		chr <- NULL
 		dist <- NULL
@@ -71,7 +71,7 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 		#check for missing phenotypes
 		dropped <- NULL
 		for(i in 1:dim(pheno)[1]) {
-			if(is.na(pheno[i,Phenot])){
+			if(is.na(pheno[i,pheno.col])){
 				cat("INFO: Dropped individual ",i ," with missing phenotype.\n")
 				dropped <- c(dropped,i) 
 				n.ind = n.ind-1
@@ -82,11 +82,11 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 			geno <- geno[-dropped,]  
 			pheno <- pheno[-dropped,]
 		}
-		if(Phenot != 1){
+		if(pheno.col != 1){
 			
-			cat("INFO: Selected phenotype ",Phenot," -> ",phenonaam,".\n")
+			cat("INFO: Selected phenotype ",pheno.col," -> ",phenonaam,".\n")
 			cat("INFO: # of phenotypes in object ",nphe(cross),".\n")
-			if(nphe(cross) < Phenot || Phenot < 1){
+			if(nphe(cross) < pheno.col || pheno.col < 1){
 				stop("ERROR: No such phenotype in cross object.\n")
 			}			
 		}
@@ -148,7 +148,7 @@ MQMaugment <- function(cross= NULL,Phenot=1,maxaug=1000,maxiaug=10,neglect=10){
 	}			
 }
 
-MQMlogPheno <- function(cross= NULL,Phenot=NULL){
+MQMlogPheno <- function(cross= NULL,pheno.col=NULL){
 	#Helperfunction to logtransform a specific phenotype specified by the Phenot parameter
 	library(qtl)
 	if(is.null(cross)){
@@ -156,13 +156,13 @@ MQMlogPheno <- function(cross= NULL,Phenot=NULL){
 		return 
 	}
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
-		if(!is.null(Phenot)){
+		if(!is.null(pheno.col)){
 			pheno <- NULL
 			logpheno <- NULL
-			pheno <- cross$pheno[[Phenot]]
+			pheno <- cross$pheno[[pheno.col]]
 			logpheno <- log(pheno)
-			cross$pheno[[Phenot]] <- logpheno
-			cat("INFO: Phenotype:",Phenot,".\n")
+			cross$pheno[[pheno.col]] <- logpheno
+			cat("INFO: Phenotype:",pheno.col,".\n")
 			cat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"Variation:",var(pheno,na.rm = TRUE),".\n")
 			cat("INFO: After LOG transformation Mean:",mean(logpheno,na.rm = TRUE),"Variation:",var(logpheno,na.rm = TRUE),".\n")
 		}else{

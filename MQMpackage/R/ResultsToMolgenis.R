@@ -48,11 +48,11 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",DBpath="http
 	if(is.null(intervalQTLmap)){
 		stop("ERROR: Please supply a QTL interval map\n")
 	}
-	if(class(intervalQTLmap)[2] == "scanone"){
+	if(any(class(intervalQTLmap) == "scanone")){
 		cat("INFO: Valid object from scanone, containing 1 phenotype\n")
 		num_pheno <- 1
 	}
-	if(class(intervalQTLmap)[2] == "MQMmulti"){
+	if(any(class(intervalQTLmap) == "MQMmulti")){
 		cat("INFO: Valid object from MultiQTL scan, containing ",length(intervalQTLmap)," phenotypes\n")
 		num_pheno <- length(intervalQTLmap)
 	}
