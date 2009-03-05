@@ -39,7 +39,7 @@ data(map10)							# Mouse genome
 cross <- sim.cross(map10,qtl,n=100)				# Simulate a Cross
 a <- MQMCofactorsEach(cross,3)					# Set Cofactors each third marker
 result <- scanMQM(cross,a)					# Do a backward model selection
-plot(result)							# Plot the results of the genome scan (with the best model)
+
 }
 \references{
 	\itemize{

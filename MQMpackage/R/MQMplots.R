@@ -224,9 +224,9 @@ plot.MQMone <- function(result = NULL,result2 = NULL, extended=0,...){
 			labels <- c(colnames(result)[3],colnames(result)[5],colnames(result)[4])
 			legend("topright", labels,col=c("black","blue","red"),lty=c(1,1,1))		
 		}else{
-			if (any(class(result) == "scanone")){
+			if (any(class(result2) == "scanone")){
 				#MAX 3 scanone objects
-				plot(result,info_c,result2,lwd=1,...)
+				plot(result,info_c,result2,lwd=1)
 				labels <- c(colnames(result)[3],colnames(result)[5],colnames(result2)[3])
 				legend("topright", labels,col=c("black","blue"),lty=c(1,1))
 			}else{

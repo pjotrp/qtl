@@ -181,6 +181,112 @@ GenerateTestSets <- function(){
 
 }
 
+loadOAT <- function(){
+	setwd("D:/test/Oat")
+	n.ind=50
+	trait <- read.table("trait.qua")
+	markers <- read.table("rflp.mar",colClasses=c("character","character"),row.names=1)
+	info <- read.table("mqm_R.txt",colClasses=c("integer","character","double"),fill=T)
+	n.mark=dim(markers)[1]
+	all.mark = dim(info)[1]
+	mar <- NULL
+	for(m in 1:n.mark){
+		colmn <- NULL
+		for(i in 1:n.ind){
+				num <- as.integer(substr(markers[m,1],i,i))
+				f <- 0
+				if(num == 3){
+					num <- 1
+					f <- 1
+				}
+				if(!f && num == 1){
+					num <- 2
+					f <- 1
+				}
+				if(!f && num == 2){
+					num <- 3
+					f <- 1
+				}
+				if(!f && num == 0){
+					num <- NA
+				}
+
+				colmn <- c(colmn,num)
+		}
+		mar <- cbind(mar,colmn)
+	}
+	colnames(mar) <- rownames(markers)
+	mar <- t(mar)
+
+	rownames(info) <- info[,2]
+	selected_markers <- substr(tolower(rownames(markers)),2,10)
+	all_markers <- substr(tolower(info[,2]),2,10)
+	conv <- which(selected_markers %in% all_markers)
+	new_markers <- NULL
+	new_info <- NULL
+	for (i in conv){
+		num <- NULL
+		if(!is.na(which(selected_markers[i]==all_markers)==0&&1)){
+			num <- which(selected_markers[i]==all_markers)
+			new_markers <- rbind(new_markers,mar[i,])
+			new_info <- rbind(new_info,info[num,])
+		}
+	}
+	rownames(new_markers) <- rownames(new_info)
+	info <- new_info
+	mar <- new_markers
+	chr <- info[,1]
+	cross <- NULL
+	cnt <- 1;
+	for(i in sort(unique(chr))){
+		matrix <- NULL
+		map <- NULL
+		names <- NULL
+		cat("Chromosome:",i,"\n")
+		for(j in which(chr==i)){
+			cat("Marker:",j,"\n")	
+			#For all markers on the chromosome do
+			matrix <- rbind(matrix,mar[j,])
+			map <- rbind(map,info[j,3])
+			names <- c(names,info[j,2])
+		}
+		map <- as.numeric(map)
+		cat("DIMS:",nrow(matrix),ncol(matrix),"\n")
+		rownames(matrix) <- names
+		names(map) <- names
+		order <- NULL
+		for(j in 1:length(map)){
+			order <- c(order,which(as.double(sort(map)[j])==as.double(map)))
+		}
+		cat(map,"\n")
+		cat(order,"\n")
+		matrix <- matrix[order,]
+		map <- map[order]
+		cat(map,"\n")
+		#We got everything so lets start adding it to the cross object
+		length(cross$geno) <- length(cross$geno)+1
+		if(!is.null(dim(matrix)[1])){
+			cross$geno[[cnt]]$data <- as.matrix(t(matrix))
+		}else{
+			cat("INFO SINGLE MARKER ON A CHROMOSOME\n")
+			cat(cnt,"->",names,"\n")
+			cross$geno[[cnt]]$data <- as.matrix(matrix)
+			colnames(cross$geno[[cnt]]$data) <- names
+		}
+		cat("DIMS:",nrow(cross$geno[[cnt]]$data),ncol(cross$geno[[cnt]]$data),"\n")
+		cross$geno[[cnt]]$map <- map
+		#Type of the chromosome should be retrieved from the database
+		class(cross$geno[[cnt]])[1] <- "A"
+		cnt = cnt +1
+	}
+	names(cross$geno) <- unique(chr)
+	cross$pheno <- as.data.frame(t(trait[1:n.ind]))
+	#Make it into a crossobject get the kind of cross from the database (RISELF/RISIBL/F2/BC)
+	class(cross)[1] <- "f2"
+	class(cross)[2] <- "cross"
+	cross
+}
+
 readMQMout <- function(cross = NULL, file = "mqm_out.txt", plot = TRUE,chr = 1){
 #reads the output from the MQM algorithm
    data <-read.table(file, quote=":")

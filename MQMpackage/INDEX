@@ -15,6 +15,8 @@ MQMlogPheno             MQMlogPheno - Helper function to logtransform
 MQMpackage              Tool for analyzing QTL experiments
 multitrait              Example Cross object from R/QTL with multiple
                         traits.
+oat                     Example F2 Cross object from R/QTL with a
+                        single trait.
 plot.MQMall             plot.MQMall - Plotting routine to display the
                         results from a scanMQMall / bootstrapMQM scan
 plot.MQMboot            plot.MQMboot - Plotting routine to display the

@@ -253,10 +253,28 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		#Reset plotting and return the results
 		if(plot){
 			info_c <- qtl
-			info_c[,3]<- info_c[,5]
-			plot(qtl,info_c,lwd=1)
-			labels <- c(paste("QTL",colnames(cross$pheno)[pheno.col]),"QTL * Info")
-			legend("topright", labels,col=c("black","blue"),lty=c(1,1))
+			#Check for error in the information content
+			e <- NULL
+			for(i in 1:ncol(qtl)){
+				if(is.na(info_c[i,5])){
+					e<- 1
+				}
+				if(is.infinite(info_c[i,5])){
+					e<- 1
+				}
+				if(is.null(info_c[i,5])){
+					e<- 1
+				}
+			}
+			#No error plot 2
+			if(!e){
+				info_c[,3]<- info_c[,5]
+				plot(qtl,info_c,lwd=1)
+				labels <- c(paste("QTL",colnames(cross$pheno)[pheno.col]),"QTL * Info")
+				legend("topright", labels,col=c("black","blue"),lty=c(1,1))
+			}else{
+				plot(qtl,lwd=1)
+			}
 		}
 		#Reset the plotting window to contain 1 plot
 		op <- par(mfrow = c(1,1))
