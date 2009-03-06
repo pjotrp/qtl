@@ -196,15 +196,15 @@ loadOAT <- function(){
 				num <- as.integer(substr(markers[m,1],i,i))
 				f <- 0
 				if(num == 3){
-					num <- 1
+					num <- 3
 					f <- 1
 				}
 				if(!f && num == 1){
-					num <- 2
+					num <- 1
 					f <- 1
 				}
 				if(!f && num == 2){
-					num <- 3
+					num <- 2
 					f <- 1
 				}
 				if(!f && num == 0){
@@ -237,7 +237,7 @@ loadOAT <- function(){
 	mar <- new_markers
 	chr <- info[,1]
 	cross <- NULL
-	cnt <- 1;
+	cnt <- 1
 	for(i in sort(unique(chr))){
 		matrix <- NULL
 		map <- NULL
@@ -251,16 +251,18 @@ loadOAT <- function(){
 			names <- c(names,info[j,2])
 		}
 		map <- as.numeric(map)
-		cat("DIMS:",nrow(matrix),ncol(matrix),"\n")
 		rownames(matrix) <- names
 		names(map) <- names
 		order <- NULL
-		for(j in 1:length(map)){
-			cat(j)
-			order <- c(order,which(as.double(sort(map)[j])==as.double(map)))
+		num <- length(map)
+		while(num>0){
+			order <- c(which(as.double(sort(map)[num])==as.double(map)),order)
+			if(length(which(as.double(sort(map)[num])==as.double(map))) != 0){
+				num = num-length(which(as.double(sort(map)[num])==as.double(map)))
+			}else{
+				num = num-1
+			}
 		}
-		cat(map,"\n")
-		cat(order,"\n")
 		matrix <- matrix[order,]
 		map <- map[order]
 		cat(map,"\n")

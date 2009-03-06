@@ -19,7 +19,7 @@
 
 scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0,n.clusters=2,doLOG=0){
+					step.min=-20.0,step.max=220.0,n.clusters=2,doLOG=0,est.map=0,dominance=0,forceRIL=0){
 
 	
 	if(is.null(cross)){
@@ -50,12 +50,12 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 			library(snow)
 			cl <- makeCluster(n.clusters)
 			clusterEvalQ(cl, library(MQMpackage))
-			res <- parLapply(cl,data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG,plot=FALSE)
+			res <- parLapply(cl,data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG,est.map=est.map,forceRIL=forceRIL,plot=FALSE)
 			stopCluster(cl)
 		}else{
 			#Apply scanMQM to the data with the specified settings		
 			cat("INFO: Library snow not found, so going into singlemode.\n")
-			res <- lapply(data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG,plot=FALSE)
+			res <- lapply(data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG,est.map=est.map,forceRIL=forceRIL,plot=FALSE)
 		}
 		
 

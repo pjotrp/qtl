@@ -8,7 +8,7 @@
 	Main multiQTL scanning function for the R/qtl package (for use with F2 / BC / RIL populations)
 }
 \usage{
-	scanMQM(cross = NULL, cofactors = NULL, doLOG = 0, pheno.col = 1, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 0, file = "MQM_output.txt",plot=TRUE)
+	scanMQM(cross = NULL, cofactors = NULL, doLOG = 0, pheno.col = 1, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 0, est.map=0,forceRIL=0,file = "MQM_output.txt",plot=TRUE)
 }
 \arguments{
   \item{cross}{ Cross object, an object of class \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
@@ -22,8 +22,9 @@
   \item{step.size}{ Step.size used for the generation of output QTL }
   \item{step.min}{ Begin this many Cm before the chromosome }
   \item{step.max}{ Maximum length in Cm }
-  \item{reestimate}{ Reestimation of the genetic map (est.rf in R/QTL) }
+  \item{est.map}{ Reestimation of the marker locations on the genetic map before mapping QTLs (no map is returned the old map remains in the cross object }
   \item{dominance}{ Should dominance be taken into account ( 0= Additive  (DEFAULT)/ 1= Dominance) }  
+  \item{forceRIL}{ Should we force the cross as a RIL, this option removed AB genotypes and replaces them with BB ? ( 0= NO  (DEFAULT)/ 1= YES) }  
   \item{file}{ File to which the raw results are saved (MQM_output.txt) }
   \item{plot}{ Plotting of the results ? ( T= TRUE  (DEFAULT)/ F= FALSE) }
 }

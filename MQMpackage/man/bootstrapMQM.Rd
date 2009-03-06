@@ -6,7 +6,7 @@
    Bootstrapping approach to obtain estimates of QTL significance
 }
 \usage{
-bootstrapMQM(cross = NULL, cofactors = NULL, Phenot = 1, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 10, file = "MQM_output.txt", doLOG = 0, reestimate = 0, dominance = 0, n.clusters = 2, parametric = 0)
+bootstrapMQM(cross = NULL, cofactors = NULL, Phenot = 1, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 10, file = "MQM_output.txt", doLOG = 0, est.map = 0, dominance = 0, n.clusters = 2, parametric = 0)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -23,7 +23,7 @@ bootstrapMQM(cross = NULL, cofactors = NULL, Phenot = 1, REMLorML = 0, alfa = 0.
   \item{step.min}{ Begin this many Cm before the chromosome }
   \item{step.max}{ Maximum length in Cm }
   \item{doLOG}{ Indicate if the algorithm can LOG transform traits with variation > 10.000 (DEFAULT 0 = off | 1 = on) }
-  \item{reestimate}{ Reestimation of the genetic map (est.rf in R/QTL) }
+  \item{est.map}{ Reestimation of the genetic map (est.rf in R/QTL) }
   \item{dominance}{ Should dominance be taken into account ( 0= Additive  (DEFAULT)/ 1= Dominance) }
   \item{n.clusters}{ When SNOW is installed use this to allocate more core's }
   
