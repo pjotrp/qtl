@@ -26,8 +26,8 @@
   \item Alonso-Blanco C, Peeters AJ,Koornneef M, (2006), Development of an aflp based linkage map of ler,col and cvi arabidopsis \dots linbred line population. \emph{Plant J.} \bold{14/2}, 259--271.
 }
 \examples{
-	library(MQMpackage)			#Load the package
-	data(multitrait)		#Load dataset
+	library(MQMpackage)					#Load the package
+	data(multitrait)						#Load dataset
 	result <- scanMQMall(multitrait,doLOG=1)	#Analyse all 24 traits
 }
 \keyword{datasets}
