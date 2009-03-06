@@ -16,13 +16,13 @@
 # MQMaugmentdata:
 #
 ######################################################################
-setwd("D:/")
-library(qtl)
-dyn.load("scanMQM.dll")
-qtl <- c(3,15,3,7)							# QTL at chromosome 3
-data(map10)									# Mouse genome
-cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
-data(listeria)
+#setwd("D:/")
+#library(qtl)
+#dyn.load("scanMQM.dll")
+#qtl <- c(3,15,3,7)							# QTL at chromosome 3
+#data(map10)									# Mouse genome
+#cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
+#data(listeria)
 
 MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10){
 	library(qtl)
@@ -182,7 +182,7 @@ MQMlogPheno <- function(cross= NULL,pheno.col=NULL){
 	}			
 }
 
-cross_good <- MQMaugment(cross)
+#cross_good <- MQMaugment(cross)
 #listeria_good <- MQMaugment(listeria,maxaug=1000,maxiaug=10,neglect=10)
 
 # end of MQMaugment.R

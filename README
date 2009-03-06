@@ -4,12 +4,12 @@ Compile instructions:
 Have the following installed:
 	R-2.8.0
 	R-Tools
-	The Microsoft html help compiler
-Optional: 
 	Perl (activeperl)
+Optional: 
+	The Microsoft html help compiler
 	MikTex for building the man files
 
-Building the package for MS Windows:
-R CMD BUILD MQMpackage -binary
+Building the package for MS Windows (with zipped datadir):
+R CMD BUILD MQMpackage -binary --auto-zip
 Building the package for use with Linux:
-R CMD BUILD MQMpackage
+R CMD BUILD MQMpackage --auto-zip

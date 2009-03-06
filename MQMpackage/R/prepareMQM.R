@@ -244,7 +244,7 @@ loadOAT <- function(){
 		names <- NULL
 		cat("Chromosome:",i,"\n")
 		for(j in which(chr==i)){
-			cat("Marker:",j,"\n")	
+			cat("Marker:",j,"->",info[j,2],"\n")	
 			#For all markers on the chromosome do
 			matrix <- rbind(matrix,mar[j,])
 			map <- rbind(map,info[j,3])
@@ -256,6 +256,7 @@ loadOAT <- function(){
 		names(map) <- names
 		order <- NULL
 		for(j in 1:length(map)){
+			cat(j)
 			order <- c(order,which(as.double(sort(map)[j])==as.double(map)))
 		}
 		cat(map,"\n")

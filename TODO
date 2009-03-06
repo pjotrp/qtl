@@ -13,11 +13,11 @@ TODO list MQM package
 - Carl's book, make some plots about the listeria dataset using his plotting methode n correct scale -DONE-
 
 - If there are Multiple traits in the cross object do them all when the user asks for it -DONE-
-- - Store each run in a certain format (file)
+- - Store each run in a certain format (file) -DONE-
+- - Store each bootstrapping runs in a certain format (file)
 - Finish testing enviroment
 - - A set of objects in csv format and in MQM input files
-- - Double test augment data section
-- - We need a working dataset of carl with 2 qtls to show we have increased power in MQM
+- - Double test augment data section -DONE-
 - Extend the testsets (more with selected co-factors)
 - Include correct RIL analysis, moved up after talk 11-febr-2009
 - Include correct BC analysis, moved up after talk 11-febr-2009
@@ -25,10 +25,11 @@ TODO list MQM package
 - - this would remove rmixture function (which is outdated by the R/QTL est.map & calc.genoprob functions as far as i can tell)
 - - this would involve a mayor rewriting some of the QTLmixture part (perhaps even regression, but that relies on 
 - - the weightmatrix (setting them 0 could be an option))
-- Remove bootstrapping from scanMQM and make it done by R
+- Remove bootstrapping from scanMQM and make it done by R -DONE-
 
 MID TERM
-Use stl (+boost) for all internal vectors and matrices
+Use stl (+boost) for all internal vectors and matrices -MOVED TO FORK-
+We need a working dataset of carl with 2 qtls to show we have increased power in MQM
 Figure out a correct way of handling autosomes
 
 LONG TERM

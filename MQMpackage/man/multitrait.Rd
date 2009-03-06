@@ -28,7 +28,6 @@
 \examples{
 	library(MQMpackage)			#Load the package
 	data(multitrait)		#Load dataset
-	class(multitrait)[1]<- "riself"		#Force correction to class riself (not BC)
 	result <- scanMQMall(multitrait,doLOG=1)	#Analyse all 24 traits
 }
 \keyword{datasets}

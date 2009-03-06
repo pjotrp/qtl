@@ -17,17 +17,17 @@
 #
 ######################################################################
 
-setwd("D:/")
-library(qtl)
+#setwd("D:/")
+#library(qtl)
 #library(MQMpackage)
-dyn.load("scanMQM.dll")
-cross <- read.cross("csv","","Test.csv")
-cof <- MQMCofactorsEach(cross,10)
+#dyn.load("scanMQM.dll")
+#cross <- read.cross("csv","","Test.csv")
+#cof <- MQMCofactorsEach(cross,10)
 	
 	
 scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=TRUE){
+					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=TRUE,forceRIL=0){
     library(qtl)
 	n.run=0
 	if(is.null(cross)){
@@ -86,13 +86,23 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		}
 		n.mark <- ncol(geno)
 		cat("INFO: Number of markers:",n.mark,"\n")
+		Fril.replaced <- 0
 		for(i in 1:n.ind) {
 			for(j in 1:n.mark) {
 				if(is.na(geno[i,j])){
 					stop("ERROR: Missing genotype information, please estimate unknown data, before running scanMQM.\n")
 					geno[i,j] <- 9
+				}else{
+					if(forceRIL && geno[i,j]==2){
+					#We have a 2 (AB) change it to a 3
+					geno[i,j] <- 3
+					Fril.replaced <- Fril.replaced+1
+					}
 				}
 			}
+		}
+		if(forceRIL==1 && Fril.replaced > 0){
+			 cat("INFO: Changed ",Fril.replaced," AB markers into BB markers.\n")
 		}
 		#check for missing phenotypes
 		dropped <- NULL
@@ -288,7 +298,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 	}			
 }
 
-res <- scanMQM(cross,cof)
+#res <- scanMQM(cross,cof)
 #plot(res)
 
 

@@ -180,7 +180,13 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
     newweight= newvector(Naug);
     
 	//Re-estimation of recombinant frequencies
-	rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance,reestimate,crosstype);
+	double max;
+	max = rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance,reestimate,crosstype);
+	if(max > stepmax){
+		Rprintf("ERROR: Reestimation of the map put markers at: %f Cm\n",max);
+		Rprintf("ERROR: Rerun the algorithm with a step.max larger than %f Cm\n",max);
+		return;
+	}
 	
 	//Check if everything still is correct
 	for (int j=0; j<Nmark; j++){

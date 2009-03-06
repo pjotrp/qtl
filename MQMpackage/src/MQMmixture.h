@@ -13,7 +13,7 @@
 /* ML estimation of recombination frequencies via EM;
     calculation of multilocus genotype probabilities;
     ignorance of unlikely genotypes*/
-void rmixture(cmatrix marker, vector weight, vector r,
+double rmixture(cmatrix marker, vector weight, vector r,
               cvector position, ivector ind,
               int Nind, int Naug, int Nmark,vector *mapdistance, char reestimate,char crosstype);
 
