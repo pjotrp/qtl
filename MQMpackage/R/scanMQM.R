@@ -218,6 +218,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 				}
 				aa <- nmar(cross)			
 				sum <- 1
+				model_present <- 0
 				qc <- NULL
 				qp <- NULL
 				qn <- NULL
@@ -226,17 +227,20 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 						#cat("INFO ",sum," ResultCOF:",result$COF[sum],"\n")
 						if(result$COF[sum] != 48){
 							cat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new_map)[sum])," Cm\n")
-							qc <- c(qc, as.character(i))
+							qc <- c(qc, as.character(names(cross$geno)[i]))
 							qp <- c(qp, as.double(unlist(new_map)[sum]))
 							qn <- c(qn, substr(names(unlist(new_map))[sum],3,nchar(names(unlist(new_map))[sum])))
+							model_present <- 1
 						}
 						sum <- sum+1
 					}
 				}
 				why <- sim.geno(cross)
-				if(!is.null(qc)){
+				if(!is.null(qc) && model_present){
 					qtlplot <- makeqtl(why, qc, qp, qn, what="draws")
 					plot(qtlplot)
+				}else{
+					op <- par(mfrow = c(1,1))
 				}
 			}
 		}
