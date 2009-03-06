@@ -140,49 +140,18 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 			}
 		}
 	}
-	for(int i=0; i< Nmark; i++){
-		for(int j=0; j< Nind; j++){
-			//Some lame ass checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
-			if(Geno[i][j] > 3 && crosstype != 1){
-				Rprintf("INFO: Stange genotype pattern, switching to F2\n");
-				crosstype = 1;
-				break;
-			}
-			if(Geno[i][j] == 3 && crosstype == 2){
-				Rprintf("INFO: Stange genotype pattern, switching from BC to F2\n");
-				crosstype = 1;
-				break;
-			}
-			//IF we have a RIL and find AB then Rqtl messed up, so we have a BC genotype
-			if(Geno[i][j] == 2 && crosstype == 3){
-				Rprintf("INFO: Stange genotype pattern, switching from RISELF to BC\n");
-				crosstype = 2;
-				break;
-			}
-			
-		}
-		//Rprintf("\n");
-	}
-	
 	char reestimate = 'y';
 	if(re_estimate == 0){
 		reestimate = 'n';
 	}
-	char cross = 'F';
-	if(crosstype == 1){
-		cross = 'F';
-		domi = domi;
-	}
-	if(crosstype == 2){
-		cross = 'B';
-		Rprintf("INFO: BackCross, dominance setting ignored (dominance=0)\n");   		
+	char cross = determin_cross(&Nmark,&Nind,Geno,&crosstype);
+	if(cross != 'F'){
+		Rprintf("INFO: Dominance setting ignored (dominance=0)\n");   
 		domi = 0;
+	}else{
+		domi= domi;
 	}
-	if(crosstype == 3){
-		cross = 'R';	
-		Rprintf("INFO: RIL, dominance setting ignored (dominance=0)\n");   		
-		domi = 0;
-	}	
+
 	char dominance='n';
 	if(domi != 0){
 		dominance='y';

@@ -17,12 +17,12 @@
 #
 ######################################################################
 
-#setwd("D:/")
-#library(qtl)
+setwd("D:/")
+library(qtl)
 #library(MQMpackage)
-#dyn.load("scanMQM.dll")
-#cross <- read.cross("csv","","Test.csv")
-#cof <- MQMCofactorsEach(cross,10)
+dyn.load("scanMQM.dll")
+cross <- read.cross("csv","","Test.csv")
+cof <- MQMCofactorsEach(cross,10)
 	
 	
 scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
@@ -254,7 +254,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		if(plot){
 			info_c <- qtl
 			#Check for error in the information content
-			e <- NULL
+			e <- 0
 			for(i in 1:ncol(qtl)){
 				if(is.na(info_c[i,5])){
 					e<- 1
@@ -284,7 +284,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 	}			
 }
 
-#res <- scanMQM(cross,cof)
+res <- scanMQM(cross,cof)
 #plot(res)
 
 

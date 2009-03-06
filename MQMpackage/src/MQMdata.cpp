@@ -23,6 +23,45 @@ extern "C"
 #include "MQMprob.h"
 
 
+char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype){
+	for(int i=0; i< *Nmark; i++){
+		for(int j=0; j< *Nind; j++){
+			//Some lame ass checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
+			if(Geno[i][j] == 3 && (*crosstype) != 1){
+				Rprintf("INFO: Stange genotype pattern, switching to F2\n");
+				(*crosstype) = 1;
+				break;
+			}
+			if(Geno[i][j] == 3 && (*crosstype) == 2){
+				Rprintf("INFO: Stange genotype pattern, switching from BC to F2\n");
+				(*crosstype) = 1;
+				break;
+			}
+			//IF we have a RIL and find AB then Rqtl messed up, so we have a BC genotype
+			if(Geno[i][j] == 2 && (*crosstype) == 3){
+				Rprintf("INFO: Stange genotype pattern, switching from RISELF to BC\n");
+				(*crosstype) = 2;
+				break;
+			}
+			
+		}
+		//Rprintf("\n");
+	}
+	
+	char cross = 'F';
+	if((*crosstype) == 1){
+		cross = 'F';	
+	}
+	if((*crosstype) == 2){
+		cross = 'B';	
+	}
+	if((*crosstype) == 3){
+		cross = 'R';	
+	}
+	return cross;
+}
+
+
 void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *augIND,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,double *neglect,int *chromo,int *crosstype){
 	int **Geno;
 	double **Pheno;
@@ -80,40 +119,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	    mapdistance[i]=Dist[0][i];
 	}
 	
-		for(int i=0; i< *Nmark; i++){
-		for(int j=0; j< *Nind; j++){
-			//Some lame ass checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
-			if(Geno[i][j] == 3 && (*crosstype) != 1){
-				Rprintf("INFO: Stange genotype pattern, switching to F2\n");
-				(*crosstype) = 1;
-				break;
-			}
-			if(Geno[i][j] == 3 && (*crosstype) == 2){
-				Rprintf("INFO: Stange genotype pattern, switching from BC to F2\n");
-				(*crosstype) = 1;
-				break;
-			}
-			//IF we have a RIL and find AB then Rqtl messed up, so we have a BC genotype
-			if(Geno[i][j] == 2 && (*crosstype) == 3){
-				Rprintf("INFO: Stange genotype pattern, switching from RISELF to BC\n");
-				(*crosstype) = 2;
-				break;
-			}
-			
-		}
-		//Rprintf("\n");
-	}
-	
-	char cross = 'F';
-	if((*crosstype) == 1){
-		cross = 'F';	
-	}
-	if((*crosstype) == 2){
-		cross = 'B';	
-	}
-	if((*crosstype) == 3){
-		cross = 'R';	
-	}
+	char cross = determin_cross(Nmark,Nind,Geno,crosstype);
 	Rprintf("INFO: Filling the chromosome matrix\n");
 
 	for(int i=0; i<(*Nmark); i++){

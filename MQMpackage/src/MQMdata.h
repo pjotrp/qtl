@@ -29,6 +29,9 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 
 int augdata(cmatrix marker, vector y, cmatrix *augmarker, vector *augy, ivector* augind, int *Nind, int *Naug, int Nmark, cvector position, vector r,int maxNaug,int imaxNaug,double neglect,char crosstype);
 
+char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype);
+
+
 /*------------------------------------------------------------------------
 Basic routines for matrix and vector calculus
 ------------------------------------------------------------------------ */
