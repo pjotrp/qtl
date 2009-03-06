@@ -96,9 +96,11 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	cofactor= newcvector(Nmark);  
 	mapdistance= newvector(Nmark);
 	
-	int cnt=0;  	
-   
-	//Rprintf("Converting Genotype matrix\n");
+	int cof_cnt=0;
+ 	
+   	//Change all the markers from Karl format to our own
+	change_coding(&Nmark,&Nind,Geno,markers);
+
 	for(int i=0; i< Nmark; i++){
 		f1genotype[i] = 12;
 		//receiving mapdistances
@@ -107,44 +109,25 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	 	cofactor[i] = '0';
 		if(Cofactors[0][i] == 1){
 			cofactor[i] = '1';
-			cnt++;
+			cof_cnt++;
 		}
 		if(Cofactors[0][i] == 2){
 			cofactor[i] = '2';
-			cnt++;
+			cof_cnt++;
 		}
-		if(cnt > (Nmark/2)){
-			//Rprintf("ERROR: More than half of the markers are to be cofactors, this is not allowed.\n");
-			//return;
-		}
-		if(cnt+5 > Nind){
-			Rprintf("ERROR: Setting this many cofactors would leave less than 5 degrees of freedom.\n");
+		if(cof_cnt+10 > Nind){
+			Rprintf("ERROR: Setting this many cofactors would leave less than 10 degrees of freedom.\n");
 			return;
 		}
-		for(int j=0; j< Nind; j++){ 
-			markers[i][j] = '9';
-			if(Geno[i][j] == 1){				//AA
-				markers[i][j] = '0';
-			}
-			if(Geno[i][j] == 2){				//AB
-				markers[i][j] = '1';
-			}
-			if(Geno[i][j] == 3){				//BB
-				markers[i][j] = '2';
-			}
-			if(Geno[i][j] == 4){				//AA of AB
-				markers[i][j] = '4';
-			}
-			if(Geno[i][j] == 5){				//BB of AB
-				markers[i][j] = '3';
-			}
-		}
 	}
+
 	char reestimate = 'y';
 	if(re_estimate == 0){
 		reestimate = 'n';
 	}
+	//determine what kind of cross we have
 	char cross = determin_cross(&Nmark,&Nind,Geno,&crosstype);
+	//set dominance accordingly
 	if(cross != 'F'){
 		Rprintf("INFO: Dominance setting ignored (dominance=0)\n");   
 		domi = 0;

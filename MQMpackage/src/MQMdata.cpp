@@ -62,6 +62,30 @@ char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype){
 }
 
 
+void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers){
+	//Change all the markers from Karl format to our own
+	for(int i=0; i< *Nmark; i++){
+		for(int j=0; j< *Nind; j++){ 
+			markers[i][j] = '9';
+			if(Geno[i][j] == 1){				//AA
+				markers[i][j] = '0';
+			}
+			if(Geno[i][j] == 2){				//AB
+				markers[i][j] = '1';
+			}
+			if(Geno[i][j] == 3){				//BB
+				markers[i][j] = '2';
+			}
+			if(Geno[i][j] == 4){				//AA of AB
+				markers[i][j] = '4';
+			}
+			if(Geno[i][j] == 5){				//BB of AB
+				markers[i][j] = '3';
+			}
+		}
+	}
+}
+
 void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *augIND,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,double *neglect,int *chromo,int *crosstype){
 	int **Geno;
 	double **Pheno;
@@ -94,39 +118,21 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
     reorg_int(*maxaug,*Nmark,auggeno,&NEW);	   
 	reorg_int((*maxiaug)*(*Nind),1,augIND,&NEWIND);	 
 	reorg_pheno(*maxaug,1,augPheno,&NEWPheno);	 
-	
+
 	//Change all the markers from Karl format to our own
-	for(int i=0; i< *Nmark; i++){
-		for(int j=0; j< *Nind; j++){ 
-			markers[i][j] = '9';
-			if(Geno[i][j] == 1){				//AA
-				markers[i][j] = '0';
-			}
-			if(Geno[i][j] == 2){				//AB
-				markers[i][j] = '1';
-			}
-			if(Geno[i][j] == 3){				//BB
-				markers[i][j] = '2';
-			}
-			if(Geno[i][j] == 4){				//AA of AB
-				markers[i][j] = '4';
-			}
-			if(Geno[i][j] == 5){				//BB of AB
-				markers[i][j] = '3';
-			}
-		}
-		mapdistance[i]=999.0;
-	    mapdistance[i]=Dist[0][i];
-	}
+	change_coding(Nmark,Nind,Geno,markers);
 	
 	char cross = determin_cross(Nmark,Nind,Geno,crosstype);
 	Rprintf("INFO: Filling the chromosome matrix\n");
 
 	for(int i=0; i<(*Nmark); i++){
+		//Set some general information structures per marker
+		mapdistance[i]=999.0;
+	    mapdistance[i]=Dist[0][i];
 		chr[i] = Chromo[0][i];
 	}
-	Rprintf("INFO: Calculating relative genomepositions of the markers\n");
 
+	Rprintf("INFO: Calculating relative genomepositions of the markers\n");
     for (int j=0; j<(*Nmark); j++)
     {   
         if (j==0)
@@ -138,8 +144,8 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
         else
         { if (chr[j]==chr[j+1]) position[j]='L'; else position[j]='U'; }
     }
-	Rprintf("INFO: Estimating recombinant frequencies\n");
 
+	Rprintf("INFO: Estimating recombinant frequencies\n");
 	for (int j=0; j<(*Nmark); j++){   
 		r[j]= 999.0;
 		if ((position[j]=='L')||(position[j]=='M')){
