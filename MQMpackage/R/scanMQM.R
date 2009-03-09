@@ -87,6 +87,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		n.mark <- ncol(geno)
 		cat("INFO: Number of markers:",n.mark,"\n")
 		Fril.replaced <- 0
+
 		for(i in 1:n.ind) {
 			for(j in 1:n.mark) {
 				if(is.na(geno[i,j])){
@@ -99,6 +100,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 					Fril.replaced <- Fril.replaced+1
 					}
 				}
+				
 			}
 		}
 		if(forceRIL==1 && Fril.replaced > 0){
@@ -160,6 +162,10 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		}		
 		if(step.size < 1){
 				stop("ERROR: Step.size needs to be larger than 1")
+		}
+		max_cm_on_map <- max(unlist(pull.map(cross)))
+		if(step.max < max_cm_on_map){
+				stop("ERROR: Markers outside of the mapping at ",max_cm_on_map," Cm, please set parameter step.max larger than this value.")		
 		}
 		qtlAchromo <- length(seq(step.min,step.max,step.size))
 		cat("INFO: Number of locations per chromosome: ",qtlAchromo, "\n")

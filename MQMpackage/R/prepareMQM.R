@@ -306,4 +306,90 @@ readMQMout <- function(cross = NULL, file = "mqm_out.txt", plot = TRUE,chr = 1){
    #should be pushed to the cross object
 }
 
+loadMOUSE <- function(pheno=c(1:10)){
+	setwd("D:/test/Illumina")
+	library(MQMpackage)
+	genotypes <- read.csv("BXD.geno",sep="\t")
+	#phenotypes <- read.csv("Experiment.pheno",sep=",")
+	#save(phenotypes,file="pheno.Rdata")
+	load("pheno.Rdata")
+	conversion <- read.csv("Conversion2.csv",sep=";")
+	n.ind <- dim(phenotypes)[2]
+	trait <- t(phenotypes[1,])
+	traits <- t(phenotypes[pheno,])
+	genomatrix <- NULL
+	for (i in 1:n.ind){
+		id <- which(rownames(trait)[i]==conversion[,2])
+		bxd <- as.character(conversion[id,1])
+		bxd <- gsub(" ","",bxd)
+		#cat(id," ",bxd,"\n")
+		genomatrix <- rbind(genomatrix,as.character(genotypes[,bxd]))
+		rownames(genomatrix)[i] <- as.character(bxd)
+	}
+	for(i in 1:dim(genomatrix)[1]){
+		for(j in 1:dim(genomatrix)[2]){
+			f <- 0
+			if(!f && genomatrix[i,j] == "B"){
+				genomatrix[i,j] <- as.integer(1)
+				f <- 1
+			}
+			if(!f && genomatrix[i,j] == "H"){
+				genomatrix[i,j] <- NA
+				f <- 1
+			}
+			if(!f && genomatrix[i,j] == "D"){
+				genomatrix[i,j] <- as.integer(2)
+				f <- 1
+			}
+			if(!f && genomatrix[i,j] == "U"){
+				genomatrix[i,j] <- NA
+				f <- 1
+			}		
+		}
+	}
+	colnames(genomatrix) <- genotypes[,2]
+	chr <- as.character(genotypes[,1])
+	names(chr) <- genotypes[,2]
+	Cm <- as.double(genotypes[,3])
+	names(Cm) <- genotypes[,2]
+
+	cross <- NULL
+	for(i in unique(chr)){
+		sum <- 0
+		asum <- 0
+		matrix <- NULL
+		map <- NULL
+		n <- NULL
+		cm <- 0
+		for(j in which(chr==i)){
+			if(Cm[j] > (cm+2)){
+				matrix <- rbind(matrix,as.integer(genomatrix[,j]))
+				map <- rbind(map,Cm[j])
+				n <- c(n,names(Cm[j]))
+				sum <- sum+1
+				cm <- Cm[j]
+			}else{
+				asum <- asum +1
+			}
+		}
+		rownames(matrix) <- n
+		rownames(map) <- n
+		
+		#Everything is okay now
+		cross$geno[[i]]$data <- as.matrix(t(matrix))
+		cross$geno[[i]]$map <- as.numeric(t(map))
+		names(cross$geno[[i]]$map) <- n
+		if(i != "X"){
+			class(cross$geno[[i]])[1] <- "A"
+		}else{
+			class(cross$geno[[i]])[1] <- "X"
+		}
+	}
+	cross$pheno <- as.data.frame(traits)
+	class(cross)[1] <- "riself"
+	class(cross)[2] <- "cross"
+	cross
+}
+
+
 # end of prepareMQM.R
