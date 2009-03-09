@@ -306,13 +306,38 @@ readMQMout <- function(cross = NULL, file = "mqm_out.txt", plot = TRUE,chr = 1){
    #should be pushed to the cross object
 }
 
-loadMOUSE <- function(pheno=c(1:10)){
+loadMOUSE <- function(pheno=c(1:10),gr1=NULL,gr2=NULL){
+	
 	setwd("D:/test/Illumina")
 	library(MQMpackage)
+	if(gr1==gr2){
+		stop("ERROR: cannot compare groups with themselves.\n")
+	}
+	selected <- NULL
+	#We select from a ordered file, the first cols (1:19) are stemcells, the progenitor, RED and White
+	if(gr1 == "S" || gr2 == "S"){
+		selected <- c(selected,1:19)
+	}
+	if(gr1 == "P" || gr2 == "P"){
+		selected <- c(selected,20:33)
+	}
+	if(gr1 == "R" || gr2 == "R"){
+		selected <- c(selected,34:48)
+	}
+	if(gr1 == "W" || gr2 == "W"){
+		selected <- c(selected,49:62)
+	}
+	notselected <- NULL
+	for(i in 1:62){
+		if(!(i %in% selected)){
+			notselected <- c(notselected,i)
+		}
+	}
 	genotypes <- read.csv("BXD.geno",sep="\t")
 	#phenotypes <- read.csv("Experiment.pheno",sep=",")
 	#save(phenotypes,file="pheno.Rdata")
 	load("pheno.Rdata")
+	phenotypes <- phenotypes[,-notselected]
 	conversion <- read.csv("Conversion2.csv",sep=";")
 	n.ind <- dim(phenotypes)[2]
 	trait <- t(phenotypes[1,])
