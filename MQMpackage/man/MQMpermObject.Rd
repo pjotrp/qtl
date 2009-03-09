@@ -36,7 +36,7 @@ f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
 f2result <- bootstrapMQM(f2cross)			# Do a MQM scan of the genome
 f2perm <- MQMpermObject(f2result)			#Create a permutation object
 summary(f2perm)										#What LOD score is considered significant ?
-summary(f2result[[1]],alpha=0.05,perms=f2perm)		#Get significant QTL's (The first run is the original)
+summary(f2result[[1]],alpha=0.05,perms=f2perm)		#Get significant QTL's (The first run is the original phenotype original)
 }
 
 \keyword{ QTL }

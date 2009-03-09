@@ -1,7 +1,7 @@
 \name{bootstrapMQM}
-\alias{bootstrapMQM}
+\alias{permutateMQM}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ bootstrapMQM - Bootstrapping approach to obtain estimates of QTL significance }
+\title{ bootstrapMQM / permutateMQM - Bootstrapping approach to obtain estimates of QTL LOD score significance }
 \description{
    Bootstrapping approach to obtain estimates of QTL significance
 }
@@ -10,7 +10,7 @@ bootstrapMQM(cross = NULL, cofactors = NULL, Phenot = 1, REMLorML = 0, alfa = 0.
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{cross}{ Cross object from R/QTL }
+  \item{cross}{ Cross object, An object of class \code{cross} from R/QTL with multiple phenotypes suitable for scanone and scanMQM from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
   \item{cofactors}{ List of cofactors with length marker (0:no cofactor, 1:cofactor, 2:sexfactor) }
   \item{n.run}{ Number of bootstrapping runs (DEFAULT=10) }
   \item{parametric}{ What kind of bootstrapping should be done ( 0= Random Shuffle (DEFAULT)/ 1= Parametric bootstrapping ) }  

@@ -7,11 +7,12 @@
   Plotting routine to display the results from a MQMscan
 }
 \usage{
-plot.MQMone(result = NULL, extended = 0)
+plot.MQMone(result = NULL, result2=NULL, extended = 0,\dots)
 }
 
 \arguments{
   \item{result}{ Results from scanMQM of type scanone }
+  \item{result2}{ Results from scanMQM of type scanone }  
   \item{extended}{ Extended plotting of the information content }
   \item{\dots}{ Extra argument passed to the plot.scanone }  
 }

@@ -306,6 +306,20 @@ readMQMout <- function(cross = NULL, file = "mqm_out.txt", plot = TRUE,chr = 1){
    #should be pushed to the cross object
 }
 
+
+MQMfind.marker <- function(cross=NULL,scanMQM=NULL,perm=NULL,alpha=0.05){
+	
+	chr <- summary(scanMQM,alpha=alpha,perms=perm,pvalues=F)$'chr'
+	pos <- summary(scanMQM,alpha=alpha,perms=perm,pvalues=F)$'pos (Cm)'
+	cat("INFO: Found",length(chr),"markers with alpha <",alpha,".\n")
+	ret <- NULL
+	for(i in 1:length(chr)){
+		ret <- rbind(ret,cbind(find.marker(cross,chr=chr[i],pos=pos[i]),as.integer(chr[i]),as.double(pos[i])))
+	}
+	colnames(ret) <- c("marker","chr","pos (Cm)")
+	ret
+}
+
 loadMOUSE <- function(pheno=c(1:10),gr1=NULL,gr2=NULL){
 	
 	setwd("D:/test/Illumina")
