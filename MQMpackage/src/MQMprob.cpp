@@ -93,10 +93,10 @@ double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,
 				Nrecom= absdouble((double)loci[j][i]-(double)compareto);
 				if(Nrecom==0){
 					//No recombination has a chance of r[j]
-					calc_i =  (1.0-r[j+ADJ]);
+					calc_i =  r[j+ADJ]*(1.0-r[j+ADJ]);
 				}else{
 					// Recombination between markers has a chance of r[j-1]
-					calc_i = r[j+ADJ];
+					calc_i = r[j+ADJ]*r[j+ADJ];
 				}
 			break;
 		case 'B':

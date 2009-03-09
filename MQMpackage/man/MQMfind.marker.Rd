@@ -43,7 +43,9 @@ f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
 f2result <- bootstrapMQM(f2cross)			# Do a MQM scan of the genome
 f2perm <- MQMpermObject(f2result)			#Create a permutation object
 summary(f2perm)										#What LOD score is considered significant ?
-MQMfind.marker(f2cross,result[[1]],f2perm)		#Find markers with a significant QTL effect (First run is original phenotype data)
+marker <- MQMfind.marker(f2cross,f2result[[1]],f2perm)		#Find markers with a significant QTL effect (First run is original phenotype data)
+marker									#print it
+lodint(f2result[[1]],chr=marker[,'chr']) #extra: Confidence intervals
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
