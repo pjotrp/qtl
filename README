@@ -1,10 +1,11 @@
-MQMpackage for integration of MultiQTL into the R/QTL package...
+MQMpackage with BOOST support.
 
 Compile instructions:
 Have the following installed:
 	R-2.8.0
 	R-Tools
 	Perl (activeperl)
+	Boost framework
 Optional: 
 	The Microsoft html help compiler
 	MikTex for building the man files
