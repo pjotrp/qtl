@@ -11,10 +11,12 @@
  * Contains: R_scanMQM, scanMQM
  *
  **********************************************************************/
+using namespace std;
+#include <fstream>
+#include <iostream>
 
 extern "C"
 {
-
 #include <R.h>
 #include <Rdefines.h>
 #include <R_ext/PrtUtil.h>
@@ -197,7 +199,7 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
 } /* end of function R_scanMQM */
 
 int main(){
-	using namespace std;
+
 	char *genofile = "geno.dat";
 	char *phenofile = "pheno.dat";
 	char *mposfile = "markerpos.txt";
@@ -206,7 +208,7 @@ int main(){
 	
 	ifstream geno(genofile, ios::in);
 		geno >> test;
-		printF(test);
+		printf("TEST: %d\n",test);
 	geno.close();
 	ifstream pheno(genofile, ios::in);
 	pheno.close();
