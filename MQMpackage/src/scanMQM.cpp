@@ -197,8 +197,23 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
 } /* end of function R_scanMQM */
 
 int main(){
-
+	using namespace std;
+	char *genofile = "geno.dat";
+	char *phenofile = "pheno.dat";
+	char *mposfile = "markerpos.txt";
+	char *chrfile = "chrid.dat";
+	int test;
 	
+	ifstream geno(genofile, ios::in);
+		geno >> test;
+		printF(test);
+	geno.close();
+	ifstream pheno(genofile, ios::in);
+	pheno.close();
+	ifstream mpos(genofile, ios::in);
+	mpos.close();
+	ifstream chr(genofile, ios::in);
+	chr.close();
 	return 1;
 }
 
