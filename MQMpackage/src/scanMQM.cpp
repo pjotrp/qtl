@@ -196,4 +196,11 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
    scanMQM(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,*crosstype,*domi);
 } /* end of function R_scanMQM */
 
+int main(){
+
+	
+	return 1;
+}
+
+
 }
