@@ -141,7 +141,7 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	if(domi != 0){
 		dominance='y';
 	}	
-	Rprintf("INFO: All the needed information, so lets start with the MQM\n");   
+	cout << "INFO: All the needed information, so lets start with the MQM\n";   
 	analyseF2(Nind, Nmark, &cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,cross,dominance);
 	if(re_estimate){
 		Rprintf("INFO: Sending back the reestimated map used during analysis\n");
@@ -198,24 +198,113 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
    scanMQM(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,*crosstype,*domi);
 } /* end of function R_scanMQM */
 
+int count_lines(char *file){
+	//NUM: number of elements on 1 line
+	int cnt=0;
+	char line[100];
+	ifstream file_stream(file, ios::in);
+	while (!file_stream.eof()){
+        file_stream >> line;
+		cnt++;
+	}
+	file_stream.close();
+	return cnt;
+}
+
+
 int main(){
 
 	char *genofile = "geno.dat";
 	char *phenofile = "pheno.dat";
 	char *mposfile = "markerpos.txt";
 	char *chrfile = "chrid.dat";
-	int test;
+    double **QTL;  
+	ivector f1genotype;
+	ivector chr;
+	cvector cofactor;
+	vector mapdistance;
+	cmatrix markers;
+	ivector INDlist;
+       
+	int cnt=0;
+	int cInd=0; //Curretn individual
+	int nInd;
+	int nMark;
 	
+	nInd=count_lines(phenofile);
+	printf("# of individuals: %d\n",nInd);
+	nMark=count_lines(chrfile);
+	printf("# of markers: %d\n",nMark);	
+    f1genotype = newivector(nMark);	
+	cofactor= newcvector(nMark);  
+	mapdistance= newvector(nMark);
+	markers= newcmatrix(nMark,nInd);
+	double pheno_value[nInd];
+	chr = newivector(nMark);
+	INDlist= newivector(nInd);
+	double pos[nMark];
+
+	char peek_c;
+
 	ifstream geno(genofile, ios::in);
-		geno >> test;
-		printf("TEST: %d\n",test);
+	while (!geno.eof()){
+        if(cnt < nMark){
+          	geno >> markers[cnt][cInd];
+		//	printf(" %c",markers[cnt][cInd]);
+			cnt++;
+        }else{
+		//	printf("\n");
+			cnt = 0;
+			cInd++;
+		}	
+	}
 	geno.close();
-	ifstream pheno(genofile, ios::in);
+	printf("Genotypes done %d %d\n",cInd,cnt);
+	cnt = 0;
+	ifstream pheno(phenofile, ios::in);
+	while (!pheno.eof()){
+		pheno >> pheno_value[cnt];
+	//	printf("%f\n",pheno_value[cnt]);
+		cnt++;
+	}
 	pheno.close();
-	ifstream mpos(genofile, ios::in);
+	printf("Phenotype done %d\n",cnt);
+	cnt = 0;
+	ifstream mpos(mposfile, ios::in);
+	while (!mpos.eof()){
+		peek_c=mpos.peek();
+    	if(peek_c=='\t' or peek_c == ' '){
+           	mpos >> pos[cnt];
+   //         printf("%f\n",pos[cnt]);
+            cnt++;
+		}else{
+            mpos >> peek_c;
+        }
+	}	
 	mpos.close();
-	ifstream chr(genofile, ios::in);
-	chr.close();
+
+    printf("Positions done %d\n",cnt);	
+	cnt = 0;	
+	ifstream chrstr(chrfile, ios::in);
+	while (!chrstr.eof()){
+		chrstr >> chr[cnt];
+//		printf("%d\n",chr[cnt]);
+		cnt++;
+	}
+	chrstr.close();
+	printf("Chromosomes done %d\n",cnt);
+	for(int i=0; i< nMark; i++){
+    	cofactor[i] = '0';
+    	f1genotype[nMark] = 12;
+    	mapdistance[i]=999.0;
+		mapdistance[i]=pos[i];
+    }
+	for(int i=0; i< nInd; i++){
+    	INDlist[i] = i;
+    }
+ 	printf("Cofactor done, starting analyseF2\n",cnt);
+	//ALL information is read in or calculated, so we gonna start MQM, however Rprintf crashes MQM
+   	analyseF2(nInd, nMark, &cofactor, markers, pheno_value, f1genotype, 0,QTL, &mapdistance,&chr,0,0,5,5,0,220,0.05,1000,0,&INDlist,0,1,0);
 	return 1;
 }
 
