@@ -302,7 +302,8 @@ int main(){
 	for(int i=0; i< nInd; i++){
     	INDlist[i] = i;
     }
- 	printf("Cofactor done, starting analyseF2\n",cnt);
+
+ 	Rprintf("Cofactor done, starting analyseF2\n",cnt);
 	//ALL information is read in or calculated, so we gonna start MQM, however Rprintf crashes MQM
    	analyseF2(nInd, nMark, &cofactor, markers, pheno_value, f1genotype, 0,QTL, &mapdistance,&chr,0,0,5,5,0,220,0.05,1000,0,&INDlist,0,1,0);
 	return 1;
