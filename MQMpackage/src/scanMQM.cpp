@@ -15,6 +15,13 @@ using namespace std;
 #include <fstream>
 #include <iostream>
 
+// #define PACKAGE
+
+#ifdef PACKAGE
+        #undef printf
+        #define printf(args...) Rprintf(args)
+#endif
+
 extern "C"
 {
 #include <R.h>
@@ -303,7 +310,7 @@ int main(){
     	INDlist[i] = i;
     }
 
- 	Rprintf("Cofactor done, starting analyseF2\n",cnt);
+ 	printf("Cofactor done, starting analyseF2\n",cnt);
 	//ALL information is read in or calculated, so we gonna start MQM, however Rprintf crashes MQM
    	analyseF2(nInd, nMark, &cofactor, markers, pheno_value, f1genotype, 0,QTL, &mapdistance,&chr,0,0,5,5,0,220,0.05,1000,0,&INDlist,0,1,0);
 	return 1;
