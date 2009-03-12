@@ -93,10 +93,10 @@ double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,
 				Nrecom= absdouble((double)loci[j][i]-(double)compareto);
 				if(Nrecom==0){
 					//No recombination has a chance of r[j]
-					calc_i = (1.0-r[j+ADJ]);
+					calc_i = 1.0-r[j+ADJ];
 				}else{
 					// Recombination between markers has a chance of r[j-1]
-					calc_i = r[j+ADJ]*r[j+ADJ];
+					calc_i = r[j+ADJ];
 				}
 			break;
 		case 'B':
@@ -214,14 +214,14 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position,c
 					if(nrecom==0){
 						return (1.0-r[jloc]);
 					}else{
-						return r[jloc]*r[jloc];
+						return r[jloc];
 					}
 				}else{
 					if(c=='0'){//Both markers could have recombinated which has a very low chance
 						prob0= (1.0-r[jloc]);
-						prob2= r[jloc]*r[jloc]; 
+						prob2= r[jloc]; 
 					}else{
-						prob0= r[jloc]*r[jloc];
+						prob0= r[jloc];
 						prob2= (1.0-r[jloc]);
 					}
 					return prob0*probright('0',jloc+1,imarker,r,position,crosstype) + prob2*probright('2',jloc+1,imarker,r,position,crosstype);

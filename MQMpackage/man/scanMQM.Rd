@@ -40,7 +40,7 @@ Normal layout of MQM-QTL analysis
 \item Rerun analysis with cofactors
 \item Bootstrap analysis with cofactors to get estimates of QTL significance
 }
-Using ML or Reduced ML the algorithm employs a forward- or backward selection strategy to identify QTL hotspot. The algorithm passes through the following stages:
+Using ML or Reduced ML the algorithm employs a backward selection strategy to identify QTL hotspot. The algorithm passes through the following stages:
 \itemize{
 \item Calculating relative marker positions
 \item (Re)Estimating recombinant frequencies
