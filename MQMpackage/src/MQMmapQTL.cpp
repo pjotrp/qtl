@@ -29,7 +29,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
 			  vector r, ivector ind, int Naug, double variance, char printoutput,vector *informationcontent,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance,int em, double windowsize,double stepsize,
 			  double stepmin,double stepmax,char crosstype)
 {      
-       Rprintf("INFO: mapQTL function called.\n");
+       printf("INFO: mapQTL function called.\n");
        int Nloci, j, jj, jjj=0;
        vector Fy;
        Fy= newvector(Naug);
@@ -257,7 +257,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
               QTLlikelihood+=2.0*QTLmixture(QTLloci,QTLcofactor,QTLr,QTLposition,y,ind,Nind,Naug,Nloci,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
 			  //this is the place we error at, because the likelyhood is not correct.
 			  if (QTLlikelihood<-0.05) { 
-				Rprintf("WARNING: Negative QTLlikelihood=%f versus BASE MODEL: %f\nThis applies to the QTL at %d\n",QTLlikelihood,savebaseNoQTLModel,j); //return 0;}	
+				printf("WARNING: Negative QTLlikelihood=%f versus BASE MODEL: %f\nThis applies to the QTL at %d\n",QTLlikelihood,savebaseNoQTLModel,j); //return 0;}	
 			  }
               maxF= (maxF<QTLlikelihood ? QTLlikelihood : maxF);
               if (run>0) (*Frun)[step][run]+= QTLlikelihood;

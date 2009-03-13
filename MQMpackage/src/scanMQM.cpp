@@ -125,7 +125,7 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 			cof_cnt++;
 		}
 		if(cof_cnt+10 > Nind){
-			Rprintf("ERROR: Setting this many cofactors would leave less than 10 degrees of freedom.\n");
+			printf("ERROR: Setting this many cofactors would leave less than 10 degrees of freedom.\n");
 			return;
 		}
 	}
@@ -138,7 +138,7 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	char cross = determin_cross(&Nmark,&Nind,Geno,&crosstype);
 	//set dominance accordingly
 	if(cross != 'F'){
-		Rprintf("INFO: Dominance setting ignored (dominance=0)\n");   
+		printf("INFO: Dominance setting ignored (dominance=0)\n");   
 		domi = 0;
 	}else{
 		domi= domi;
@@ -148,21 +148,21 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	if(domi != 0){
 		dominance='y';
 	}	
-	cout << "INFO: All the needed information, so lets start with the MQM\n";   
+	printf("INFO: All the needed information, so lets start with the MQM\n");
 	analyseF2(Nind, Nmark, &cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,cross,dominance);
 	if(re_estimate){
-		Rprintf("INFO: Sending back the reestimated map used during analysis\n");
+		printf("INFO: Sending back the reestimated map used during analysis\n");
 		for(int i=0; i< Nmark; i++){
 			Dist[0][i]=mapdistance[i];
 		}
 	}
 	if(Backwards){
-		Rprintf("INFO: Sending back the model\n");
+		printf("INFO: Sending back the model\n");
 		for(int i=0; i< Nmark; i++){
 			Cofactors[0][i]=cofactor[i];
 		}
 	}	
-	//Rprintf("Starting Cleanup\n");
+	//printf("Starting Cleanup\n");
 	delcmatrix(markers,Nmark);
 	Free(f1genotype);
 	Free(cofactor);

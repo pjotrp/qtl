@@ -39,9 +39,9 @@ double rmixture(cmatrix marker, vector weight, vector r,
     distance= newvector(Nmark+1);
 
     if (reestimate=='n'){
-		Rprintf("INFO: recombination parameters are not re-estimated\n");
+		printf("INFO: recombination parameters are not re-estimated\n");
     }else{
-		Rprintf("INFO: recombination parameters are re-estimated\n");
+		printf("INFO: recombination parameters are re-estimated\n");
 	}
 	//Reestimation of map now works
      while ((iem<1000)&&(rdelta>0.0001))
@@ -115,7 +115,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
 			//Rprintf("r(%d)= %f -> %f\n",j,r[j],(*mapdistance)[j]);
 		}
 	}
-	Rprintf("INFO: Re-estimation of the genetic map took %d iterations, to reach a rdelta of %f\n",iem,rdelta);
+	printf("INFO: Re-estimation of the genetic map took %d iterations, to reach a rdelta of %f\n",iem,rdelta);
 	Free(indweight);
 	return maximum;
 }
@@ -142,7 +142,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 	varknown= (((*variance)==-1.0) ? 'n' : 'y' );
     Ploci= newvector(newNaug);	
     if ((REMLorML=='0')&&(varknown=='n')){ 
-		Rprintf("INFO: Variance is being estimated and bias adjusted\n");
+		printf("INFO: Variance is being estimated and bias adjusted\n");
 	}
     if (REMLorML=='1') { 
 		varknown='n'; biasadj='n'; 

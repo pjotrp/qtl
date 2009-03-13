@@ -40,7 +40,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      '3': QTL at locu j and QTL effect is included in the model
      */
 	//for (int j=0; j<Naug; j++){
-	//   Rprintf("J:%d,COF:%d,VAR:%f,WEIGHT:%f,Trait:%f,IND[j]:%d\n",j,cofactor[j],*variance,(*weight)[j],y[j],ind[j]);
+	//   printf("J:%d,COF:%d,VAR:%f,WEIGHT:%f,Trait:%f,IND[j]:%d\n",j,cofactor[j],*variance,(*weight)[j],y[j],ind[j]);
     //}
 
 	matrix XtWX;
@@ -92,7 +92,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
         }
      }
 
-    //Rprintf("calculate xtwx and xtwy\n");
+    //printf("calculate xtwx and xtwy\n");
      /* calculate xtwx and xtwy */
      double xtwj, yi, wi, calc_i;
      for (j=0; j<dimx; j++)
@@ -160,13 +160,13 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      ivector indx;
      indx= newivector(dimx);
      /* solve equations */
-     //Rprintf("LUcmp equations\nPrintinf matrix XiWX\n");
+     //printf("LUcmp equations\nPrintinf matrix XiWX\n");
     // printmatrix(XtWX,dimx,dimx);
     // Rprintf("LUcmp equations\nPrintinf indX\n");	 
 	// for (jj=0; jj<dimx; jj++){
-	//	Rprintf("%f",indx);
+	//	printf("%f",indx);
 	 //}
-	 //Rprintf("\n");	 
+	 //printf("\n");	 
 	 
 	 ludcmp(XtWX,dimx,indx,&d);
      
@@ -421,7 +421,7 @@ double inverseF(int df1, int df2, double alfa)
              else minF= halfway;
              absdiff= fabs(prob-alfa);
        }
-       Rprintf("INFO: Prob=%f Alfa=%f\n",prob,alfa);
+       printf("INFO: Prob=%f Alfa=%f\n",prob,alfa);
        return halfway;
 }
 
