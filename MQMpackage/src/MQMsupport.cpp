@@ -10,7 +10,10 @@
  * Contains: 
  *
  **********************************************************************/
- 
+using namespace std;
+#include <fstream>
+#include <iostream>
+
 extern "C"
 {
 
@@ -41,7 +44,6 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 	//char perm_simu='1';
 	ivector chr;
 	matrix Frun;
-
 	vector r;
 	r= newvector(Nmark);
     position= newcvector(Nmark);
@@ -133,6 +135,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
         }
     }
     Nmark= jj;
+  	printf("INFO: Num markers: %d",Nmark);
     for (int j=0; j<Nmark; j++){
 		r[j]= 999.0;
         if (j==0)
@@ -154,6 +157,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 			}
 		}
     }
+    printf("INFO: After dropping of uninformative cofactors\n");
     ivector newind;
     vector newy;
     cmatrix newmarker;
@@ -181,12 +185,15 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
     
 	//Re-estimation of recombinant frequencies
 	double max;
+	printf("INFO: Num markers: %d",Nmark);
 	max = rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance,reestimate,crosstype);
 	if(max > stepmax){
 		printf("ERROR: Reestimation of the map put markers at: %f Cm\n",max);
 		printf("ERROR: Rerun the algorithm with a step.max larger than %f Cm\n",max);
 		return;
-	}
+	}else{
+       printf("INFO: Reestimation of the map finished. MAX Cm: %f Cm\n",max);   
+    }
 	
 	//Check if everything still is correct
 	for (int j=0; j<Nmark; j++){
@@ -198,7 +205,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 				return;
 			}
 		}
-    }
+    } 
     /* eliminate individuals with missing trait values */
     //We can skip this part iirc because R throws out missing phenotypes beforehand
 	int oldNind=Nind;
@@ -247,12 +254,14 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
     int dimx=1;
     for (int j=0; j<Nmark; j++){
 		if ((*cofactor)[j]=='1'){
+      printf("INFO Cofactor=='1' at:%d",j);
 			dimx+= (dominance=='n' ? 1 : 2);  // per QTL only additivity !!
 		}else if ((*cofactor)[j]=='2'){
 			dimx+=1;  /* sex of the mouse */
 		}
 	}
 	double F1, F2;
+	printf("INFO: dimX:%d nInd:%d\n",dimx,Nind);  
 	F1= inverseF(1,Nind-dimx,alfa);
 	F2= inverseF(2,Nind-dimx,alfa);
 	printf("INFO: F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa\n");
@@ -281,20 +290,22 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 		}
 	}
 	//QTL likelyhood for each location
-	printf("INFO: Number of output datapoints: %d\n",Nsteps);	
+	printf("INFO: Number of output datapoints: %d\n",Nsteps);
+    //ofstream fff("MQM.output", ios::out | ios::app);	
 	for (int ii=0; ii<Nsteps; ii++){   
 		QTL[0][ii] = Frun[ii][0];
 		QTL[0][Nsteps+ii] = informationcontent[ii];
-		//printf("INFO:LOC: %d QTL: %f INFO: %f\n",ii,QTL[0][ii],QTL[0][Nsteps+ii]);	
+		//char *outline;
+		printf("LOC: %d QTL: %f INFO: %f\n",ii,QTL[0][ii],QTL[0][Nsteps+ii]);	
+		//fff << outline;
     }
-	
+    //fff.close();
 	Free(position);
 	Free(weight);
 	Free(ind);
 	delcmatrix(marker,Nmark);
 	Free(y);
 	Free(selcofactor);
-	
 	printf("INFO: Analysis of data finished\n");
 	
 	return;

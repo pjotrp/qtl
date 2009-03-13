@@ -232,7 +232,10 @@ int main(){
 	vector mapdistance;
 	cmatrix markers;
 	ivector INDlist;
-       
+    int stepmin = 0;
+    int stepmax = 220;
+    int stepsize = 5;
+
 	int cnt=0;
 	int cInd=0; //Curretn individual
 	int nInd;
@@ -257,10 +260,8 @@ int main(){
 	while (!geno.eof()){
         if(cnt < nMark){
           	geno >> markers[cnt][cInd];
-		//	printf(" %c",markers[cnt][cInd]);
 			cnt++;
         }else{
-		//	printf("\n");
 			cnt = 0;
 			cInd++;
 		}	
@@ -293,26 +294,34 @@ int main(){
     printf("Positions done %d\n",cnt);	
 	cnt = 0;	
 	ifstream chrstr(chrfile, ios::in);
+	int max_chr = 0;
 	while (!chrstr.eof()){
 		chrstr >> chr[cnt];
-//		printf("%d\n",chr[cnt]);
+        if(chr[cnt] > max_chr){
+          max_chr = chr[cnt];           
+        }
 		cnt++;
 	}
 	chrstr.close();
-	printf("Chromosomes done %d\n",cnt);
+	printf("Chromosomes done %d -> # %d Chromosomes\n",cnt,max_chr);
+    int something = 2*max_chr*(((stepmax)-(stepmin))/ (stepsize));
+    int i;
+    QTL = newmatrix(something,1);
+
 	for(int i=0; i< nMark; i++){
     	cofactor[i] = '0';
-    	f1genotype[nMark] = 12;
+    	f1genotype[i] = 12;
     	mapdistance[i]=999.0;
 		mapdistance[i]=pos[i];
     }
 	for(int i=0; i< nInd; i++){
     	INDlist[i] = i;
     }
-
+    char estmap = 'n';
+    //reorg_pheno(2*(*chromo) * (((*stepma)-(*stepmi))/ (*steps)),1,qtl,&QTL);
  	printf("Cofactor done, starting analyseF2\n",cnt);
 	//ALL information is read in or calculated, so we gonna start MQM, however Rprintf crashes MQM
-   	analyseF2(nInd, nMark, &cofactor, markers, pheno_value, f1genotype, 0,QTL, &mapdistance,&chr,0,0,5,5,0,220,0.05,1000,0,&INDlist,0,1,0);
+   	analyseF2(nInd, nMark, &cofactor, markers, pheno_value, f1genotype, 0,QTL, &mapdistance,&chr,0,0,5,5,0,220,0.05,1000,nInd,&INDlist,estmap,'F',0);
 	return 1;
 }
 

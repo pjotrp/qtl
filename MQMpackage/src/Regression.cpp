@@ -397,13 +397,13 @@ double betacf(double a, double b, double x)
           bz=1.0;
           if ( absdouble((az-aold)/az)  < 3.0e-7) return az;
       }
-      warning("a or b too big or max number of iterations too small\n");
+      printf("a or b too big or max number of iterations too small\n");
       return 0.0;
 }
 
 double betai(double a, double b, double x)
 {     double bt;
-      if (x<0.0 || x>1.0) { warning("x not between 0 and 1\n");}
+      if (x<0.0 || x>1.0) { printf("x not between 0 and 1\n");}
       if (x==0.0 || x==1.0) bt=0.0;
       else bt=exp(gammln(a+b)-gammln(a)-gammln(b)+a*log(x)+b*log(1.0-x));
       if (x<(a+1.0)/(a+b+2.0)) return bt*betacf(a,b,x)/a;
@@ -413,8 +413,11 @@ double betai(double a, double b, double x)
 double inverseF(int df1, int df2, double alfa)
 {      double prob=0.0, minF=0.0, maxF=100.0, halfway=50.0, absdiff=1.0;
        int count=0;
+       //printf("INFO: Things are still OKAY\n");  
        while ((absdiff>0.001)&&(count<100))
-       {     count++;
+       {     
+             //printf("INFO df1:%d df2:%d alpha:%f\n",df1,df2,alfa);
+             count++;
              halfway= (maxF+minF)/2.0;
              prob= betai(df2/2.0,df1/2.0,df2/(df2+df1*halfway));
              if (prob<alfa) maxF= halfway;

@@ -66,7 +66,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
 
        variance= -1.0;
        savelogL= 2.0*QTLmixture(marker,cofactor,r,position, y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
-	   //Rprintf("log-likelihood of full model= %f\n",savelogL/2);
+	   printf("log-likelihood of full model= %f\n",savelogL/2);
        Nloci= Nmark+1;
        // augment data for missing QTL observations (x 3)
        fitQTL='y';
@@ -78,7 +78,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
        vector weight0;
        weight0= newvector(newNaug);
        weight0[0]= -1.0;
-    //   Rprintf("DEBUG testing_2");
+
 //       augmentdataforQTL(marker);
        vector QTLr, QTLmapdistance;
        QTLr= newvector(Nloci);
@@ -86,12 +86,14 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
        cvector QTLposition;
        QTLposition= newcvector(Nloci);
        cmatrix QTLloci;
-	   QTLloci = (char **)R_alloc(Nloci, sizeof(char *));
+     
+	   QTLloci = newcmatrix(1,Nloci);
+       //printf("DEBUG testing_2");  
        double moveQTL= stepmin;
        char nextinterval= 'n', firsttime='y';
        double maxF=0.0, savebaseNoQTLModel=0.0;
        int baseNoQTLModel=0, step=0;
-	 //  Rprintf("DEBUG testing_3");
+	 //printf("DEBUG testing_3");
        for (j=0; j<Nmark; j++){   
 	    /* 	fit a QTL in two steps:
 			1. move QTL along marker interval j -> j+1 with steps of stepsize=20 cM, starting from -20 cM up to 220 cM

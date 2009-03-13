@@ -45,8 +45,9 @@ double rmixture(cmatrix marker, vector weight, vector r,
 	}
 	//Reestimation of map now works
      while ((iem<1000)&&(rdelta>0.0001))
-     {     R_CheckUserInterrupt(); /* check for ^C */
-		   R_ProcessEvents(); /* do some windows/C stuff so R doesn't look so unresponsive */
+     {     
+           //R_CheckUserInterrupt(); /* check for ^C */
+		   //R_ProcessEvents(); /* do some windows/C stuff so R doesn't look so unresponsive */
 		  // R_FlushConsole();
 		   iem+=1;
            rdelta= 0.0;
@@ -95,7 +96,9 @@ double rmixture(cmatrix marker, vector weight, vector r,
 /*   print new estimates of recombination frequencies */
 	double maximum = 0.0;
 	float last_step = 0.0;
-    if (reestimate=='y'){  
+	//printf("INFO: Reestimate? %c\n",reestimate);
+    if (reestimate=='y'){
+        //printf("INFO: looping over all markers %d\n",Nmark);  
         for (j=0; j<Nmark; j++){
 			if(position[j+1]=='R'){
 				last_step = (*mapdistance)[j+1]-(*mapdistance)[j];
@@ -112,7 +115,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
 			if(maximum < (*mapdistance)[j]){
 				maximum = (*mapdistance)[j];
 			}
-			//Rprintf("r(%d)= %f -> %f\n",j,r[j],(*mapdistance)[j]);
+			//printf("r(%d)= %f -> %f\n",j,r[j],(*mapdistance)[j]);
 		}
 	}
 	printf("INFO: Re-estimation of the genetic map took %d iterations, to reach a rdelta of %f\n",iem,rdelta);
@@ -151,7 +154,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 		Ploci[i]= 1.0;
 	}
     if (fitQTL=='n'){
-	//Rprintf("FitQTL=N\n");	
+	    //printf("FitQTL=N\n");	
 		for (j=0; j<Nloci; j++){
 		    for (i=0; i<Naug; i++) 
 			Ploci[i]*= Pscale;
@@ -160,6 +163,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 				for (i=0; i<Naug; i++){
 					calc_i= prob(loci,r,i,j,'1',crosstype,1,0,1);
 					Ploci[i]*= calc_i;
+					//printf("%f\n",calc_i);
 				}
 			}
 		    if ((position[j]=='L')||(position[j]=='M')){
@@ -170,7 +174,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 			}
 		}
 	}else{
-	//Rprintf("FitQTL=Y\n");	
+	//printf("FitQTL=Y\n");	
      for (j=0; j<Nloci; j++)
      {    for (i=0; i<Naug; i++)
           {   Ploci[i]*= Pscale; Ploci[i+Naug]*= Pscale; Ploci[i+2*Naug]*= Pscale;
@@ -243,18 +247,18 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
            }
         }
      }
-	// Rprintf("Weights done\n");
-     //Rprintf("Individual->trait->cofactor->weight\n");
-    // for (int j=0; j<Nind; j++){
-	//    Rprintf("%d->%f,%d,%f\n",j,y[j],cofactor[j],(*weight)[j]);
-	 //}	
+	//printf("Weights done\n");
+    //printf("Individual->trait->cofactor->weight\n");
+    //for (int j=0; j<Nind; j++){
+	//  printf("%d->%f,%d,%f %f\n",j,y[j],cofactor[j],(*weight)[j],Ploci[j]);
+	//}	
      double logL=0;
      vector indL;
      indL= newvector(Nind);
      while ((iem<em)&&(delta>1.0e-5))
      {  
-		R_CheckUserInterrupt(); /* check for ^C */
-		R_ProcessEvents();
+		//R_CheckUserInterrupt(); /* check for ^C */
+		//R_ProcessEvents();
 		//R_FlushConsole();
            iem+=1;
            if (varknown=='n') *variance=-1.0;
@@ -294,7 +298,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
            delta= absdouble(logL-oldlogL);
            oldlogL= logL;
      }
-  //   Rprintf("EM Finished\n");
+     //printf("EM Finished\n");
      // bias adjustment after finished ML estimation via EM
      if ((REMLorML=='0')&&(varknown=='n'))
      {  
@@ -338,7 +342,9 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
            }
         }
      }
-	// for (i=0; i<Nind; i++) Rprintf("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n",i,Ploci[i],Fy[i],indL[i],log(indL[i]),log(indL[i])-logP);
+	//for (i=0; i<Nind; i++){
+    //    printf("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n",i,Ploci[i],Fy[i],indL[i],log(indL[i]),log(indL[i])-logP);
+    //}
 	Free(Fy);
 	Free(Ploci);
 	Free(indweight);
