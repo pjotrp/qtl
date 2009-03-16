@@ -292,8 +292,9 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 	//QTL likelyhood for each location
 	printf("INFO: Number of output datapoints: %d\n",Nsteps);
     //ofstream fff("MQM.output", ios::out | ios::app);	
-	for (int ii=0; ii<Nsteps; ii++){   
-		QTL[0][ii] = Frun[ii][0];
+	for (int ii=0; ii<Nsteps; ii++){ 
+		//Convert LR to LOD before sending back
+		QTL[0][ii] = Frun[ii][0] / 4.60517;
 		QTL[0][Nsteps+ii] = informationcontent[ii];
 		//char *outline;
 		printf("LOC: %d QTL: %f INFO: %f\n",ii,QTL[0][ii],QTL[0][Nsteps+ii]);	
