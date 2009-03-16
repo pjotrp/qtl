@@ -29,7 +29,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
 			  vector r, ivector ind, int Naug, double variance, char printoutput,vector *informationcontent,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance,int em, double windowsize,double stepsize,
 			  double stepmin,double stepmax,char crosstype)
 {      
-       printf("INFO: mapQTL function called.\n");
+       Rprintf("INFO: mapQTL function called.\n");
        int Nloci, j, jj, jjj=0;
        vector Fy;
        Fy= newvector(Naug);
@@ -66,7 +66,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
 
        variance= -1.0;
        savelogL= 2.0*QTLmixture(marker,cofactor,r,position, y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
-	   printf("log-likelihood of full model= %f\n",savelogL/2);
+	   Rprintf("log-likelihood of full model= %f\n",savelogL/2);
        Nloci= Nmark+1;
        // augment data for missing QTL observations (x 3)
        fitQTL='y';
@@ -85,21 +85,28 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
        QTLmapdistance= newvector(Nloci);
        cvector QTLposition;
        QTLposition= newcvector(Nloci);
-       cmatrix QTLloci;
-     
+	   cmatrix QTLloci;
+	//MAYOR ERRORS WHEN USING ANYTHING OTHER THAN R_ALLOC for QTLloci (perhaps Calloc ??)
+	#ifndef ALONE
+	   QTLloci = (char **)R_alloc(Nloci, sizeof(char *));
+	#endif
+	#ifdef ALONE
 	   QTLloci = newcmatrix(1,Nloci);
-       //printf("DEBUG testing_2");  
+	#endif
+       //Rprintf("DEBUG testing_2");  
        double moveQTL= stepmin;
        char nextinterval= 'n', firsttime='y';
        double maxF=0.0, savebaseNoQTLModel=0.0;
        int baseNoQTLModel=0, step=0;
-	 //printf("DEBUG testing_3");
+	 //Rprintf("DEBUG testing_3");
        for (j=0; j<Nmark; j++){   
 	    /* 	fit a QTL in two steps:
 			1. move QTL along marker interval j -> j+1 with steps of stepsize=20 cM, starting from -20 cM up to 220 cM
 			2. all marker-cofactors in the neighborhood of the QTL are dropped by using cM='windows' as criterium
 		*/
-         nextinterval= 'n';
+        nextinterval= 'n';
+		R_CheckUserInterrupt(); /* check for ^C */
+		R_ProcessEvents(); /*  Try not to crash windows etc*/
          while (nextinterval=='n')
          { // step 1:
 		//   Rprintf("DEBUG testing STEP 1");
@@ -259,7 +266,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
               QTLlikelihood+=2.0*QTLmixture(QTLloci,QTLcofactor,QTLr,QTLposition,y,ind,Nind,Naug,Nloci,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
 			  //this is the place we error at, because the likelyhood is not correct.
 			  if (QTLlikelihood<-0.05) { 
-				printf("WARNING: Negative QTLlikelihood=%f versus BASE MODEL: %f\nThis applies to the QTL at %d\n",QTLlikelihood,savebaseNoQTLModel,j); //return 0;}	
+				Rprintf("WARNING: Negative QTLlikelihood=%f versus BASE MODEL: %f\nThis applies to the QTL at %d\n",QTLlikelihood,savebaseNoQTLModel,j); //return 0;}	
 			  }
               maxF= (maxF<QTLlikelihood ? QTLlikelihood : maxF);
               if (run>0) (*Frun)[step][run]+= QTLlikelihood;
@@ -303,7 +310,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
     Free(QTLcofactor);
 	Free(cumdistance);
 	Free(QTLmapdistance);
-    //Rprintf("MapQTL finished\n");
+    //RRprintf("MapQTL finished\n");
     return maxF; //QTLlikelihood;
 }
  

@@ -15,11 +15,11 @@ using namespace std;
 #include <fstream>
 #include <iostream>
 
-// #define PACKAGE
+//#define ALONE
 
-#ifdef PACKAGE
-        #undef printf
-        #define printf(args...) Rprintf(args)
+#ifdef ALONE
+       #undef Rprintf
+       #define Rprintf(args...) printf(args)
 #endif
 
 extern "C"
@@ -125,7 +125,7 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 			cof_cnt++;
 		}
 		if(cof_cnt+10 > Nind){
-			printf("ERROR: Setting this many cofactors would leave less than 10 degrees of freedom.\n");
+			Rprintf("ERROR: Setting this many cofactors would leave less than 10 degrees of freedom.\n");
 			return;
 		}
 	}
@@ -138,7 +138,7 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	char cross = determin_cross(&Nmark,&Nind,Geno,&crosstype);
 	//set dominance accordingly
 	if(cross != 'F'){
-		printf("INFO: Dominance setting ignored (dominance=0)\n");   
+		Rprintf("INFO: Dominance setting ignored (dominance=0)\n");   
 		domi = 0;
 	}else{
 		domi= domi;
@@ -148,25 +148,28 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	if(domi != 0){
 		dominance='y';
 	}	
-	printf("INFO: All the needed information, so lets start with the MQM\n");
+	Rprintf("INFO: All the needed information, so lets start with the MQM\n");
 	analyseF2(Nind, Nmark, &cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,cross,dominance);
 	if(re_estimate){
-		printf("INFO: Sending back the reestimated map used during analysis\n");
+		Rprintf("INFO: Sending back the reestimated map used during analysis\n");
 		for(int i=0; i< Nmark; i++){
 			Dist[0][i]=mapdistance[i];
 		}
 	}
 	if(Backwards){
-		printf("INFO: Sending back the model\n");
+		Rprintf("INFO: Sending back the model\n");
 		for(int i=0; i< Nmark; i++){
 			Cofactors[0][i]=cofactor[i];
 		}
 	}	
-	//printf("Starting Cleanup\n");
+	//Rprintf("Starting Cleanup\n");
 	delcmatrix(markers,Nmark);
 	Free(f1genotype);
 	Free(cofactor);
 	Free(mapdistance);
+	Rprintf("INFO: All done in C returning to R\n");
+	R_CheckUserInterrupt(); /* check for ^C */
+	R_ProcessEvents(); /*  Try not to crash windows etc*/
 	return;
 }  /* end of function scanMQM */
 
@@ -242,9 +245,9 @@ int main(){
 	int nMark;
 	
 	nInd=count_lines(phenofile);
-	printf("# of individuals: %d\n",nInd);
+	Rprintf("# of individuals: %d\n",nInd);
 	nMark=count_lines(chrfile);
-	printf("# of markers: %d\n",nMark);	
+	Rprintf("# of markers: %d\n",nMark);	
     f1genotype = newivector(nMark);	
 	cofactor= newcvector(nMark);  
 	mapdistance= newvector(nMark);
@@ -267,23 +270,23 @@ int main(){
 		}	
 	}
 	geno.close();
-	printf("Genotypes done %d %d\n",cInd,cnt);
+	Rprintf("Genotypes done %d %d\n",cInd,cnt);
 	cnt = 0;
 	ifstream pheno(phenofile, ios::in);
 	while (!pheno.eof()){
 		pheno >> pheno_value[cnt];
-	//	printf("%f\n",pheno_value[cnt]);
+	//	Rprintf("%f\n",pheno_value[cnt]);
 		cnt++;
 	}
 	pheno.close();
-	printf("Phenotype done %d\n",cnt);
+	Rprintf("Phenotype done %d\n",cnt);
 	cnt = 0;
 	ifstream mpos(mposfile, ios::in);
 	while (!mpos.eof()){
 		peek_c=mpos.peek();
     	if(peek_c=='\t' or peek_c == ' '){
            	mpos >> pos[cnt];
-   //         printf("%f\n",pos[cnt]);
+   //         Rprintf("%f\n",pos[cnt]);
             cnt++;
 		}else{
             mpos >> peek_c;
@@ -291,7 +294,7 @@ int main(){
 	}	
 	mpos.close();
 
-    printf("Positions done %d\n",cnt);	
+    Rprintf("Positions done %d\n",cnt);	
 	cnt = 0;	
 	ifstream chrstr(chrfile, ios::in);
 	int max_chr = 0;
@@ -303,7 +306,7 @@ int main(){
 		cnt++;
 	}
 	chrstr.close();
-	printf("Chromosomes done %d -> # %d Chromosomes\n",cnt,max_chr);
+	Rprintf("Chromosomes done %d -> # %d Chromosomes\n",cnt,max_chr);
     int something = 2*max_chr*(((stepmax)-(stepmin))/ (stepsize));
     int i;
     QTL = newmatrix(something,1);
@@ -319,7 +322,7 @@ int main(){
     }
     char estmap = 'n';
     //reorg_pheno(2*(*chromo) * (((*stepma)-(*stepmi))/ (*steps)),1,qtl,&QTL);
- 	printf("Cofactor done, starting analyseF2\n",cnt);
+ 	Rprintf("Cofactor done, starting analyseF2\n",cnt);
 	//ALL information is read in or calculated, so we gonna start MQM, however Rprintf crashes MQM
    	analyseF2(nInd, nMark, &cofactor, markers, pheno_value, f1genotype, 0,QTL, &mapdistance,&chr,0,0,5,5,0,220,0.05,1000,nInd,&INDlist,estmap,'F',0);
 	return 1;

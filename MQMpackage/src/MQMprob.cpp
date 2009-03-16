@@ -51,10 +51,10 @@ double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,
 	char compareto;
 	
 	if(JorC==1){
-		//printf("C %d %d\n",i,j);
+		//Rprintf("C %d %d\n",i,j);
 		compareto = c;
 	}else{
-		//printf("loci[j+1][i] %d\n",j);
+		//Rprintf("loci[j+1][i] %d\n",j);
 		compareto = loci[j+1][i];
 	}
 	switch(crosstype){
@@ -62,26 +62,26 @@ double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,
 				if(start){
 					return (loci[j][i]=='1' ? 0.5 : 0.25);
 				}
-				//printf("before Nrecom\n",j);				
+				//Rprintf("before Nrecom\n",j);				
 				Nrecom= absdouble((double)loci[j][i]-(double)compareto);
 				if ((loci[j][i]=='1')&&(compareto=='1')){
-					//printf("SCase %c <-> %c:\n",compareto,loci[j][i]);
+					//Rprintf("SCase %c <-> %c:\n",compareto,loci[j][i]);
 					calc_i= (r[j+ADJ]*r[j+ADJ]+(1.0-r[j+ADJ])*(1.0-r[j+ADJ]));}
 				else if (Nrecom==0) {
-					//printf("Nrecom=0 %c <-> %c:\n",compareto,loci[j][i]);
+					//Rprintf("Nrecom=0 %c <-> %c:\n",compareto,loci[j][i]);
 					calc_i= (1.0-r[j+ADJ])*(1.0-r[j+ADJ]);
 				}else if (Nrecom==1) {
-					//printf("Nrecom=1 %c <-> %c:\n",compareto,loci[j][i]);
+					//Rprintf("Nrecom=1 %c <-> %c:\n",compareto,loci[j][i]);
 					if(ADJ!=0){
 						calc_i= ((loci[j][i]=='1') ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
 					}else{
 						calc_i= ((compareto=='1') ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
 					}
 				}else {
-					//printf("Nrecom=2 %c <-> %c:\n",compareto,loci[j][i]);
+					//Rprintf("Nrecom=2 %c <-> %c:\n",compareto,loci[j][i]);
 					calc_i= r[j+ADJ]*r[j+ADJ];
 				}
-				//printf("after IF\n",j);
+				//Rprintf("after IF\n",j);
 			break;
 		case 'R':
 				if(start){
@@ -250,7 +250,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position,c
 				}
 			break;
 	}
-	return 0.0;
+	return 1.0;
 }
 
 }

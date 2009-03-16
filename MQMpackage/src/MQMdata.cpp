@@ -28,24 +28,24 @@ char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype){
 		for(int j=0; j< *Nind; j++){
 			//Some lame ass checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
 			if(Geno[i][j] > 3 && (*crosstype) != 1){
-				printf("INFO: Stange genotype pattern, switching to F2\n");
+				Rprintf("INFO: Stange genotype pattern, switching to F2\n");
 				(*crosstype) = 1;
 				break;
 			}
 			if(Geno[i][j] == 3 && (*crosstype) == 2){
-				printf("INFO: Stange genotype pattern, switching from BC to F2\n");
+				Rprintf("INFO: Stange genotype pattern, switching from BC to F2\n");
 				(*crosstype) = 1;
 				break;
 			}
 			//IF we have a RIL and find AB then Rqtl messed up, so we have a BC genotype
 			if(Geno[i][j] == 2 && (*crosstype) == 3){
-				printf("INFO: Stange genotype pattern, switching from RISELF to BC\n");
+				Rprintf("INFO: Stange genotype pattern, switching from RISELF to BC\n");
 				(*crosstype) = 2;
 				break;
 			}
 			
 		}
-		//printf("\n");
+		//Rprintf("\n");
 	}
 	
 	char cross = 'F';
@@ -95,7 +95,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	double **NEWPheno;
 	int **NEWIND;
 	int prior = *Nind;
-	printf("INFO: Starting C-part of the dataaugmentation routine\n");
+	Rprintf("INFO: Starting C-part of the dataaugmentation routine\n");
 	ivector new_ind;
     vector new_y,r,mapdistance;
 	cvector position;
@@ -123,7 +123,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	change_coding(Nmark,Nind,Geno,markers);
 	
 	char cross = determin_cross(Nmark,Nind,Geno,crosstype);
-	printf("INFO: Filling the chromosome matrix\n");
+	Rprintf("INFO: Filling the chromosome matrix\n");
 
 	for(int i=0; i<(*Nmark); i++){
 		//Set some general information structures per marker
@@ -132,7 +132,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		chr[i] = Chromo[0][i];
 	}
 
-	printf("INFO: Calculating relative genomepositions of the markers\n");
+	Rprintf("INFO: Calculating relative genomepositions of the markers\n");
     for (int j=0; j<(*Nmark); j++)
     {   
         if (j==0)
@@ -145,18 +145,18 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
         { if (chr[j]==chr[j+1]) position[j]='L'; else position[j]='U'; }
     }
 
-	printf("INFO: Estimating recombinant frequencies\n");
+	Rprintf("INFO: Estimating recombinant frequencies\n");
 	for (int j=0; j<(*Nmark); j++){   
 		r[j]= 999.0;
 		if ((position[j]=='L')||(position[j]=='M')){
 			r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
 			if (r[j]<0){
-				printf("ERROR: Recombination frequency is negative\n");
-				printf("ERROR: Position=%d r[j]=%d\n",position[j], r[j]);
+				Rprintf("ERROR: Recombination frequency is negative\n");
+				Rprintf("ERROR: Position=%d r[j]=%f\n",position[j], r[j]);
 				return;
 			}
 		}
-		//Rprintf("recomfreq:%d,%f\n",j,r[j]);
+		//RRprintf("recomfreq:%d,%f\n",j,r[j]);
     }
 
 	if(augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r,*maxaug,*maxiaug,*neglect,cross)==1){
@@ -190,11 +190,11 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		Free(position);
 		Free(r);
 		Free(chr);
-		printf("INFO: Data augmentation finished succesfull\n");
-		printf("# Unique individuals before augmentation:%d\n",prior);
-		printf("# Unique selected individuals:%d\n",*Nind);
-		printf("# Marker p individual:%d\n",*Nmark);
-		printf("# Individuals after augmentation:%d\n",*Naug);
+		Rprintf("INFO: Data augmentation finished succesfull\n");
+		Rprintf("# Unique individuals before augmentation:%d\n",prior);
+		Rprintf("# Unique selected individuals:%d\n",*Nind);
+		Rprintf("# Marker p individual:%d\n",*Nmark);
+		Rprintf("# Individuals after augmentation:%d\n",*Naug);
 	}else{
 		//Unsuccessfull data augmentation exit
 		*Naug = *Nind;
@@ -255,8 +255,8 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
     vector newprob, newprobmax;
     newprob= newvector(*Naug);
     newprobmax= newvector(*Naug);
-	printf("INFO: Crosstype determined by the algorithm:%c:\n",crosstype);
-	printf("INFO: Augmentation parameters: Maximum augmentation=%d,Maximum augmentation per individual=%d,Neglect=%f\n",maxNaug, imaxNaug, neglect);
+	Rprintf("INFO: Crosstype determined by the algorithm:%c:\n",crosstype);
+	Rprintf("INFO: Augmentation parameters: Maximum augmentation=%d,Maximum augmentation per individual=%d,Neglect=%f\n",maxNaug, imaxNaug, neglect);
     // ---- foreach individual create one in the newmarker matrix
     for (int i=0; i<(*Nind); i++)
     {   newind[iaug]=i-((*Nind)-newNind);  // index of individuals
@@ -490,8 +490,8 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
 
                    if (iaug+3>maxNaug)
                    {       
-                    printf("ERROR: Dataset too large after augmentation\n");
-                    printf("INFO: Recall procedure with larger value for augmentation parameters or lower the parameter neglect\n");
+                    Rprintf("ERROR: Dataset too large after augmentation\n");
+                    Rprintf("INFO: Recall procedure with larger value for augmentation parameters or lower the parameter neglect\n");
 					// Better not free them, we don't know if the arrays already contain something, perhaps not... then we would segfault in R
 					//Free(newy);
 					//Free(newmarker);
@@ -505,7 +505,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
              if ((iaug-saveiaug+1)>imaxNaug)
              {  newNind-= 1;
                 iaug= saveiaug-1;
-				printf("INFO: Individual %d is eliminated\n",i);
+				Rprintf("INFO: Individual %d is eliminated\n",i);
              }
              sumprob= 0.0;
              for (int ii=saveiaug; ii<=iaug; ii++) sumprob+= newprob[ii];
@@ -577,9 +577,9 @@ void printmatrix(matrix m, int rows, int cols){
       
 	for (int r=0; r<rows; r++){
 		for (int c=0; c<cols; c++){
-			printf("%f\t",m[r][c]);
+			Rprintf("%f\t",m[r][c]);
 		}
-        printf("\n");
+        Rprintf("\n");
 	}
 }
 
@@ -587,9 +587,9 @@ void printcmatrix(cmatrix m, int rows, int cols){
       
 	for (int r=0; r<rows; r++){   
 		for (int c=0; c<cols; c++){
-			printf("%c\t",m[r][c]);
+			Rprintf("%c\t",m[r][c]);
 		}
-        printf("\n");
+        Rprintf("\n");
 	}
 }
 

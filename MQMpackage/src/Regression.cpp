@@ -40,7 +40,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      '3': QTL at locu j and QTL effect is included in the model
      */
 	//for (int j=0; j<Naug; j++){
-	//   printf("J:%d,COF:%d,VAR:%f,WEIGHT:%f,Trait:%f,IND[j]:%d\n",j,cofactor[j],*variance,(*weight)[j],y[j],ind[j]);
+	//   Rprintf("J:%d,COF:%d,VAR:%f,WEIGHT:%f,Trait:%f,IND[j]:%d\n",j,cofactor[j],*variance,(*weight)[j],y[j],ind[j]);
     //}
 
 	matrix XtWX;
@@ -92,7 +92,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
         }
      }
 
-    //printf("calculate xtwx and xtwy\n");
+    //Rprintf("calculate xtwx and xtwy\n");
      /* calculate xtwx and xtwy */
      double xtwj, yi, wi, calc_i;
      for (j=0; j<dimx; j++)
@@ -160,14 +160,15 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      ivector indx;
      indx= newivector(dimx);
      /* solve equations */
-     //printf("LUcmp equations\nPrintinf matrix XiWX\n");
+     //Rprintf("LUcmp equations\nPrintinf matrix XiWX\n");
     // printmatrix(XtWX,dimx,dimx);
     // Rprintf("LUcmp equations\nPrintinf indX\n");	 
 	// for (jj=0; jj<dimx; jj++){
-	//	printf("%f",indx);
+	//	Rprintf("%f",indx);
 	 //}
-	 //printf("\n");	 
-	 
+	 //Rprintf("\n");	 
+	 R_CheckUserInterrupt(); /* check for ^C */
+	 R_ProcessEvents(); /*  Try not to crash windows etc*/
 	 ludcmp(XtWX,dimx,indx,&d);
      
 	 //Rprintf("LUsolve equations\nPrintinf indX\n");	 
@@ -284,7 +285,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
 		
 		logL+= log(indL[i]);
 	}
-	//Rprintf("LLhood: %f\n",logL);
+	//RRprintf("LLhood: %f\n",logL);
 	Free(indL);
     Free(indx);
     Free(xtQTL);
@@ -306,7 +307,7 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d)
     vector scale, swap;
     scale= newvector(dim);
     *d=1;
-  //  Rprintf("dim: %d, d: %d\n",dim,*d);
+  //  RRprintf("dim: %d, d: %d\n",dim,*d);
     for (r=0; r<dim; r++)
     {   for (max=0.0, c=0; c<dim; c++) if ((temp=fabs(m[r][c])) > max) max=temp;
         if (max==0.0) {warning("Singular matrix.");}
@@ -397,13 +398,13 @@ double betacf(double a, double b, double x)
           bz=1.0;
           if ( absdouble((az-aold)/az)  < 3.0e-7) return az;
       }
-      printf("a or b too big or max number of iterations too small\n");
+      Rprintf("a or b too big or max number of iterations too small\n");
       return 0.0;
 }
 
 double betai(double a, double b, double x)
 {     double bt;
-      if (x<0.0 || x>1.0) { printf("x not between 0 and 1\n");}
+      if (x<0.0 || x>1.0) { Rprintf("x not between 0 and 1\n");}
       if (x==0.0 || x==1.0) bt=0.0;
       else bt=exp(gammln(a+b)-gammln(a)-gammln(b)+a*log(x)+b*log(1.0-x));
       if (x<(a+1.0)/(a+b+2.0)) return bt*betacf(a,b,x)/a;
@@ -413,10 +414,10 @@ double betai(double a, double b, double x)
 double inverseF(int df1, int df2, double alfa)
 {      double prob=0.0, minF=0.0, maxF=100.0, halfway=50.0, absdiff=1.0;
        int count=0;
-       //printf("INFO: Things are still OKAY\n");  
+       //Rprintf("INFO: Things are still OKAY\n");  
        while ((absdiff>0.001)&&(count<100))
        {     
-             //printf("INFO df1:%d df2:%d alpha:%f\n",df1,df2,alfa);
+             //Rprintf("INFO df1:%d df2:%d alpha:%f\n",df1,df2,alfa);
              count++;
              halfway= (maxF+minF)/2.0;
              prob= betai(df2/2.0,df1/2.0,df2/(df2+df1*halfway));
@@ -424,7 +425,7 @@ double inverseF(int df1, int df2, double alfa)
              else minF= halfway;
              absdiff= fabs(prob-alfa);
        }
-       printf("INFO: Prob=%f Alfa=%f\n",prob,alfa);
+       Rprintf("INFO: Prob=%f Alfa=%f\n",prob,alfa);
        return halfway;
 }
 
