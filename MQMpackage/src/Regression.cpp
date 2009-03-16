@@ -3,7 +3,7 @@
  * MQMsupport.c
  *
  * copyright (c) 2009 Danny Arends
- * last modified Feb, 2009
+ * last modified Mrt, 2009
  * first written Feb, 2009
  *
  * C external functions used by the MQM algorithm
@@ -22,6 +22,7 @@
 #include "MQMdata.h"
 #include "MQMprob.h"
 #include "Regression.h"
+#include "reDefine.h"
 
 /* regression of trait on multiple cofactors  y=xb+e with weight w
 *							(xtwx)b=(xtw)y  
@@ -116,7 +117,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      for (int i=0; i<Naug; i++)
      {   wi= (*weight)[i]+ (*weight)[i+Naug]+ (*weight)[i+2*Naug];
          yi= y[i];
-		 //CHnaged <= to < to prevent chrashes, this could make calculations a tad different then before
+		 //Changed <= to < to prevent chrashes, this could make calculations a tad different then before
          for (j=0; j<dimx; j++)
          if (xtQTL[j]<='1')
          {  xtwj= ((double)Xt[j][i]-48.0)*wi;
@@ -166,11 +167,9 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
 	// for (jj=0; jj<dimx; jj++){
 	//	Rprintf("%f",indx);
 	 //}
-	 //Rprintf("\n");	 
-	 R_CheckUserInterrupt(); /* check for ^C */
-	 R_ProcessEvents(); /*  Try not to crash windows etc*/
+	 //Rprintf("\n");
 	 ludcmp(XtWX,dimx,indx,&d);
-     
+  
 	 //Rprintf("LUsolve equations\nPrintinf indX\n");	 
 	 //for (jj=0; jj<dimx; jj++){
 	//	Rprintf("%f",indx);

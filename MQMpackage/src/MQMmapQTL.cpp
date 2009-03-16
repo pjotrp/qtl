@@ -3,7 +3,7 @@
  * MQMmapQTL.c
  *
  * copyright (c) 2009 Danny Arends
- * last modified Feb, 2009
+ * last modified Mrt, 2009
  * first written Feb, 2009
  *
  * C external functions used by the MQM algorithm
@@ -23,6 +23,7 @@ extern "C"
 #include "MQMdata.h"
 #include "MQMmixture.h"
 #include "Regression.h"
+#include "reDefine.h"
 
 /* mapQTL */
 double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatrix marker, cvector position, vector mapdistance, vector y, 
@@ -105,8 +106,12 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
 			2. all marker-cofactors in the neighborhood of the QTL are dropped by using cM='windows' as criterium
 		*/
         nextinterval= 'n';
-		R_CheckUserInterrupt(); /* check for ^C */
-		R_ProcessEvents(); /*  Try not to crash windows etc*/
+		#ifndef ALONE
+			//Rprintf("TEST MQMmapQTL\n");
+			R_CheckUserInterrupt(); /* check for ^C */
+			R_FlushConsole();
+			R_ProcessEvents(); /*  Try not to crash windows etc*/
+		#endif
          while (nextinterval=='n')
          { // step 1:
 		//   Rprintf("DEBUG testing STEP 1");

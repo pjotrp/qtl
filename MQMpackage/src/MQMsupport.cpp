@@ -3,7 +3,7 @@
  * MQMsupport.c
  *
  * copyright (c) 2009 Danny Arends
- * last modified Feb, 2009
+ * last modified Mrt, 2009
  * first written Feb, 2009
  *
  * C external functions used by the MQM algorithm
@@ -28,6 +28,7 @@ extern "C"
 #include "Regression.h"
 #include "MQMmapQTL.h"
 #include "MQMmixture.h"
+#include "reDefine.h"
 
 /*
  * analyseF2 - analyse one F2/RIL/BC family
@@ -36,7 +37,8 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 			   double **QTL,vector *mapdistance,int **Chromo,int Nrun,int RMLorML, double windowsize,double stepsize,
 			   double stepmin,double stepmax,double alfa,int em,int out_Naug,int **INDlist,char reestimate,char crosstype,char dominance)
 {    
-    int Naug;
+    Rprintf("INFO: Starting C-part of the MQM analysis\n");
+	int Naug;
 	int run=0;
     cvector position;
 	vector informationcontent;
@@ -294,13 +296,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
     //ofstream fff("MQM.output", ios::out | ios::app);	
 	for (int ii=0; ii<Nsteps; ii++){ 
 		//Convert LR to LOD before sending back
-		if(REMLorML == '1'){
-			//ML aproach so we have LOD scores
-			QTL[0][ii] = Frun[ii][0];
-		}else{
-			//ML aproach so we have LR scores -> convert them to LOD
-			QTL[0][ii] = Frun[ii][0] / 4.60517;
-		}
+		QTL[0][ii] = Frun[ii][0] / 4.60517;
 		QTL[0][Nsteps+ii] = informationcontent[ii];
 		//char *outline;
 		//Rprintf("LOC: %d QTL: %f INFO: %f\n",ii,QTL[0][ii],QTL[0][Nsteps+ii]);	
@@ -363,8 +359,12 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
 				}
 			}
 		}
+	#ifndef ALONE
+		//Rprintf("TEST BW\n");
 		R_CheckUserInterrupt(); /* check for ^C */
 		R_ProcessEvents(); /*  Try not to crash windows etc*/
+		R_FlushConsole();
+	#endif
 		if  ( ((*newcofactor)[dropj]=='1') && ( F2> 2.0*(savelogL-maxlogL)) ){   
 			savelogL= maxlogL;
 			(*newcofactor)[dropj]= '0'; Ncof-=1;

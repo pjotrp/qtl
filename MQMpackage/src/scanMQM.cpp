@@ -4,23 +4,17 @@
  *
  * copyright (c) 2009
  *
- * last modified Feb 2009
- * first written Feb 2009
+ * last modified Mrt,2009
+ * first written Feb, 2009
  *
  * C functions for the R/qtl package
  * Contains: R_scanMQM, scanMQM
  *
  **********************************************************************/
 using namespace std;
+
 #include <fstream>
 #include <iostream>
-
-//#define ALONE
-
-#ifdef ALONE
-       #undef Rprintf
-       #define Rprintf(args...) printf(args)
-#endif
 
 extern "C"
 {
@@ -29,10 +23,10 @@ extern "C"
 #include <R_ext/PrtUtil.h>
 #include <R_ext/RS.h> /* for Calloc, Realloc */
 #include <R_ext/Utils.h>
+#include <math.h>
 #include "MQMdata.h"
 #include "MQMsupport.h"
-
-//long *idum; // for monte carlo simulation or permutation
+#include "reDefine.h"
 
 double Lnormal(double residual, double variance)
 {      double Likelihood;
@@ -168,8 +162,11 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	Free(cofactor);
 	Free(mapdistance);
 	Rprintf("INFO: All done in C returning to R\n");
-	R_CheckUserInterrupt(); /* check for ^C */
-	R_ProcessEvents(); /*  Try not to crash windows etc*/
+	 #ifndef ALONE
+	 R_CheckUserInterrupt(); /* check for ^C */
+	 R_ProcessEvents(); /*  Try not to crash windows etc*/
+	 R_FlushConsole();
+	 #endif
 	return;
 }  /* end of function scanMQM */
 
@@ -286,7 +283,7 @@ int main(){
 		peek_c=mpos.peek();
     	if(peek_c=='\t' or peek_c == ' '){
            	mpos >> pos[cnt];
-   //         Rprintf("%f\n",pos[cnt]);
+          //  Rprintf("%f\n",pos[cnt]);
             cnt++;
 		}else{
             mpos >> peek_c;
@@ -322,7 +319,7 @@ int main(){
     }
     char estmap = 'n';
     //reorg_pheno(2*(*chromo) * (((*stepma)-(*stepmi))/ (*steps)),1,qtl,&QTL);
- 	Rprintf("Cofactor done, starting analyseF2\n",cnt);
+    Rprintf("INFO: Starting C-part of the MQM analysis\n");
 	//ALL information is read in or calculated, so we gonna start MQM, however Rprintf crashes MQM
    	analyseF2(nInd, nMark, &cofactor, markers, pheno_value, f1genotype, 0,QTL, &mapdistance,&chr,0,0,5,5,0,220,0.05,1000,nInd,&INDlist,estmap,'F',0);
 	return 1;

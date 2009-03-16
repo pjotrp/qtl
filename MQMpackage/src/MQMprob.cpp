@@ -3,7 +3,7 @@
  * MQMprob.c
  *
  * copyright (c) 2009 Danny Arends
- * last modified Feb, 2009
+ * last modified Mrt, 2009
  * first written Feb, 2009
  *
  * C external functions used by the MQM algorithm
@@ -25,6 +25,7 @@ extern "C"
 #include "Regression.h"
 #include "MQMmapQTL.h"
 #include "MQMmixture.h"
+#include "reDefine.h"
 
 double start_prob(char crosstype,char c){
 	switch(crosstype){
