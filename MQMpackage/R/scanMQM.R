@@ -288,12 +288,12 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 			}
 			#No error plot 2
 			if(!e){
-				info_c[,3]<- info_c[,5]
-				plot(qtl,info_c,lwd=1)
-				labels <- c(paste("QTL",colnames(cross$pheno)[pheno.col]),"QTL * Info")
-				legend("topright", labels,col=c("black","blue"),lty=c(1,1))
+				plot.MQMone(qtl)
 			}else{
 				plot(qtl,lwd=1)
+				grid(max(gtl$chr),5)
+				labels <- paste("QTL",colnames(cross$pheno)[pheno.col])
+				legend("topright", labels,col=c("black"),lty=c(1))
 			}
 		}
 		#Reset the plotting window to contain 1 plot

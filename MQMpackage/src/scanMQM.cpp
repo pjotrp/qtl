@@ -305,7 +305,6 @@ int main(){
 	chrstr.close();
 	Rprintf("Chromosomes done %d -> # %d Chromosomes\n",cnt,max_chr);
     int something = 2*max_chr*(((stepmax)-(stepmin))/ (stepsize));
-    int i;
     QTL = newmatrix(something,1);
 
 	for(int i=0; i< nMark; i++){

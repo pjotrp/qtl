@@ -221,17 +221,20 @@ plot.MQMone <- function(result = NULL,result2 = NULL, extended=0,...){
 			info_l <- result
 			info_l[,3] <- result[,4]
 			plot(result,info_c,info_l,lwd=1,col=c("black","blue","red"),...)
+			grid(max(result$chr),5)
 			labels <- c(colnames(result)[3],colnames(result)[5],colnames(result)[4])
 			legend("topright", labels,col=c("black","blue","red"),lty=c(1,1,1))		
 		}else{
 			if (any(class(result2) == "scanone")){
 				#MAX 3 scanone objects
 				plot(result,info_c,result2,lwd=1)
+				grid(max(result$chr),5)
 				labels <- c(colnames(result)[3],colnames(result)[5],colnames(result2)[3])
 				legend("topright", labels,col=c("black","blue"),lty=c(1,1))
 			}else{
 				#MAX 3 scanone objects (here we now have 2)
 				plot(result,info_c,lwd=1,...)
+				grid(max(result$chr),5)
 				labels <- c(colnames(result)[3],colnames(result)[5])
 				legend("topright", labels,col=c("black","blue"),lty=c(1,1))			
 			}
