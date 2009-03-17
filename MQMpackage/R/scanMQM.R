@@ -59,12 +59,12 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 			dist <- c(dist,cross$geno[[i]]$map)
 		}
 		if(alfa <=0 || alfa >= 1){
-			stop("ERROR: Alfa must be between 0 and 1.")
-		}
-		if(n.run !=0){
-			stop("ERROR: # of runs should be positive and < 10000.")
+			stop("ERROR: Alfa must be between 0 and 1.\n")
 		}
 		#CHECK if the phenotype exists
+		if (length(pheno.col) > 1){
+			stop("ERROR: For multiple phenotype analysis use the function: 'scanMQMall'.\n")	
+		}
 		if(pheno.col != 1){
 			cat("INFO: Selected phenotype ",pheno.col,".\n")
 			cat("INFO: Number of phenotypes in object ",nphe(cross),".\n")
@@ -267,7 +267,6 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		#So we can use carls plotting routines
 		qtl <- as.data.frame(qtl)
 		class(qtl) <- c("scanone",class(qtl)) 
-		
 		cat("INFO: Saving output to file: ",file, "\n")
 		write.table(qtl,file)
 		#Reset plotting and return the results
