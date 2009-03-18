@@ -39,10 +39,17 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
        saveQTLcofactor= newcvector(Nmark+1);
        double infocontent;
        vector info0, info1, info2, weight;
+	   vector dir0, dir1, dir2;
+	   
        info0= newvector(Nind);
        info1= newvector(Nind);
        info2= newvector(Nind);
-       weight= newvector(Naug);
+       
+	   dir0= newvector(Nind);
+       dir1= newvector(Nind);
+       dir2= newvector(Nind);	   
+       
+	   weight= newvector(Naug);
        weight[0]= -1.0;
 
        /* fit QTL on top of markers (but: should also be done with routine QTLmixture() for exact ML) */
@@ -296,6 +303,29 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
               if (info0[i]<info1[i]) infocontent+= (info1[i]<info2[i] ? info2[i] : info1[i]);
               else infocontent+= (info0[i]<info2[i] ? info2[i] : info0[i]);
               (*informationcontent)[step]+=infocontent/Nind;
+			  
+			  /*
+			  TODO Insert a methode to find the direction of the QTL, we need to know which GROUP has teh highest trait values
+			  */
+			  for (int i=0; i<Nind; i++)
+              {   dir0[i]= 0.0; // qq
+                  dir1[i]= 0.0; // Qq
+                  dir2[i]= 0.0; // QQ
+              }	  
+            //  for (int i=0; i<Naug; i++)
+             // {
+				//Rprintf("%d,%d -> %c,",step,ind[i],QTLloci[0][ind[i]]);
+				//if(QTLloci[0][ind[i]]=='0'){
+			//		dir0[ind[i]] += y[i];
+		//		}
+		//		if(QTLloci[0][ind[i]]=='1'){
+	//				dir1[ind[i]] += y[i];
+	//			}
+	//			if(QTLloci[0][ind[i]]=='2'){
+	//				dir2[ind[i]] += y[i];
+	//			}				
+      //        }
+			  Rprintf("\n%d:DIR0:%f,DIR1:%f,DIR2:%f\n",step,dir0,dir1,dir2);
               step++;
            }
          }
@@ -306,6 +336,9 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
 	Free(info0);
     Free(info1);
     Free(info2);
+	Free(dir0);
+    Free(dir1);
+    Free(dir2);
     Free(weight);
     Free(weight0);
 	Free(QTLr);

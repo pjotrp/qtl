@@ -17,7 +17,7 @@
 #
 ######################################################################
 
-CrossFromMolgenis <- function(DBmarkerID=297,DBtraitID=181,DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox"){
+CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox"){
 	library("RCurl")
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
 		stop("ERROR: Please install the package RCurl from bioconductor to use the molgenis interface\n")
