@@ -261,6 +261,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 			}
 		}
 		rownames(qtl) <- names
+		cat(info)
 		qtl <- cbind(qtl,1/(min(info))*(info-min(info)))
 		qtl <- cbind(qtl,1/(min(info))*(info-min(info))*qtl[,3])
 		colnames(qtl) = c("chr","pos (Cm)",paste("QTL",colnames(cross$pheno)[pheno.col]),"Info","QTL*INFO")

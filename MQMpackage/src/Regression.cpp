@@ -77,11 +77,12 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
            jx++;
            xtQTL[jx]= '1';
         }
-        else
-        {  for (int i=0; i<Naug; i++)
-           if      (marker[j][i]=='1') { Xt[jx][i]=48; }  //ASCII code 47, 48 en 49 voor -1,0,1;
-           else if (marker[j][i]=='0') { Xt[jx][i]=47; } // '/' stands for -1
-           else                        { Xt[jx][i]=49; }
+        else{
+			for (int i=0; i<Naug; i++){
+				if      (marker[j][i]=='1') { Xt[jx][i]=48; }  //ASCII code 47, 48 en 49 voor -1,0,1;
+				else if (marker[j][i]=='0') { Xt[jx][i]=47; } // '/' stands for -1
+				else                        { Xt[jx][i]=49; }
+		   }
         }
      }
      else if (cofactor[j]=='3') // QTL
@@ -270,21 +271,27 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
     /* calculation of logL */
     // cout << "calculate logL" << endl;
     long double logL=0.0;
-    for (int i=0; i<Nind; i++) indL[i]= 0.0;
-    if (fitQTL=='n')
-    for (int i=0; i<Naug; i++) indL[ind[i]]+=(*weight)[i]*Fy[i];
-    else
-    for (int i=0; i<Naug; i++)
-    {   indL[ind[i]]+=(*weight)[i]*       Fy[i];
-        indL[ind[i]]+=(*weight)[i+Naug]*  Fy[i+Naug];
-        indL[ind[i]]+=(*weight)[i+2*Naug]*Fy[i+2*Naug];
-    }
     for (int i=0; i<Nind; i++){
+		indL[i]= 0.0;
+	}
+    if (fitQTL=='n'){
+		for (int i=0; i<Naug; i++) indL[ind[i]]+=(*weight)[i]*Fy[i];
+    }else{
+		for (int i=0; i<Naug; i++)
+		{   indL[ind[i]]+=(*weight)[i]*       Fy[i];
+			indL[ind[i]]+=(*weight)[i+Naug]*  Fy[i+Naug];
+			indL[ind[i]]+=(*weight)[i+2*Naug]*Fy[i+2*Naug];
+		}
+		
+	}
+	
+	for (int i=0; i<Nind; i++){
 		//Sum up log likelyhoods for each individual
 		
 		logL+= log(indL[i]);
 	}
 	//RRprintf("LLhood: %f\n",logL);
+	
 	Free(indL);
     Free(indx);
     Free(xtQTL);
