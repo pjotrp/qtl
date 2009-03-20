@@ -225,6 +225,7 @@ int main(){
 	char *phenofile = "pheno.dat";
 	char *mposfile = "markerpos.txt";
 	char *chrfile = "chrid.dat";
+	char *setfile = "settings.dat";
     double **QTL;  
 	ivector f1genotype;
 	ivector chr;
@@ -237,9 +238,10 @@ int main(){
     int stepsize = 5;
 
 	int cnt=0;
-	int cInd=0; //Curretn individual
+	int cInd=0; //Current individual
 	int nInd;
 	int nMark;
+	int backwards=0;
 	
 	nInd=count_lines(phenofile);
 	Rprintf("# of individuals: %d\n",nInd);
@@ -318,9 +320,44 @@ int main(){
     }
     char estmap = 'n';
     //reorg_pheno(2*(*chromo) * (((*stepma)-(*stepmi))/ (*steps)),1,qtl,&QTL);
-    Rprintf("INFO: Starting C-part of the MQM analysis\n");
+	Rprintf("INFO: Loading settings from file\n");
+	cnt = 0;
+	char *name;
+	int maxIter;
+	double windowsize,alpha;
+	
+	ifstream setstr(setfile, ios::in);
+    setstr >> stepmin;
+	Rprintf("SMin: %d\n",stepmin);
+	setstr >> stepmax;
+	Rprintf("SMax: %d\n",stepmax);	
+	setstr >> stepsize;
+	Rprintf("SSiz: %d\n",stepsize);	
+	setstr >> windowsize;
+	Rprintf("WSiz: %d\n",windowsize);	
+	setstr >> alpha;
+	Rprintf("A: %f\n",alpha);
+	setstr >> maxIter;
+	Rprintf("Miter: %d\n",maxIter);
+
+    int sum = 0;
+    for(int i=0; i< nMark; i++){
+      setstr >> cofactor[i];
+   	  if(cofactor[i] == '1'){
+      sum++;               
+      }
+    }
+    
+    if(sum > 0){
+    backwards = 1;       
+    }else{
+    backwards = 0;       
+    }
+    setstr.close();	
+	Rprintf("INFO: Cofactors %d\n",sum);
+	Rprintf("INFO: Starting C-part of the MQM analysis\n");
 	//ALL information is read in or calculated, so we gonna start MQM, however Rprintf crashes MQM
-   	analyseF2(nInd, nMark, &cofactor, markers, pheno_value, f1genotype, 0,QTL, &mapdistance,&chr,0,0,5,5,0,220,0.05,1000,nInd,&INDlist,estmap,'F',0);
+   	analyseF2(nInd, nMark, &cofactor, markers, pheno_value, f1genotype, backwards,QTL, &mapdistance,&chr,0,0,windowsize,stepsize,stepmin,stepmax,alpha,maxIter,nInd,&INDlist,estmap,'F',0);
 	return 1;
 }
 

@@ -99,7 +99,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
 	#ifdef ALONE
 	   QTLloci = newcmatrix(1,Nloci);
 	#endif
-       //Rprintf("DEBUG testing_2");  
+     //  Rprintf("DEBUG testing_2");  
        double moveQTL= stepmin;
        char nextinterval= 'n', firsttime='y';
        double maxF=0.0, savebaseNoQTLModel=0.0;
@@ -119,7 +119,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
 		#endif
          while (nextinterval=='n')
          { // step 1:
-		//   Rprintf("DEBUG testing STEP 1");
+		  // Rprintf("DEBUG testing STEP 1");
            if (position[j]=='L')
            {  if (moveQTL<=mapdistance[j])
               {  QTLposition[j]= position[j];
@@ -253,12 +253,13 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
               {  baseNoQTLModel=0;
                  for (jj=0; jj<Nloci; jj++) baseNoQTLModel+= (saveQTLcofactor[jj]==QTLcofactor[jj] ? 0 : 1);
               }
-//              cout << "fit NoQTL model(1=y; 0=n)= " << baseNoQTLModel << endl;
+            //  Rprintf("fitting NO-QTL model\n");
               if (baseNoQTLModel!=0) // new base no-QTL model
               {  if ((position[j]=='L')&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= '2';
                  else QTLcofactor[j+1]= '2';
+                // Rprintf("INFO: Before base model\n",QTLlikelihood/-2);
                  QTLlikelihood= -2.0*QTLmixture(QTLloci,QTLcofactor,QTLr,QTLposition,y,ind,Nind,Naug,Nloci,&variance,em,&weight0,REMLorML,fitQTL,dominance,crosstype);
-				 //Rprintf("log-likelihood of NO QTL model= %f\n",QTLlikelihood/-2);
+				// Rprintf("INFO: log-likelihood of NO QTL model= %f\n",QTLlikelihood/-2);
 				 weight0[0]= -1.0;
                  savebaseNoQTLModel= QTLlikelihood;
                  if ((position[j]=='L')&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= '0';

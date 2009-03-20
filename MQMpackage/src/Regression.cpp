@@ -32,7 +32,8 @@
 double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
                 vector *weight, ivector ind, int Naug,
                 double *variance, vector Fy, char biasadj,char fitQTL,char dominance)
-{    // cout << "regression IN" << endl;
+{    
+    // Rprintf("regression IN\n");
      /*
      cofactor[j] at locus j:
      '0': no cofactor at locus j
@@ -40,9 +41,9 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      '2': QTL at locus j, but QTL effect is not included in the model
      '3': QTL at locu j and QTL effect is included in the model
      */
-	//for (int j=0; j<Naug; j++){
-	//   Rprintf("J:%d,COF:%d,VAR:%f,WEIGHT:%f,Trait:%f,IND[j]:%d\n",j,cofactor[j],*variance,(*weight)[j],y[j],ind[j]);
-    //}
+//	for (int j=0; j<Naug; j++){
+//	   Rprintf("J:%d,COF:%d,VAR:%f,WEIGHT:%f,Trait:%f,IND[j]:%d\n",j,cofactor[j],*variance,(*weight)[j],y[j],ind[j]);
+  //  }
 
 	matrix XtWX;
 	cmatrix Xt;
@@ -55,7 +56,6 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
 	XtWX= newmatrix(dimx+2,dimx+2);
     Xt= newcmatrix(dimx+2,Naug);
 	XtWY= newvector(dimx+2);
-    
 	dimx=1;	
 	for (j=0; j<Nmark; j++)
      if ((cofactor[j]=='1')||(cofactor[j]=='3')) dimx+= (dominance=='y' ? 2 : 1);
@@ -162,16 +162,15 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      ivector indx;
      indx= newivector(dimx);
      /* solve equations */
-     //Rprintf("LUcmp equations\nPrintinf matrix XiWX\n");
-    // printmatrix(XtWX,dimx,dimx);
-    // Rprintf("LUcmp equations\nPrintinf indX\n");	 
-	// for (jj=0; jj<dimx; jj++){
-	//	Rprintf("%f",indx);
-	 //}
-	 //Rprintf("\n");
+  //   Rprintf("LUcmp equations\nPrintinf matrix XiWX\n");
+  //   printmatrix(XtWX,dimx,dimx);
+//	 for (jj=0; jj<dimx; jj++){
+//		Rprintf("%f",indx);
+//	 }
+//	 Rprintf("\n");
 	 ludcmp(XtWX,dimx,indx,&d);
   
-	 //Rprintf("LUsolve equations\nPrintinf indX\n");	 
+//	 Rprintf("LUsolve equations\nPrintinf indX\n");	 
 	 //for (jj=0; jj<dimx; jj++){
 	//	Rprintf("%f",indx);
 	 //}
@@ -179,7 +178,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      
 	 lusolve(XtWX,dimx,indx,XtWY);
      // luinvert(xtwx, inv, dimx, indx);
-     //Rprintf("Parameter Estimates\n");
+   //  Rprintf("Parameter Estimates\n");
 	 //for (jj=0; jj<dimx; jj++){ 
 	//	Rprintf("%d %f\n",jj,XtWY[jj]);
 	// }
@@ -313,10 +312,10 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d)
     vector scale, swap;
     scale= newvector(dim);
     *d=1;
-  //  RRprintf("dim: %d, d: %d\n",dim,*d);
+  //Rprintf("dim: %d, d: %d\n",dim,*d);
     for (r=0; r<dim; r++)
     {   for (max=0.0, c=0; c<dim; c++) if ((temp=fabs(m[r][c])) > max) max=temp;
-        if (max==0.0) {warning("Singular matrix.");}
+        if (max==0.0) {Rprintf("Singular matrix.");}
         scale[r]=1.0/max;
     }
     for (c=0; c<dim; c++)
@@ -329,7 +328,7 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d)
             m[r][c]=sum;
             if ((temp=scale[r]*fabs(sum)) > max) { max=temp; rowmax=r; }
         }
-        if (max==0.0) {warning("singular matrix"); }
+        if (max==0.0) {Rprintf("singular matrix"); }
         if (rowmax!=c)
         {  swap=m[rowmax]; m[rowmax]=m[c]; m[c]=swap;
            scale[rowmax]=scale[c]; (*d)= -(*d);
@@ -338,7 +337,8 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d)
         temp=1.0/m[c][c];
         for (r=c+1; r<dim; r++) m[r][c]*=temp;
     }
-    Free(scale);
+   // printf("Something\n");
+    //Free(scale);
 }
 
 /* Solve the set of n linear equations AX=B.

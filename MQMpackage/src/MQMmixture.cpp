@@ -127,7 +127,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
               vector y, ivector ind, int Nind, int Naug,
               int Nloci,
               double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance,char crosstype){
-	//Rprintf("QTLmixture called\n");
+//	Rprintf("QTLmixture called\n");
     int iem= 0, newNaug, i, j;
     char varknown, biasadj='n';
 	double oldlogL=-10000, delta=1.0, calc_i, logP=0.0, Pscale=1.75;
@@ -147,9 +147,10 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 		R_FlushConsole();
 	#endif	
     if ((REMLorML=='0')&&(varknown=='n')){ 
-		Rprintf("INFO: Variance is being estimated and bias adjusted\n");
+//		Rprintf("INFO: REML\n");
 	}
     if (REMLorML=='1') { 
+//		Rprintf("INFO: ML\n");                       
 		varknown='n'; biasadj='n'; 
 	}
     for (i=0; i<newNaug; i++){ 
@@ -176,7 +177,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 			}
 		}
 	}else{
-	//Rprintf("FitQTL=Y\n");	
+//	Rprintf("FitQTL=Y\n");	
      for (j=0; j<Nloci; j++)
      {    for (i=0; i<Naug; i++)
           {   Ploci[i]*= Pscale; Ploci[i+Naug]*= Pscale; Ploci[i+2*Naug]*= Pscale;
@@ -233,7 +234,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
           }
 	 }
 	 }
-	//Rprintf("INFO: Done fitting QTL's\n");
+//	Rprintf("INFO: Done fitting QTL's\n");
      if ((*weight)[0]== -1.0)
      {  for (i=0; i<Nind; i++) indweight[i]= 0.0;
 		if (fitQTL=='n')
