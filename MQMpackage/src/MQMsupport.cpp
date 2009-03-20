@@ -137,7 +137,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
         }
     }
     Nmark= jj;
-  	Rprintf("INFO: Num markers: %d",Nmark);
+  	Rprintf("INFO: Num markers: %d\n",Nmark);
     for (int j=0; j<Nmark; j++){
 		r[j]= 999.0;
         if (j==0)
@@ -187,7 +187,6 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
     
 	//Re-estimation of recombinant frequencies
 	double max;
-	Rprintf("INFO: Num markers: %d",Nmark);
 	max = rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance,reestimate,crosstype);
 	if(max > stepmax){
 		Rprintf("ERROR: Reestimation of the map put markers at: %f Cm\n",max);
