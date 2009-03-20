@@ -21,7 +21,7 @@ MQMpermObject(MQMbootresult = NULL)
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} }
 \note{ 
-
+	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
 \seealso{ 
 \itemize{

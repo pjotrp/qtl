@@ -1,5 +1,6 @@
 \name{multitrait}
 \alias{multitrait}
+\alias{ArabidopsisLERCVI}
 
 \docType{data}
 

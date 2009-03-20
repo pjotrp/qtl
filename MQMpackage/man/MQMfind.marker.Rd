@@ -25,7 +25,7 @@ MQMfind.marker(cross = NULL, scanMQMres = NULL, perm = NULL, alpha = 0.05)
 }
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} }
 \note{ 
-
+	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
 \seealso{ 
 \itemize{
@@ -37,15 +37,15 @@ MQMfind.marker(cross = NULL, scanMQMres = NULL, perm = NULL, alpha = 0.05)
 }
 \examples{
 library(MQMpackage)
-f2qtl <- c(3,15,3,7)					# QTL at chromosome 3
-data(map10)						# Mouse genome
-f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
-f2result <- bootstrapMQM(f2cross)			# Do a MQM scan of the genome
-f2perm <- MQMpermObject(f2result)			#Create a permutation object
-summary(f2perm)										#What LOD score is considered significant ?
+f2qtl <- c(3,15,3,7)						# QTL at chromosome 3
+data(map10)							# Mouse genome
+f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")		# Simulate a F2 Cross
+f2result <- bootstrapMQM(f2cross)				# Do a MQM scan of the genome
+f2perm <- MQMpermObject(f2result)				#Create a permutation object
+summary(f2perm)				#What LOD score is considered significant ?
 marker <- MQMfind.marker(f2cross,f2result[[1]],f2perm)		#Find markers with a significant QTL effect (First run is original phenotype data)
-marker									#print it
-lodint(f2result[[1]],chr=marker[,'chr']) #extra: Confidence intervals
+marker								#Print it to the screen
+lodint(f2result[[1]],chr=marker[,'chr']) 			#Extra: Confidence intervals
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
