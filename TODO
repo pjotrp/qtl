@@ -32,7 +32,7 @@ March 2009
 - - the weightmatrix (setting them 0 could be an option))
 ****/
 - Make standalone -DONE-
-- Fix a way to send parameters to standalone
+- Fix a way to send parameters to standalone -DONE-
 - profile standalone 
 - - execution time vs. # individuals
 - - execution time vs. # cofactors
@@ -41,7 +41,6 @@ March 2009
 
 MID TERM
 Use stl (+boost) for all internal vectors and matrices -MOVED TO BRANCH-
-We need a working dataset of carl with 2 qtls to show we have increased power in MQM
 Figure out a correct way of handling autosomes
 
 LONG TERM
