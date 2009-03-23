@@ -3,7 +3,7 @@
 # CrossFromMolgenis.R
 #
 # copyright (c) 2009, Danny Arends
-# last modified Fep, 2009
+# last modified Mrt, 2009
 # first written Feb, 2009
 # 
 # Part of the R/qtl package

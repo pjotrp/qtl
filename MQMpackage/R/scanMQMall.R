@@ -3,7 +3,7 @@
 # scanMQMall.R
 #
 # copyright (c) 2009, Danny Arends
-# last modified Fep, 2009
+# last modified Mrt, 2009
 # first written Feb, 2009
 # 
 # Part of the R/qtl package
@@ -19,7 +19,7 @@
 
 scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0,n.clusters=2,doLOG=0,est.map=0,dominance=0,forceRIL=0,FF=0){
+					step.min=-20.0,step.max=220.0,n.clusters=2,doLOG=0,est.map=0,dominance=0,forceRIL=0,FF=0,plot=TRUE){
 
 	
 	if(is.null(cross)){
@@ -68,7 +68,9 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 		#Return the results
 		class(res) <- c(class(res),"MQMmulti")
 		#All done now plot the results
-		plot.MQMnice(res)
+		if(plot){
+			plot.MQMnice(res)
+		}
 		res
 	}else{
 		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")

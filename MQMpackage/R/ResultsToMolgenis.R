@@ -3,7 +3,7 @@
 # ResultsToMolgenis.R
 #
 # copyright (c) 2009, Danny Arends
-# last modified Fep, 2009
+# last modified Mrt, 2009
 # first written Feb, 2009
 # 
 # Part of the R/qtl package
@@ -104,6 +104,7 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",DBpath="http
 	
 	#Retrieve all the instances in the current DB
 	DD <- find.decimaldataelement(data_id=aaa$id)
+	cnt <- 0
 	if(num_pheno == 1){
 		#We need to know which Phenotype (name) we were working on this is done by
 		colnam <- NULL
@@ -118,12 +119,14 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",DBpath="http
 			number <- intersect(which(DD$rowindex==(i-1)),which(DD$colindex==0))
 			if(is.na(number&&1)){
 				add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap)[i], rowindex=(i-1), colindex=0, value=intervalQTLmap[i,3])
+				cnt = cnt+1
 			}else{
 				if(Fupdate==1){
 					#Forced update REMOVE elements and insert the new ones
 					remove.decimaldataelement(id=DD[number,]$id)
 					add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap)[i], rowindex=(i-1), colindex=0, value=intervalQTLmap[i,3])
-					cat("INFO: Updated (",i-1,",0) because it already existed\n")	
+					cat("INFO: Updated (",i-1,",0) because it already existed\n")
+					cnt = cnt+1
 				}else{
 					cat("INFO: Not gonna add (",i-1,",0) because it already exist\n")
 				}
@@ -154,6 +157,7 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",DBpath="http
 			}
 		}
 	}
+	cat("INFO: Uploaded",cnt," QTL estimates\n")
 }
 
 # end of ResultsToMolgenis.R

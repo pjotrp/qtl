@@ -3,7 +3,7 @@
 # CrossFromMolgenis.R
 #
 # copyright (c) 2009, Danny Arends
-# last modified Fep, 2009
+# last modified Mrt, 2009
 # first written Feb, 2009
 # 
 # Part of the R/qtl package
@@ -56,7 +56,7 @@ ResultsFromMolgenis <- function(DBqtlName=NULL,DBpath="http://celtic.service.rug
 		if(dim(data)[2] == 1){
 			#We need to give back a single QTL scanone object
 			returnObj <- cbind(as.numeric(marker_info$chr),as.numeric(marker_info$cm),as.numeric(data[,1]))
-			colnames(returnobject) <- c("chr","cm","QTL")
+			colnames(returnObj) <- c("chr","cm","QTL")
 			returnObj <- returnObj[order(returnObj[,"chr"],returnObj[,"cm"]),]
 			returnObj <- as.data.frame(returnObj)
 			class(returnObj) <- c("scanone",class(returnObj))
