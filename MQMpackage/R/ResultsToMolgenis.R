@@ -133,6 +133,7 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",DBpath="http
 			}
 		}
 	}else{
+		cnt <- 0
 		for(j in 1:num_pheno){
 			colnam <- colnames(intervalQTLmap[[j]])[3]
 			colnam <- substr(colnam,5,nchar(colnames(intervalQTLmap[[j]])[3]))
@@ -144,12 +145,14 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",DBpath="http
 				number <- intersect(which(DD$rowindex==(i-1)),which(DD$colindex==(j-1)))
 				if(is.na(number&&1)){
 					add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap[[j]])[i], rowindex=(i-1), colindex=(j-1), value=intervalQTLmap[[j]][i,3])
+					cnt = cnt+1
 				}else{
 					if(Fupdate==1){
 						#Forced update REMOVE elements and insert the new ones
 						remove.decimaldataelement(id=DD[number,]$id)
 						add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap[[j]])[i], rowindex=(i-1), colindex=(j-1), value=intervalQTLmap[[j]][i,3])
 						cat("INFO: Updated (",i-1,",",j-1,") because it already existed\n")	
+						cnt = cnt+1
 					}else{
 						cat("INFO: Not gonna add (",i-1,",",j-1,") because it already exist\n")
 					}

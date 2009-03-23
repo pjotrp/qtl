@@ -39,6 +39,12 @@ March 2009
 - - execution time vs. # markers
 - Remove bootstrapping from scanMQM and make it done by R -DONE-
 
+MOLGENIS
+Change output of R-part
+Adapt CrossFromMolgenis for pipelining
+Include QTLintervals in ResultsToMolgenis
+- Include QTLintervals in ResultsFromMolgenis
+
 MID TERM
 Use stl (+boost) for all internal vectors and matrices -MOVED TO BRANCH-
 Figure out a correct way of handling autosomes
