@@ -45,6 +45,7 @@ CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,DBpath="http://celtic
 	marker_data <- find.datamatrix(id=DBmarkerID) #Markerdata
 	trait_data <- find.datamatrix(id=DBtraitID) #Traitdata
 	marker_info <- find.marker()
+	marker_info_reduced <- marker_info[,c(1,2,10)]
 	
 	#prepare data for the cross object (we should match which matches which)
 	marker_row <- find.data(id=DBmarkerID)["rowtype"]
@@ -68,10 +69,21 @@ CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,DBpath="http://celtic
 	cat("INFO: Number of individuals in Phenotype set:",dim(trait_data)[2],"\n")
 	
 	#We assume that if we have IND in markers = IND in trait that individuals match
-	if(dim(marker_data)[2] != dim(trait_data)[2]){
-		matchV <- match(colnames(trait_data)[1:dim(trait_data)[2]],colnames(marker_data))
+	if(dim(marker_data)[2] > dim(trait_data)[2]){
+		cat("INFO: Scaling down the markerset\n")
+		matchV <- na.omit(match(colnames(trait_data),colnames(marker_data)))
+		marker_data <- marker_data[,matchV]
+		matchV <- na.omit(match(colnames(marker_data),colnames(trait_data)))
+		trait_data <- trait_data[,matchV]
+	}else{
+		cat("INFO: Scaling down the traitset\n")	
+		matchV <- na.omit(match(colnames(marker_data),colnames(trait_data)))
+		trait_data <- trait_data[,matchV]
+		matchV <- na.omit(match(colnames(trait_data),colnames(marker_data)))
 		marker_data <- marker_data[,matchV]
 	}
+	cat("INFO: Number of individuals in Marker set:",dim(marker_data)[2],"\n")
+	cat("INFO: Number of individuals in Phenotype set:",dim(trait_data)[2],"\n")
 	
 	#Parse data towards the R/QTL format we need to convert all AA/AB/BB etc to 1,2,3
 	for(i in 1:dim(marker_data)[1]) {
@@ -100,38 +112,51 @@ CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,DBpath="http://celtic
 	}
 	chr <- NULL
 	loc <- NULL
+	names <- NULL
 	for(i in 1:dim(marker_data)[1]){
 		chr <- c(chr,marker_info[which(rownames(marker_data)[i]== marker_info$name),"chr"])
 		loc <- c(loc,marker_info[which(rownames(marker_data)[i]== marker_info$name),"cm"])
+		names <- c(names,marker_info[which(rownames(marker_data)[i]== marker_info$name),"name"])
 	}
 	#FIX for NA in chromosome
 	remFromChr <- NULL
 	for(i in 1:length(chr)) {
 		if(is.na(chr[i])){
+			cat("INFO: Gonna remove marker #",i,"Which is prob:",names(marker_data[,1])[i],"\n")
 			remFromChr <- c(remFromChr,i)
+
 		}
 	}
 	chr <- chr[-remFromChr]
 	loc <- loc[-remFromChr]
+	names <- names[-remFromChr]
+	marker_data <- marker_data[-remFromChr,]
 	
 	#All in expected format, So we can begin filling our cross object
 	cross <- NULL
-	for(i in unique(chr)){
+	for(i in sort(unique(chr))){
 		# for each chromosome do
 		matrix <- NULL
 		map <- NULL
-		names <- NULL
+		namez <- NULL
+		length(cross$geno) <- i
 		for(j in which(chr==i)){
 				#For all markers on the chromosome do
+				cat("INFO: marker:",j,names[j],"on chr",i,"at",loc[j],"\n")
 				matrix <- rbind(matrix,marker_data[j,])
 				map <- rbind(map,loc[j])
+				namez <- rbind(namez,names[j])
 		}
-		names <- names(marker_data[,1])[which(chr==i)]
+		mapi <- cbind(namez,map)	
+		resort <- na.omit(match(sort(as.double(mapi[,2])),as.double(mapi[,2])))
+		map <- map[resort]
+		namez <- namez[resort]
+		matrix <- matrix[resort,]
 
 		#We got everything so lets start adding it to the cross object
-		length(cross$geno) <- length(cross$geno)+1
+
 		cross$geno[[i]]$data <- t(matrix)
-		colnames(cross$geno[[i]]$data)<- names
+		colnames(cross$geno[[i]]$data)<- namez
 		cross$geno[[i]]$map <- as.numeric(t(map))
 		names(cross$geno[[i]]$map) <- colnames(cross$geno[[i]]$data)
 		#Type of the chromosome should be retrieved from the database
