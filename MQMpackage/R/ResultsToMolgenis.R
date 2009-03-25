@@ -17,7 +17,7 @@
 #
 ######################################################################
 
-ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox",Fupdate=0){
+ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",Trait_num=0,DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox",Fupdate=0){
 	library("RCurl")
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
 		stop("ERROR: Please install the package RCurl from bioconductor to use the molgenis interface\n")
@@ -90,7 +90,7 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",DBpath="http
 		#No find, so we'll create one
 		cat("INFO: Not matrix named",name,"found in the current database\n")
 		cat("INFO: Creating:",name,"in the current database\n")
-		aaa <- add.data(name = name,investigation_id=num$id,rowtype="Marker",coltype=trait_name$type,totalrows=dim(intervalQTLmap)[1],totalcols=num_pheno,valuetype="Decimal")
+		aaa <- add.data(name = name,investigation_id=num$id,rowtype="Marker",coltype=trait_name$type,totalrows=1,totalcols=1,valuetype="Decimal")
 	}else{
 		cat("INFO: Matrix named",name,"found in the current database\n")
 	}
@@ -105,24 +105,30 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",DBpath="http
 		if(colnam ==""){
 			colnam = paste("unknown",j,sep="")
 		}
+		names <- NULL
+		values <- NULL
+		rowindex <- NULL
+		colindex <- Trait_num
 		for(i in 1:dim(intervalQTLmap[[j]])[1]) {
 			#Number (if it exists) is the location in the DD (DeciData-matrix)
 			number <- intersect(which(DD$rowindex==(i-1)),which(DD$colindex==(j-1)))
 			if(is.na(number&&1)){
-				add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap[[j]])[i], rowindex=(i-1), colindex=(j-1), value=intervalQTLmap[[j]][i,3])
-				cnt = cnt+1
+				names <- c(names,rownames(intervalQTLmap[[j]])[i])
+				values <- c(values,rownames(intervalQTLmap[[j]])[i])
+				rowindex <- c(rowindex,i-1)
 			}else{
 				if(Fupdate==1){
 					#Forced update REMOVE elements and insert the new ones
 					remove.decimaldataelement(id=DD[number,]$id)
 					add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap[[j]])[i], rowindex=(i-1), colindex=(j-1), value=intervalQTLmap[[j]][i,3])
-					cat("INFO: Updated (",i-1,",",j-1,") because it already existed\n")  
-					cnt = cnt+1
+					cat("INFO: Updated (",i-1,",",j-1,") because it already existed\n") 
 				}else{
 					cat("INFO: Not gonna add (",i-1,",",j-1,") because it already exist\n")
 				}
 			}
 		}
+		cat("INFO: Trying to upload a trait to column:",colindex,"\n")  
+		add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=names, rowindex=rowindex, colindex=colindex, value=values)
 	}
 	cat("INFO: Uploaded",cnt," QTL estimates\n")
 }
