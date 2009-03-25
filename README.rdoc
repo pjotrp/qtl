@@ -1,0 +1,39 @@
+== DESCRIPTION:
+
+MQMpackage for integration of MultiQTL mapping into the R/QTL package.
+
+== INSTALL & USAGE:
+
+Install the package under R from the zip or the tar.gz
+
+== REQUIREMENTS:
+	R-2.8.0 (earlier version should work)
+
+== COMPILE:
+
+Compile instructions:
+
+Building the package for MS Windows (with zipped datadir):
+R CMD BUILD MQMpackage -binary --auto-zip
+Building the package for use with Linux:
+R CMD BUILD MQMpackage --auto-zip
+
+== EXAMPLES:
+
+When in R:
+	library(MQMpackage)
+	?scanMQM
+
+
+==== Footnotes
+To compile your own version of MQM you should have the following installed:
+	R-2.8.0
+	R-Tools
+	Perl (activeperl)
+Optional: 
+	The Microsoft html help compiler
+	MikTex for building the man files
+
+== LICENSE:
+
+Unknown at this time.
