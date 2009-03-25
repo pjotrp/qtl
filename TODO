@@ -41,7 +41,7 @@ March 2009
 
 MOLGENIS
 Change output of R-part
-Adapt CrossFromMolgenis for pipelining
+Adapt CrossFromMolgenis for pipelining -DONE-
 Include QTLintervals in ResultsToMolgenis
 - Include QTLintervals in ResultsFromMolgenis
 

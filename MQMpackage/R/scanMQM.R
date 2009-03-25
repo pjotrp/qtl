@@ -297,7 +297,9 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 			}
 		}
 		#Reset the plotting window to contain 1 plot (fot the next upcomming pots
-		op <- par(mfrow = c(1,1))
+		if(plot){
+		  op <- par(mfrow = c(1,1))
+		}
 		qtl
 	}else{
 		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
