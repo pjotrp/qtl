@@ -1,3 +1,5 @@
+MASTER BRANCH
+
 == DESCRIPTION:
 
 MQMpackage for integration of MultiQTL mapping into the R/QTL package.
