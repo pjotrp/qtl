@@ -31,12 +31,14 @@ March 2009
 - - this would involve a mayor rewriting some of the QTLmixture part (perhaps even regression, but that relies on 
 - - the weightmatrix (setting them 0 could be an option))
 ****/
+
 - Make standalone -DONE-
 - Fix a way to send parameters to standalone -DONE-
 - profile standalone 
 - - execution time vs. # individuals
 - - execution time vs. # cofactors
 - - execution time vs. # markers
+--REWRITE prob function to a lookup table and use boost
 - Remove bootstrapping from scanMQM and make it done by R -DONE-
 
 MOLGENIS
