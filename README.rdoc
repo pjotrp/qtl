@@ -16,16 +16,16 @@ When in R:
 	library(MQMpackage)
 	?scanMQM
 
-== COMPILE:
+== COMPILING:
 
-Compile instructions:
+==== Compile instructions:
 
 Building the package for MS Windows (with zipped datadir):
 	R CMD BUILD MQMpackage -binary --auto-zip
 Building the package for use with Linux:
 	R CMD BUILD MQMpackage --auto-zip
 	
-==== Footnotes
+==== Compile dependencies:
 To compile your own version of MQM you should have the following installed:
 	R-2.8.0
 	R-Tools

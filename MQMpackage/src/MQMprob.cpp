@@ -42,6 +42,14 @@ double start_prob(char crosstype,char c){
 	return 0.0;
 }
 
+void create_lookup_table(){
+
+}
+
+double probnew(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,int ADJ,int start){
+
+}
+
 double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,int ADJ,int start){
 	//Compares loci[j][i] versus loci[j+1][i]
 	//OR if JorC is set to 1 loci[j][i] versus compareto
