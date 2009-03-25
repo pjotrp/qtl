@@ -10,6 +10,12 @@ Install the package under R from the zip or the tar.gz
 
 R-2.8.0 (earlier version should work)
 
+== EXAMPLES:
+
+When in R:
+	library(MQMpackage)
+	?scanMQM
+
 == COMPILE:
 
 Compile instructions:
@@ -18,13 +24,7 @@ Building the package for MS Windows (with zipped datadir):
 	R CMD BUILD MQMpackage -binary --auto-zip
 Building the package for use with Linux:
 	R CMD BUILD MQMpackage --auto-zip
-
-== EXAMPLES:
-
-When in R:
-	library(MQMpackage)
-	?scanMQM
-
+	
 ==== Footnotes
 To compile your own version of MQM you should have the following installed:
 	R-2.8.0
