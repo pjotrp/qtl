@@ -4,26 +4,29 @@
  *
  * copyright (c) 2009
  *
- * last modified Feb 2009
- * first written Feb 2009
+ * last modified Mrt,2009
+ * first written Feb, 2009
  *
  * C functions for the R/qtl package
  * Contains: R_scanMQM, scanMQM
  *
  **********************************************************************/
+using namespace std;
+
+#include <fstream>
+#include <iostream>
 
 extern "C"
 {
-
 #include <R.h>
 #include <Rdefines.h>
 #include <R_ext/PrtUtil.h>
 #include <R_ext/RS.h> /* for Calloc, Realloc */
 #include <R_ext/Utils.h>
+#include <math.h>
 #include "MQMdata.h"
 #include "MQMsupport.h"
-
-//long *idum; // for monte carlo simulation or permutation
+#include "reDefine.h"
 
 double Lnormal(double residual, double variance)
 {      double Likelihood;
@@ -139,7 +142,7 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	if(domi != 0){
 		dominance='y';
 	}	
-	Rprintf("INFO: All the needed information, so lets start with the MQM\n");   
+	Rprintf("INFO: All the needed information, so lets start with the MQM\n");
 	analyseF2(Nind, Nmark, &cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,cross,dominance);
 	if(re_estimate){
 		Rprintf("INFO: Sending back the reestimated map used during analysis\n");
@@ -158,6 +161,12 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	Free(f1genotype);
 	Free(cofactor);
 	Free(mapdistance);
+	Rprintf("INFO: All done in C returning to R\n");
+	 #ifndef ALONE
+	 R_CheckUserInterrupt(); /* check for ^C */
+	 R_ProcessEvents(); /*  Try not to crash windows etc*/
+	 R_FlushConsole();
+	 #endif
 	return;
 }  /* end of function scanMQM */
 
@@ -196,24 +205,159 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
    scanMQM(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,*crosstype,*domi);
 } /* end of function R_scanMQM */
 
+int count_lines(char *file){
+	//NUM: number of elements on 1 line
+	int cnt=0;
+	char line[100];
+	ifstream file_stream(file, ios::in);
+	while (!file_stream.eof()){
+        file_stream >> line;
+		cnt++;
+	}
+	file_stream.close();
+	return cnt;
+}
+
+
 int main(){
-	using namespace std;
+
 	char *genofile = "geno.dat";
 	char *phenofile = "pheno.dat";
 	char *mposfile = "markerpos.txt";
 	char *chrfile = "chrid.dat";
-	int test;
+	char *setfile = "settings.dat";
+    double **QTL;  
+	ivector f1genotype;
+	ivector chr;
+	cvector cofactor;
+	vector mapdistance;
+	cmatrix markers;
+	ivector INDlist;
+    int stepmin = 0;
+    int stepmax = 220;
+    int stepsize = 5;
+
+	int cnt=0;
+	int cInd=0; //Current individual
+	int nInd;
+	int nMark;
+	int backwards=0;
 	
+	nInd=count_lines(phenofile);
+	Rprintf("# of individuals: %d\n",nInd);
+	nMark=count_lines(chrfile);
+	Rprintf("# of markers: %d\n",nMark);	
+    f1genotype = newivector(nMark);	
+	cofactor= newcvector(nMark);  
+	mapdistance= newvector(nMark);
+	markers= newcmatrix(nMark,nInd);
+	double pheno_value[nInd];
+	chr = newivector(nMark);
+	INDlist= newivector(nInd);
+	double pos[nMark];
+
+	char peek_c;
+
 	ifstream geno(genofile, ios::in);
-		geno >> test;
-		printF(test);
+	while (!geno.eof()){
+        if(cnt < nMark){
+          	geno >> markers[cnt][cInd];
+			cnt++;
+        }else{
+			cnt = 0;
+			cInd++;
+		}	
+	}
 	geno.close();
-	ifstream pheno(genofile, ios::in);
+	Rprintf("Genotypes done %d %d\n",cInd,cnt);
+	cnt = 0;
+	ifstream pheno(phenofile, ios::in);
+	while (!pheno.eof()){
+		pheno >> pheno_value[cnt];
+	//	Rprintf("%f\n",pheno_value[cnt]);
+		cnt++;
+	}
 	pheno.close();
-	ifstream mpos(genofile, ios::in);
+	Rprintf("Phenotype done %d\n",cnt);
+	cnt = 0;
+	ifstream mpos(mposfile, ios::in);
+	while (!mpos.eof()){
+		peek_c=mpos.peek();
+    	if(peek_c=='\t' or peek_c == ' '){
+           	mpos >> pos[cnt];
+          //  Rprintf("%f\n",pos[cnt]);
+            cnt++;
+		}else{
+            mpos >> peek_c;
+        }
+	}	
 	mpos.close();
-	ifstream chr(genofile, ios::in);
-	chr.close();
+
+    Rprintf("Positions done %d\n",cnt);	
+	cnt = 0;	
+	ifstream chrstr(chrfile, ios::in);
+	int max_chr = 0;
+	while (!chrstr.eof()){
+		chrstr >> chr[cnt];
+        if(chr[cnt] > max_chr){
+          max_chr = chr[cnt];           
+        }
+		cnt++;
+	}
+	chrstr.close();
+	Rprintf("Chromosomes done %d -> # %d Chromosomes\n",cnt,max_chr);
+    int something = 2*max_chr*(((stepmax)-(stepmin))/ (stepsize));
+    QTL = newmatrix(something,1);
+
+	for(int i=0; i< nMark; i++){
+    	cofactor[i] = '0';
+    	f1genotype[i] = 12;
+    	mapdistance[i]=999.0;
+		mapdistance[i]=pos[i];
+    }
+	for(int i=0; i< nInd; i++){
+    	INDlist[i] = i;
+    }
+    char estmap = 'n';
+    //reorg_pheno(2*(*chromo) * (((*stepma)-(*stepmi))/ (*steps)),1,qtl,&QTL);
+	Rprintf("INFO: Loading settings from file\n");
+	cnt = 0;
+	char *name;
+	int maxIter;
+	double windowsize,alpha;
+	
+	ifstream setstr(setfile, ios::in);
+    setstr >> stepmin;
+	Rprintf("SMin: %d\n",stepmin);
+	setstr >> stepmax;
+	Rprintf("SMax: %d\n",stepmax);	
+	setstr >> stepsize;
+	Rprintf("SSiz: %d\n",stepsize);	
+	setstr >> windowsize;
+	Rprintf("WSiz: %d\n",windowsize);	
+	setstr >> alpha;
+	Rprintf("A: %f\n",alpha);
+	setstr >> maxIter;
+	Rprintf("Miter: %d\n",maxIter);
+
+    int sum = 0;
+    for(int i=0; i< nMark; i++){
+      setstr >> cofactor[i];
+   	  if(cofactor[i] == '1'){
+      sum++;               
+      }
+    }
+    
+    if(sum > 0){
+    backwards = 1;       
+    }else{
+    backwards = 0;       
+    }
+    setstr.close();	
+	Rprintf("INFO: Cofactors %d\n",sum);
+	Rprintf("INFO: Starting C-part of the MQM analysis\n");
+	//ALL information is read in or calculated, so we gonna start MQM, however Rprintf crashes MQM
+   	analyseF2(nInd, nMark, &cofactor, markers, pheno_value, f1genotype, backwards,QTL, &mapdistance,&chr,0,0,windowsize,stepsize,stepmin,stepmax,alpha,maxIter,nInd,&INDlist,estmap,'F',0);
 	return 1;
 }
 

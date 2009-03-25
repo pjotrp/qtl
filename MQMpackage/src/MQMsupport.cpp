@@ -3,14 +3,17 @@
  * MQMsupport.c
  *
  * copyright (c) 2009 Danny Arends
- * last modified Feb, 2009
+ * last modified Mrt, 2009
  * first written Feb, 2009
  *
  * C external functions used by the MQM algorithm
  * Contains: 
  *
  **********************************************************************/
- 
+using namespace std;
+#include <fstream>
+#include <iostream>
+
 extern "C"
 {
 
@@ -25,6 +28,7 @@ extern "C"
 #include "Regression.h"
 #include "MQMmapQTL.h"
 #include "MQMmixture.h"
+#include "reDefine.h"
 
 /*
  * analyseF2 - analyse one F2/RIL/BC family
@@ -33,7 +37,8 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 			   double **QTL,vector *mapdistance,int **Chromo,int Nrun,int RMLorML, double windowsize,double stepsize,
 			   double stepmin,double stepmax,double alfa,int em,int out_Naug,int **INDlist,char reestimate,char crosstype,char dominance)
 {    
-    int Naug;
+    Rprintf("INFO: Starting C-part of the MQM analysis\n");
+	int Naug;
 	int run=0;
     cvector position;
 	vector informationcontent;
@@ -41,7 +46,6 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 	//char perm_simu='1';
 	ivector chr;
 	matrix Frun;
-
 	vector r;
 	r= newvector(Nmark);
     position= newcvector(Nmark);
@@ -95,9 +99,9 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 
     char dropj='y';
     int jj=0;
-   //  Rprintf("any triple of non-segregating markers is considered to be the result of:\n");
-   //  Rprintf("identity-by-descent (IBD) instead of identity-by-state (IBS)\n");
-  //   Rprintf("no (segregating!) cofactors are fitted in such non-segregating IBD regions\n");
+   //Rprintf("any triple of non-segregating markers is considered to be the result of:\n");
+   //Rprintf("identity-by-descent (IBD) instead of identity-by-state (IBS)\n");
+  //  Rprintf("no (segregating!) cofactors are fitted in such non-segregating IBD regions\n");
     for (int j=0; j<Nmark; j++){
 		if (mod(f1genotype[j],11)!=0){
 			dropj='n';
@@ -133,6 +137,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
         }
     }
     Nmark= jj;
+  	Rprintf("INFO: Num markers: %d\n",Nmark);
     for (int j=0; j<Nmark; j++){
 		r[j]= 999.0;
         if (j==0)
@@ -149,11 +154,12 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 			r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
 			if (r[j]<0){
 				Rprintf("ERROR: Recombination frequency is negative\n");
-				Rprintf("ERROR: Position=%d r[j]=%d\n",position[j], r[j]);
+				Rprintf("ERROR: Position=%d r[j]=%f\n",position[j], r[j]);
 				return;
 			}
 		}
     }
+    Rprintf("INFO: After dropping of uninformative cofactors\n");
     ivector newind;
     vector newy;
     cmatrix newmarker;
@@ -186,7 +192,9 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 		Rprintf("ERROR: Reestimation of the map put markers at: %f Cm\n",max);
 		Rprintf("ERROR: Rerun the algorithm with a step.max larger than %f Cm\n",max);
 		return;
-	}
+	}else{
+       Rprintf("INFO: Reestimation of the map finished. MAX Cm: %f Cm\n",max);   
+    }
 	
 	//Check if everything still is correct
 	for (int j=0; j<Nmark; j++){
@@ -194,11 +202,11 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 			r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
 			if (r[j]<0){
 				Rprintf("ERROR: Recombination frequency is negative\n");
-				Rprintf("ERROR: Position=%d r[j]=%d\n",position[j], r[j]);
+				Rprintf("ERROR: Position=%d r[j]=%f\n",position[j], r[j]);
 				return;
 			}
 		}
-    }
+    } 
     /* eliminate individuals with missing trait values */
     //We can skip this part iirc because R throws out missing phenotypes beforehand
 	int oldNind=Nind;
@@ -247,32 +255,31 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
     int dimx=1;
     for (int j=0; j<Nmark; j++){
 		if ((*cofactor)[j]=='1'){
+      Rprintf("INFO Cofactor=='1' at:%d",j);
 			dimx+= (dominance=='n' ? 1 : 2);  // per QTL only additivity !!
 		}else if ((*cofactor)[j]=='2'){
 			dimx+=1;  /* sex of the mouse */
 		}
 	}
-     double F1, F2;
-     F1= inverseF(1,Nind-dimx,alfa);
-     F2= inverseF(2,Nind-dimx,alfa);
-	 Rprintf("INFO: F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa\n");
-     Rprintf("INFO: F(%f,1,%d)=%f\n",F1,(Nind-dimx),alfa);
-     Rprintf("INFO: F(%f,2,%d)=%f\n",F2,(Nind-dimx),alfa);
-     F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
+	double F1, F2;
+	Rprintf("INFO: dimX:%d nInd:%d\n",dimx,Nind);  
+	F1= inverseF(1,Nind-dimx,alfa);
+	F2= inverseF(2,Nind-dimx,alfa);
+	Rprintf("INFO: F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa\n");
+	Rprintf("INFO: F(%f,1,%d)=%f\n",F1,(Nind-dimx),alfa);
+	Rprintf("INFO: F(%f,2,%d)=%f\n",F2,(Nind-dimx),alfa);
+	F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
-     weight[0]= -1.0;
-     logLfull= QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
-     Rprintf("INFO: Log-likelihood of full model= %f\n",logLfull);
-     Rprintf("INFO: Residual variance= %f\n",variance);
-     Rprintf("INFO: Trait mean= %f \nINFO: Trait variation= %f\n",ymean,yvari);
+	weight[0]= -1.0;
+	logLfull= QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
+	Rprintf("INFO: Log-likelihood of full model= %f\n",logLfull);
+	Rprintf("INFO: Residual variance= %f\n",variance);
+	Rprintf("INFO: Trait mean= %f \nINFO: Trait variation= %f\n",ymean,yvari);
 
-     if (Backwards==1)    // use only selected cofactors
-         logLfull= backward(Nind, Nmark, (*cofactor), marker, y, weight, ind, Naug, logLfull,
-                    variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype);
-     if (Backwards==0) // use all cofactors
-         logLfull= mapQTL(Nind, Nmark, (*cofactor), (*cofactor), marker, position,
-                  (*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype); // printout=='n'
-
+	if (Backwards==1)    // use only selected cofactors
+		logLfull= backward(Nind, Nmark, (*cofactor), marker, y, weight, ind, Naug, logLfull,variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype);
+	if (Backwards==0) // use all cofactors
+		logLfull= mapQTL(Nind, Nmark, (*cofactor), (*cofactor), marker, position,(*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype); // printout=='n'
 	
 	// ---- Write output / send it back to R
 	//Cofactors that made it to the final model
@@ -284,22 +291,24 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 		}
 	}
 	//QTL likelyhood for each location
-	Rprintf("INFO: Number of output datapoints: %d\n",Nsteps);	
-	for (int ii=0; ii<Nsteps; ii++){   
-		QTL[0][ii] = Frun[ii][0];
+	Rprintf("INFO: Number of output datapoints: %d\n",Nsteps);
+    //ofstream fff("MQM.output", ios::out | ios::app);	
+	for (int ii=0; ii<Nsteps; ii++){ 
+		//Convert LR to LOD before sending back
+		QTL[0][ii] = Frun[ii][0] / 4.60517;
 		QTL[0][Nsteps+ii] = informationcontent[ii];
-		//Rprintf("INFO:LOC: %d QTL: %f INFO: %f\n",ii,QTL[0][ii],QTL[0][Nsteps+ii]);	
+		//char *outline;
+		//Rprintf("LOC: %d QTL: %f INFO: %f\n",ii,QTL[0][ii],QTL[0][Nsteps+ii]);	
+		//fff << outline;
     }
-	
+    //fff.close();
 	Free(position);
 	Free(weight);
 	Free(ind);
 	delcmatrix(marker,Nmark);
 	Free(y);
 	Free(selcofactor);
-	
 	Rprintf("INFO: Analysis of data finished\n");
-	
 	return;
 }
 
@@ -349,6 +358,12 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
 				}
 			}
 		}
+	#ifndef ALONE
+		//Rprintf("TEST BW\n");
+		R_CheckUserInterrupt(); /* check for ^C */
+		R_ProcessEvents(); /*  Try not to crash windows etc*/
+		R_FlushConsole();
+	#endif
 		if  ( ((*newcofactor)[dropj]=='1') && ( F2> 2.0*(savelogL-maxlogL)) ){   
 			savelogL= maxlogL;
 			(*newcofactor)[dropj]= '0'; Ncof-=1;

@@ -1,5 +1,6 @@
 \name{MQMpackage-package}
 \alias{MQMpackage}
+\alias{MQM}
 \docType{package}
 \title{
 Tool for analyzing QTL experiments

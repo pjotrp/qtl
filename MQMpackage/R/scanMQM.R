@@ -48,7 +48,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		n.ind <- nind(cross)
 		n.chr <- nchr(cross)
 		cat("INFO: Number of individuals: ",n.ind,"\n")
-		cat("INFO: Number of chr: ",n.chr,"\n")
+		cat("INFO: Number of chromosomes: ",n.chr,"\n")
 		geno <- NULL
 		chr <- NULL
 		dist <- NULL
@@ -59,12 +59,12 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 			dist <- c(dist,cross$geno[[i]]$map)
 		}
 		if(alfa <=0 || alfa >= 1){
-			stop("ERROR: Alfa must be between 0 and 1.")
-		}
-		if(n.run !=0){
-			stop("ERROR: # of runs should be positive and < 10000.")
+			stop("ERROR: Alfa must be between 0 and 1.\n")
 		}
 		#CHECK if the phenotype exists
+		if (length(pheno.col) > 1){
+			stop("ERROR: For multiple phenotype analysis use the function: 'scanMQMall'.\n")	
+		}
 		if(pheno.col != 1){
 			cat("INFO: Selected phenotype ",pheno.col,".\n")
 			cat("INFO: Number of phenotypes in object ",nphe(cross),".\n")
@@ -129,6 +129,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 			cat("INFO: Individuals after augmentation",cross$extra$augIND,".\n")
 			extra2 <- cross$extra$augIND
 		}else{
+			#No augmentation so just set extra1 to be Nind (Naug internally of scanMQM)
 			extra1 <- n.ind
 			extra2 <- 0:n.ind
 		}
@@ -264,16 +265,15 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		qtl <- cbind(qtl,1/(min(info))*(info-min(info)))
 		qtl <- cbind(qtl,1/(min(info))*(info-min(info))*qtl[,3])
 		colnames(qtl) = c("chr","pos (Cm)",paste("QTL",colnames(cross$pheno)[pheno.col]),"Info","QTL*INFO")
-		#So we can use carls plotting routines
+		#Convert to data/frame and scan.one object so we can use the standard plotting routines
 		qtl <- as.data.frame(qtl)
 		class(qtl) <- c("scanone",class(qtl)) 
-		
 		cat("INFO: Saving output to file: ",file, "\n")
 		write.table(qtl,file)
 		#Reset plotting and return the results
 		if(plot){
 			info_c <- qtl
-			#Check for error in the information content
+			#Check for errors in the information content IF err we can't do a second plot
 			e <- 0
 			for(i in 1:ncol(qtl)){
 				if(is.na(info_c[i,5])){
@@ -286,18 +286,20 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 					e<- 1
 				}
 			}
-			#No error plot 2
+			#No error do plot 2
 			if(!e){
-				info_c[,3]<- info_c[,5]
-				plot(qtl,info_c,lwd=1)
-				labels <- c(paste("QTL",colnames(cross$pheno)[pheno.col]),"QTL * Info")
-				legend("topright", labels,col=c("black","blue"),lty=c(1,1))
+				plot.MQMone(qtl)
 			}else{
 				plot(qtl,lwd=1)
+				grid(max(gtl$chr),5)
+				labels <- paste("QTL",colnames(cross$pheno)[pheno.col])
+				legend("topright", labels,col=c("black"),lty=c(1))
 			}
 		}
-		#Reset the plotting window to contain 1 plot
-		op <- par(mfrow = c(1,1))
+		#Reset the plotting window to contain 1 plot (fot the next upcomming pots
+		if(plot){
+		  op <- par(mfrow = c(1,1))
+		}
 		qtl
 	}else{
 		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")

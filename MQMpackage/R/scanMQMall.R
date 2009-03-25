@@ -3,7 +3,7 @@
 # scanMQMall.R
 #
 # copyright (c) 2009, Danny Arends
-# last modified Fep, 2009
+# last modified Mrt, 2009
 # first written Feb, 2009
 # 
 # Part of the R/qtl package
@@ -19,7 +19,7 @@
 
 scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0,n.clusters=2,doLOG=0,est.map=0,dominance=0,forceRIL=0){
+					step.min=-20.0,step.max=220.0,n.clusters=2,doLOG=0,est.map=0,dominance=0,forceRIL=0,FF=0,plot=TRUE){
 
 	
 	if(is.null(cross)){
@@ -57,12 +57,20 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 			cat("INFO: Library snow not found, so going into singlemode.\n")
 			res <- lapply(data,scanMQM,step.min=step.min,step.max=step.max,alfa=alfa,em.iter=em.iter,windowsize=windowsize,REMLorML=REMLorML,cofactors=cofactors,step.size=step.size,doLOG=doLOG,est.map=est.map,forceRIL=forceRIL,plot=FALSE)
 		}
-		
-
+		if(FF){
+			cat(rownames(res[[1]]),"\n",res[[1]][,1],"\n",res[[1]][,2],"\n",file="out.frank")
+			for(i in 1:length(res)){
+				cat("INFO: Saving trait",i,"in frankformat\n")
+				qtl <- res[[i]]
+				cat(colnames(qtl)[3],qtl[,3],"\n",file="out.frank",append = T)
+			}
+		}
 		#Return the results
 		class(res) <- c(class(res),"MQMmulti")
 		#All done now plot the results
-		plot.MQMnice(res)
+		if(plot){
+			plot.MQMnice(res)
+		}
 		res
 	}else{
 		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")

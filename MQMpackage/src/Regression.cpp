@@ -3,7 +3,7 @@
  * MQMsupport.c
  *
  * copyright (c) 2009 Danny Arends
- * last modified Feb, 2009
+ * last modified Mrt, 2009
  * first written Feb, 2009
  *
  * C external functions used by the MQM algorithm
@@ -22,6 +22,7 @@
 #include "MQMdata.h"
 #include "MQMprob.h"
 #include "Regression.h"
+#include "reDefine.h"
 
 /* regression of trait on multiple cofactors  y=xb+e with weight w
 *							(xtwx)b=(xtw)y  
@@ -31,7 +32,8 @@
 double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
                 vector *weight, ivector ind, int Naug,
                 double *variance, vector Fy, char biasadj,char fitQTL,char dominance)
-{    // cout << "regression IN" << endl;
+{    
+    // Rprintf("regression IN\n");
      /*
      cofactor[j] at locus j:
      '0': no cofactor at locus j
@@ -39,9 +41,9 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      '2': QTL at locus j, but QTL effect is not included in the model
      '3': QTL at locu j and QTL effect is included in the model
      */
-	//for (int j=0; j<Naug; j++){
-	//   Rprintf("J:%d,COF:%d,VAR:%f,WEIGHT:%f,Trait:%f,IND[j]:%d\n",j,cofactor[j],*variance,(*weight)[j],y[j],ind[j]);
-    //}
+//	for (int j=0; j<Naug; j++){
+//	   Rprintf("J:%d,COF:%d,VAR:%f,WEIGHT:%f,Trait:%f,IND[j]:%d\n",j,cofactor[j],*variance,(*weight)[j],y[j],ind[j]);
+  //  }
 
 	matrix XtWX;
 	cmatrix Xt;
@@ -54,7 +56,6 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
 	XtWX= newmatrix(dimx+2,dimx+2);
     Xt= newcmatrix(dimx+2,Naug);
 	XtWY= newvector(dimx+2);
-    
 	dimx=1;	
 	for (j=0; j<Nmark; j++)
      if ((cofactor[j]=='1')||(cofactor[j]=='3')) dimx+= (dominance=='y' ? 2 : 1);
@@ -76,11 +77,12 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
            jx++;
            xtQTL[jx]= '1';
         }
-        else
-        {  for (int i=0; i<Naug; i++)
-           if      (marker[j][i]=='1') { Xt[jx][i]=48; }  //ASCII code 47, 48 en 49 voor -1,0,1;
-           else if (marker[j][i]=='0') { Xt[jx][i]=47; } // '/' stands for -1
-           else                        { Xt[jx][i]=49; }
+        else{
+			for (int i=0; i<Naug; i++){
+				if      (marker[j][i]=='1') { Xt[jx][i]=48; }  //ASCII code 47, 48 en 49 voor -1,0,1;
+				else if (marker[j][i]=='0') { Xt[jx][i]=47; } // '/' stands for -1
+				else                        { Xt[jx][i]=49; }
+		   }
         }
      }
      else if (cofactor[j]=='3') // QTL
@@ -116,7 +118,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      for (int i=0; i<Naug; i++)
      {   wi= (*weight)[i]+ (*weight)[i+Naug]+ (*weight)[i+2*Naug];
          yi= y[i];
-		 //CHnaged <= to < to prevent chrashes, this could make calculations a tad different then before
+		 //Changed <= to < to prevent chrashes, this could make calculations a tad different then before
          for (j=0; j<dimx; j++)
          if (xtQTL[j]<='1')
          {  xtwj= ((double)Xt[j][i]-48.0)*wi;
@@ -160,17 +162,15 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      ivector indx;
      indx= newivector(dimx);
      /* solve equations */
-     //Rprintf("LUcmp equations\nPrintinf matrix XiWX\n");
-    // printmatrix(XtWX,dimx,dimx);
-    // Rprintf("LUcmp equations\nPrintinf indX\n");	 
-	// for (jj=0; jj<dimx; jj++){
-	//	Rprintf("%f",indx);
-	 //}
-	 //Rprintf("\n");	 
-	 
+  //   Rprintf("LUcmp equations\nPrintinf matrix XiWX\n");
+  //   printmatrix(XtWX,dimx,dimx);
+//	 for (jj=0; jj<dimx; jj++){
+//		Rprintf("%f",indx);
+//	 }
+//	 Rprintf("\n");
 	 ludcmp(XtWX,dimx,indx,&d);
-     
-	 //Rprintf("LUsolve equations\nPrintinf indX\n");	 
+  
+//	 Rprintf("LUsolve equations\nPrintinf indX\n");	 
 	 //for (jj=0; jj<dimx; jj++){
 	//	Rprintf("%f",indx);
 	 //}
@@ -178,7 +178,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      
 	 lusolve(XtWX,dimx,indx,XtWY);
      // luinvert(xtwx, inv, dimx, indx);
-     //Rprintf("Parameter Estimates\n");
+   //  Rprintf("Parameter Estimates\n");
 	 //for (jj=0; jj<dimx; jj++){ 
 	//	Rprintf("%d %f\n",jj,XtWY[jj]);
 	// }
@@ -270,21 +270,27 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
     /* calculation of logL */
     // cout << "calculate logL" << endl;
     long double logL=0.0;
-    for (int i=0; i<Nind; i++) indL[i]= 0.0;
-    if (fitQTL=='n')
-    for (int i=0; i<Naug; i++) indL[ind[i]]+=(*weight)[i]*Fy[i];
-    else
-    for (int i=0; i<Naug; i++)
-    {   indL[ind[i]]+=(*weight)[i]*       Fy[i];
-        indL[ind[i]]+=(*weight)[i+Naug]*  Fy[i+Naug];
-        indL[ind[i]]+=(*weight)[i+2*Naug]*Fy[i+2*Naug];
-    }
     for (int i=0; i<Nind; i++){
+		indL[i]= 0.0;
+	}
+    if (fitQTL=='n'){
+		for (int i=0; i<Naug; i++) indL[ind[i]]+=(*weight)[i]*Fy[i];
+    }else{
+		for (int i=0; i<Naug; i++)
+		{   indL[ind[i]]+=(*weight)[i]*       Fy[i];
+			indL[ind[i]]+=(*weight)[i+Naug]*  Fy[i+Naug];
+			indL[ind[i]]+=(*weight)[i+2*Naug]*Fy[i+2*Naug];
+		}
+		
+	}
+	
+	for (int i=0; i<Nind; i++){
 		//Sum up log likelyhoods for each individual
 		
 		logL+= log(indL[i]);
 	}
-	//Rprintf("LLhood: %f\n",logL);
+	//RRprintf("LLhood: %f\n",logL);
+	
 	Free(indL);
     Free(indx);
     Free(xtQTL);
@@ -306,10 +312,10 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d)
     vector scale, swap;
     scale= newvector(dim);
     *d=1;
-  //  Rprintf("dim: %d, d: %d\n",dim,*d);
+  //Rprintf("dim: %d, d: %d\n",dim,*d);
     for (r=0; r<dim; r++)
     {   for (max=0.0, c=0; c<dim; c++) if ((temp=fabs(m[r][c])) > max) max=temp;
-        if (max==0.0) {warning("Singular matrix.");}
+        if (max==0.0) {Rprintf("Singular matrix.");}
         scale[r]=1.0/max;
     }
     for (c=0; c<dim; c++)
@@ -322,7 +328,7 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d)
             m[r][c]=sum;
             if ((temp=scale[r]*fabs(sum)) > max) { max=temp; rowmax=r; }
         }
-        if (max==0.0) {warning("singular matrix"); }
+        if (max==0.0) {Rprintf("singular matrix"); }
         if (rowmax!=c)
         {  swap=m[rowmax]; m[rowmax]=m[c]; m[c]=swap;
            scale[rowmax]=scale[c]; (*d)= -(*d);
@@ -331,7 +337,8 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d)
         temp=1.0/m[c][c];
         for (r=c+1; r<dim; r++) m[r][c]*=temp;
     }
-    Free(scale);
+   // printf("Something\n");
+    //Free(scale);
 }
 
 /* Solve the set of n linear equations AX=B.
@@ -397,13 +404,13 @@ double betacf(double a, double b, double x)
           bz=1.0;
           if ( absdouble((az-aold)/az)  < 3.0e-7) return az;
       }
-      warning("a or b too big or max number of iterations too small\n");
+      Rprintf("a or b too big or max number of iterations too small\n");
       return 0.0;
 }
 
 double betai(double a, double b, double x)
 {     double bt;
-      if (x<0.0 || x>1.0) { warning("x not between 0 and 1\n");}
+      if (x<0.0 || x>1.0) { Rprintf("x not between 0 and 1\n");}
       if (x==0.0 || x==1.0) bt=0.0;
       else bt=exp(gammln(a+b)-gammln(a)-gammln(b)+a*log(x)+b*log(1.0-x));
       if (x<(a+1.0)/(a+b+2.0)) return bt*betacf(a,b,x)/a;
@@ -413,8 +420,11 @@ double betai(double a, double b, double x)
 double inverseF(int df1, int df2, double alfa)
 {      double prob=0.0, minF=0.0, maxF=100.0, halfway=50.0, absdiff=1.0;
        int count=0;
+       //Rprintf("INFO: Things are still OKAY\n");  
        while ((absdiff>0.001)&&(count<100))
-       {     count++;
+       {     
+             //Rprintf("INFO df1:%d df2:%d alpha:%f\n",df1,df2,alfa);
+             count++;
              halfway= (maxF+minF)/2.0;
              prob= betai(df2/2.0,df1/2.0,df2/(df2+df1*halfway));
              if (prob<alfa) maxF= halfway;

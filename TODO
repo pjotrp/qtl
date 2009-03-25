@@ -1,4 +1,6 @@
 TODO list MQM package
+March 2009
+
 - Make a V_0_C.exe which uses selected cofactors in stead of em all -DONE-
 
 - Carl's book, make some plots about the listeria dataset -DONE-
@@ -16,20 +18,37 @@ TODO list MQM package
 - - Store each run in a certain format (file) -DONE-
 - - Store each bootstrapping runs in a certain format (file)
 - Finish testing enviroment
+- - Do some extreme tests (large chromosomes with a lot of markers/cofactors or 1 marker on a chromosome being a cofactor, etc)
 - - A set of objects in csv format and in MQM input files
 - - Double test augment data section -DONE-
 - Extend the testsets (more with selected co-factors)
-- Include correct RIL analysis, moved up after talk 11-febr-2009
-- Include correct BC analysis, moved up after talk 11-febr-2009
+- Include correct RIL analysis, moved up after talk 11-febr-2009 -DOPNE-
+- Include correct BC analysis, moved up after talk 11-febr-2009 -DONE-
+- Change LR to LOD -DONE-
+/****
 - - both could perhaps be done with getting the recombinant frequencies from R and then adjusting the algorithm
 - - this would remove rmixture function (which is outdated by the R/QTL est.map & calc.genoprob functions as far as i can tell)
 - - this would involve a mayor rewriting some of the QTLmixture part (perhaps even regression, but that relies on 
 - - the weightmatrix (setting them 0 could be an option))
+****/
+
+- Make standalone -DONE-
+- Fix a way to send parameters to standalone -DONE-
+- profile standalone 
+- - execution time vs. # individuals
+- - execution time vs. # cofactors
+- - execution time vs. # markers
+--REWRITE prob function to a lookup table and use boost
 - Remove bootstrapping from scanMQM and make it done by R -DONE-
 
+MOLGENIS
+Change output of R-part
+Adapt CrossFromMolgenis for pipelining -DONE-
+Include QTLintervals in ResultsToMolgenis
+- Include QTLintervals in ResultsFromMolgenis
+
 MID TERM
-Use stl (+boost) for all internal vectors and matrices -MOVED TO FORK-
-We need a working dataset of carl with 2 qtls to show we have increased power in MQM
+Use stl (+boost) for all internal vectors and matrices -MOVED TO BRANCH-
 Figure out a correct way of handling autosomes
 
 LONG TERM

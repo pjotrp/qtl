@@ -3,7 +3,7 @@
  * MQMdata.c
  *
  * copyright (c) 2009 Danny Arends
- * last modified Feb, 2009
+ * last modified Mrt, 2009
  * first written Feb, 2009
  *
  * Several basic routines needed by the MQM algorithm are defined here
@@ -21,6 +21,7 @@ extern "C"
 #include "scanMQM.h"
 #include "MQMdata.h"
 #include "MQMprob.h"
+#include "reDefine.h"
 
 
 char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype){
@@ -152,11 +153,11 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 			r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
 			if (r[j]<0){
 				Rprintf("ERROR: Recombination frequency is negative\n");
-				Rprintf("ERROR: Position=%d r[j]=%d\n",position[j], r[j]);
+				Rprintf("ERROR: Position=%d r[j]=%f\n",position[j], r[j]);
 				return;
 			}
 		}
-		//Rprintf("recomfreq:%d,%f\n",j,r[j]);
+		//RRprintf("recomfreq:%d,%f\n",j,r[j]);
     }
 
 	if(augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r,*maxaug,*maxiaug,*neglect,cross)==1){

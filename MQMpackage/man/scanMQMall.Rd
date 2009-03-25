@@ -9,7 +9,7 @@
 	Uses MQMaugment and scanMQM to scan for QTL's for each phenotype in the cross object.
 }
 \usage{
-	scanMQMall(cross = NULL, cofactors = NULL, doLOG = 0,REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.clusters = 10,doLOG=0,est.map=0,dominance=0)
+	scanMQMall(cross = NULL, cofactors = NULL, doLOG = 0,REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.clusters = 10,doLOG=0,est.map=0,dominance=0,FF=0)
 }
 
 \arguments{
@@ -26,6 +26,7 @@
   \item{doLOG}{ Indicate if the algorithm should LOG transform traitdata (DEFAULT 0 = off | 1 = on) }    
   \item{est.map}{ Reestimation of the marker locations on the genetic map before mapping QTLs (no map is returned the old map remains in the cross object }
   \item{dominance}{ Should dominance be taken into account ( 0= Additive  (DEFAULT)/ 1= Dominance) }  
+  \item{FF}{ Print an output file at the end of scanning in Frank.Format (file="frank.out") (DEFAULT 0 = no | 1 = yes) }  
   \item{forceRIL}{ Should we force the cross as a RIL, this option removed AB genotypes and replaces them with BB ? ( 0= NO  (DEFAULT)/ 1= YES) }  
   \item{n.clusters}{ Number of child processes to split the job into }
 }
