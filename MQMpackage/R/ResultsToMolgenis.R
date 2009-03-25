@@ -17,7 +17,7 @@
 #
 ######################################################################
 
-ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",Trait_num=0,DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox",Fupdate=0){
+ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresultsTest",Trait_num=0,DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox",Fupdate=0){
 	library("RCurl")
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
 		stop("ERROR: Please install the package RCurl from bioconductor to use the molgenis interface\n")
@@ -110,22 +110,9 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresults",Trait_num=0,
 		rowindex <- NULL
 		colindex <- Trait_num
 		for(i in 1:dim(intervalQTLmap[[j]])[1]) {
-			#Number (if it exists) is the location in the DD (DeciData-matrix)
-			number <- intersect(which(DD$rowindex==(i-1)),which(DD$colindex==(j-1)))
-			if(is.na(number&&1)){
-				names <- c(names,rownames(intervalQTLmap[[j]])[i])
-				values <- c(values,rownames(intervalQTLmap[[j]])[i])
-				rowindex <- c(rowindex,i-1)
-			}else{
-				if(Fupdate==1){
-					#Forced update REMOVE elements and insert the new ones
-					remove.decimaldataelement(id=DD[number,]$id)
-					add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=rownames(intervalQTLmap[[j]])[i], rowindex=(i-1), colindex=(j-1), value=intervalQTLmap[[j]][i,3])
-					cat("INFO: Updated (",i-1,",",j-1,") because it already existed\n") 
-				}else{
-					cat("INFO: Not gonna add (",i-1,",",j-1,") because it already exist\n")
-				}
-			}
+			names <- c(names,rownames(intervalQTLmap[[j]])[i])
+			values <- c(values,intervalQTLmap[[j]][i,3])
+			rowindex <- c(rowindex,i-1)
 		}
 		cat("INFO: Trying to upload a trait to column:",colindex,"\n")  
 		add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=names, rowindex=rowindex, colindex=colindex, value=values)
