@@ -90,7 +90,6 @@ double probnew(double ***MendelM,cmatrix loci, vector r, int i, int j,char c,cha
 	}else{
 		index = 0;
 	}
-
 	Nrecom = absdouble((double)loci[j][i]-(double)compareto);
 	return MendelM[j+ADJ][Nrecom][index];
 }

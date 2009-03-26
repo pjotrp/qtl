@@ -264,9 +264,6 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
               Fy[i+2*Naug]= Lnormal(resi[i+2*Naug],*variance);
           }
      }
-	Free(fit);
-    Free(resi);
-
     /* calculation of logL */
     // cout << "calculate logL" << endl;
     long double logL=0.0;
@@ -294,8 +291,10 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
 	Free(indL);
     Free(indx);
     Free(xtQTL);
-	delmatrix(XtWX,dimx+2);
-	delcmatrix(Xt,dimx+2);
+	delmatrix(XtWX);
+	delcmatrix(Xt);
+	Free(fit);
+    Free(resi);
 	Free(XtWY);    
 	return (double)logL;
 }
@@ -312,7 +311,6 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d)
     vector scale, swap;
     scale= newvector(dim);
     *d=1;
-  //Rprintf("dim: %d, d: %d\n",dim,*d);
     for (r=0; r<dim; r++)
     {   for (max=0.0, c=0; c<dim; c++) if ((temp=fabs(m[r][c])) > max) max=temp;
         if (max==0.0) {Rprintf("Singular matrix.");}
@@ -337,8 +335,8 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d)
         temp=1.0/m[c][c];
         for (r=c+1; r<dim; r++) m[r][c]*=temp;
     }
-   // printf("Something\n");
-    //Free(scale);
+    Free(scale);
+	//Free(swap);
 }
 
 /* Solve the set of n linear equations AX=B.
@@ -420,7 +418,6 @@ double betai(double a, double b, double x)
 double inverseF(int df1, int df2, double alfa)
 {      double prob=0.0, minF=0.0, maxF=100.0, halfway=50.0, absdiff=1.0;
        int count=0;
-       //Rprintf("INFO: Things are still OKAY\n");  
        while ((absdiff>0.001)&&(count<100))
        {     
              //Rprintf("INFO df1:%d df2:%d alpha:%f\n",df1,df2,alfa);

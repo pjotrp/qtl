@@ -39,7 +39,6 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
        saveQTLcofactor= newcvector(Nmark+1);
        double infocontent;
        vector info0, info1, info2, weight;
-	   double dir0, dir1, dir2;
 	   
        info0= newvector(Nind);
        info1= newvector(Nind);
@@ -92,13 +91,9 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
        cvector QTLposition;
        QTLposition= newcvector(Nloci);
 	   cmatrix QTLloci;
-	//MAYOR ERRORS WHEN USING ANYTHING OTHER THAN R_ALLOC for QTLloci (perhaps Calloc ??)
-	#ifndef ALONE
-	   QTLloci = (char **)R_alloc(Nloci, sizeof(char *));
-	#endif
-	#ifdef ALONE
-	   QTLloci = newcmatrix(1,Nloci);
-	#endif
+	
+	   QTLloci = (char **)Calloc(Nloci, char *);
+	
      //  Rprintf("DEBUG testing_2");  
        double moveQTL= stepmin;
        char nextinterval= 'n', firsttime='y';
@@ -367,7 +362,6 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
 	//	Rprintf("step: %d marker: %d\n",i,curmarker);
 	//}
 	Free(info0);
-	Free(direction);
     Free(info1);
     Free(info2);
     Free(weight);
@@ -379,7 +373,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
     Free(QTLcofactor);
 	Free(cumdistance);
 	Free(QTLmapdistance);
-    //RRprintf("MapQTL finished\n");
+	Free(QTLloci);
+	Free(saveQTLcofactor);
     return maxF; //QTLlikelihood;
 }
  

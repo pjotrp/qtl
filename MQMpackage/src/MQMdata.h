@@ -46,7 +46,8 @@ Mmatrix newMmatrix(int rows, int cols,int depth);
 void   printmatrix(matrix m, int rows, int cols);
 void   printcmatrix(cmatrix m, int rows, int cols);
 cmatrix newcmatrix(int rows, int cols);
-void delmatrix(matrix m, int rows);
-void delcmatrix(cmatrix m, int rows);
+void delmatrix(matrix m);
+void delMmatrix(Mmatrix m);
+void delcmatrix(cmatrix m);
 void copyvector(vector vsource, vector vdestination, int dim);
 /* end of MQMdata.h */

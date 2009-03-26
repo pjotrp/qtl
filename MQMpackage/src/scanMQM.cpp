@@ -157,7 +157,7 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 		}
 	}	
 	//Rprintf("Starting Cleanup\n");
-	delcmatrix(markers,Nmark);
+	delcmatrix(markers);
 	Free(f1genotype);
 	Free(cofactor);
 	Free(mapdistance);

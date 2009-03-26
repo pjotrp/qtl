@@ -187,11 +187,11 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
     vector newweight;
     newweight= newvector(Naug);
     //Creation of lookup table
-	Rprintf("INFO: Creating look-up table\n");
-	Mmatrix MendelM;
-	MendelM = newMmatrix(Nmark,3,2);
-	create_lookup_table(MendelM,Nmark,r,crosstype);
-	Rprintf("INFO: DONE Creating look-up table\n");
+		Rprintf("INFO: Creating look-up table\n");
+		Mmatrix MendelM;
+		MendelM = newMmatrix(Nmark,3,2);
+		create_lookup_table(MendelM,Nmark,r,crosstype);
+		Rprintf("INFO: DONE Creating look-up table\n");
 	//Re-estimation of recombinant frequencies
 	double max;
 	max = rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance,reestimate,crosstype,MendelM);
@@ -247,7 +247,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
         if  (diff>1)
         for (int ii=i+1; ii<Naug; ii++) ind[ii]=ind[ii]-diff+1;
     }
-    delcmatrix(newmarker,Nmark);
+    delcmatrix(newmarker);
     Free(newy);
     Free(newind);
     Free(newweight);
@@ -312,8 +312,13 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 	Free(position);
 	Free(weight);
 	Free(ind);
-	delcmatrix(marker,Nmark);
+	Free(r);
+	Free(informationcontent);
+	Free(Frun);
+	delcmatrix(marker);
+	delMmatrix(MendelM);
 	Free(y);
+	Free(chr);
 	Free(selcofactor);
 	Rprintf("INFO: Analysis of data finished\n");
 	return;

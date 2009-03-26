@@ -185,8 +185,8 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 				}				
 			}
 		}
-		delcmatrix(new_markers,(*Nmark));
-		delcmatrix(markers,(*Nmark));
+		delcmatrix(new_markers);
+		delcmatrix(markers);
 		Free(mapdistance);
 		Free(position);
 		Free(r);
@@ -220,8 +220,8 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 				}					
 			}
 		}
-		delcmatrix(new_markers,(*Nmark));
-		delcmatrix(markers,(*Nmark));
+		delcmatrix(new_markers);
+		delcmatrix(markers);
 		Free(mapdistance);
 		Free(position);
 		Free(r);
@@ -618,12 +618,17 @@ cmatrix newcmatrix(int rows, int cols){
 	return m;
 }
 
-void delmatrix(matrix m, int rows){
+void delmatrix(matrix m){
       
 	Free(m);
 }
 
-void delcmatrix(cmatrix m, int rows){
+void delMmatrix(Mmatrix m){
+      
+	Free(m);
+}
+
+void delcmatrix(cmatrix m){
      
      Free(m);
 }

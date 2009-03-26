@@ -72,5 +72,6 @@ PipelineMolgenis <- function(DBmarkerID=298,DBtraitID=181,name="MQMResultsTest",
 		cat("INFO:Stage3: Storing calculated QTL's to Molgenis\n")
 			ResultsToMolgenis(result, name,(x-1),DBpath, Fupdate)
 		cat("INFO:DONE Stage3\n")
+		Sys.sleep(0.1)
 	}
 }
