@@ -15,6 +15,7 @@
 /*------------------------------------------------------------------------
 Datastructures for matrix and vector calculus
 ------------------------------------------------------------------------ */
+typedef double*** Mmatrix;
 typedef double** matrix;
 typedef double*  vector;
 typedef char**   cmatrix;
@@ -41,6 +42,7 @@ vector newvector(int dim);
 ivector newivector(int dim);
 cvector newcvector(int dim);
 matrix newmatrix(int rows, int cols);
+Mmatrix newMmatrix(int rows, int cols,int depth);
 void   printmatrix(matrix m, int rows, int cols);
 void   printcmatrix(cmatrix m, int rows, int cols);
 cmatrix newcmatrix(int rows, int cols);

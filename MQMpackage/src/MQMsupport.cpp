@@ -28,6 +28,7 @@ extern "C"
 #include "Regression.h"
 #include "MQMmapQTL.h"
 #include "MQMmixture.h"
+#include "MQMprob.h"
 #include "reDefine.h"
 
 /*
@@ -81,6 +82,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 		if ((position[j]=='L')||(position[j]=='M')){
 			r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
 		}
+		//Rprintf("R[j] value: %f\n",r[j]);
     }
 	
 	Rprintf("INFO: Initialize Frun and informationcontent to 0.0\n");	// ---- Initialize Frun and informationcontent to 0.0
@@ -184,10 +186,15 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 
     vector newweight;
     newweight= newvector(Naug);
-    
+    //Creation of lookup table
+	Rprintf("INFO: Creating look-up table\n");
+	Mmatrix MendelM;
+	MendelM = newMmatrix(Nmark,3,2);
+	create_lookup_table(MendelM,Nmark,r,crosstype);
+	Rprintf("INFO: DONE Creating look-up table\n");
 	//Re-estimation of recombinant frequencies
 	double max;
-	max = rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance,reestimate,crosstype);
+	max = rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance,reestimate,crosstype,MendelM);
 	if(max > stepmax){
 		Rprintf("ERROR: Reestimation of the map put markers at: %f Cm\n",max);
 		Rprintf("ERROR: Rerun the algorithm with a step.max larger than %f Cm\n",max);
@@ -271,15 +278,15 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 	F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
 	weight[0]= -1.0;
-	logLfull= QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
+	logLfull= QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype, MendelM);
 	Rprintf("INFO: Log-likelihood of full model= %f\n",logLfull);
 	Rprintf("INFO: Residual variance= %f\n",variance);
 	Rprintf("INFO: Trait mean= %f \nINFO: Trait variation= %f\n",ymean,yvari);
 
 	if (Backwards==1)    // use only selected cofactors
-		logLfull= backward(Nind, Nmark, (*cofactor), marker, y, weight, ind, Naug, logLfull,variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype);
+		logLfull= backward(Nind, Nmark, (*cofactor), marker, y, weight, ind, Naug, logLfull,variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,MendelM);
 	if (Backwards==0) // use all cofactors
-		logLfull= mapQTL(Nind, Nmark, (*cofactor), (*cofactor), marker, position,(*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype); // printout=='n'
+		logLfull= mapQTL(Nind, Nmark, (*cofactor), (*cofactor), marker, position,(*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,MendelM); // printout=='n'
 	
 	// ---- Write output / send it back to R
 	//Cofactors that made it to the final model
@@ -318,7 +325,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
    analoog vector XtWY wordt full xtwy genoemd;
 */
 double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector weight, int* ind, int Naug, double logLfull, double variance, double F1, double F2, cvector* newcofactor, vector r, cvector position,vector *informationcontent,vector *mapdistance,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance,int em, double windowsize,double stepsize,
-			  double stepmin,double stepmax,char crosstype){
+			  double stepmin,double stepmax,char crosstype,Mmatrix MendelM){
 	int dropj=0, Ncof=0;
     double maxlogL, savelogL, maxF=0.0; //, minlogL=logLfull, maxFtest=0.0;
     char finished='n'; //, biasadj='n';
@@ -337,13 +344,13 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
 				//Rprintf("Drop marker %d\n",j);
 				(*newcofactor)[j]='0';
 				if (REMLorML=='1') variance= -1.0;
-				logL[j]= QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
+				logL[j]= QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype, MendelM);
 				(*newcofactor)[j]='1';
 			}else if ((*newcofactor)[j]=='2'){
 				//Rprintf("Drop marker %d\n",j);
 				(*newcofactor)[j]='0';
 				if (REMLorML=='1') variance= -1.0;
-				logL[j]=  QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype);
+				logL[j]=  QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype, MendelM);
 				(*newcofactor)[j]='2';
 			}else if ((*newcofactor)[j]!='0'){
 				Rprintf("ERROR: Something is wrong when trying to parse the newcofactorslist.\n");
@@ -392,7 +399,7 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
 	Rprintf("MODEL: --------------------:END MODEL:--------------------\n");
 
     maxF= mapQTL(Nind, Nmark, cofactor, (*newcofactor), marker, position,
-           (*mapdistance), y, r, ind, Naug, variance, 'n', informationcontent,Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype); // printoutput='n'
+           (*mapdistance), y, r, ind, Naug, variance, 'n', informationcontent,Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype, MendelM); // printoutput='n'
     //Rprintf("Backward selection finished\n");
     Free(logL);
     return maxF;

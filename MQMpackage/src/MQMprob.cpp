@@ -42,19 +42,64 @@ double start_prob(char crosstype,char c){
 	return 0.0;
 }
 
-void create_lookup_table(){
+void create_lookup_table(double ***MendelM,int Nmark,vector r,char crosstype){
 
+	switch(crosstype){
+		case 'F':
+			for(int i=0; i< Nmark; i++){
+				MendelM[i][0][0] = (1.0-r[i])*(1.0-r[i]);
+				MendelM[i][1][0] = r[i]*(1.0-r[i]);
+				MendelM[i][1][1] = 2.0*r[i]*(1.0-r[i]);
+				MendelM[i][2][0] = r[i]*r[i];
+			}
+		break;
+		case 'R':
+			for(int i=0; i< Nmark; i++){
+				MendelM[i][0][0] = 1.0-r[i];
+				MendelM[i][1][0] = 0;
+				MendelM[i][2][0] = r[i];
+			}
+		break;
+		case 'B':
+			for(int i=0; i< Nmark; i++){
+				MendelM[i][0][0] = 1.0-r[i];
+				MendelM[i][1][0] = r[i];
+				MendelM[i][2][0] = 0;
+			}
+		break;			
+	}
 }
 
-double probnew(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,int ADJ,int start){
+double probnew(double ***MendelM,cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,int ADJ,int start){
+	if(start){
+		return start_prob(crosstype,loci[j][i]);
+	}
+	char compareto;
+	int index;
+	int Nrecom;
+	
+	if(JorC==1){
+		//Rprintf("C %d %d\n",i,j);
+		compareto = c;
+	}else{
+		//Rprintf("loci[j+1][i] %d\n",j);
+		compareto = loci[j+1][i];
+	}
+	if ((crosstype=='F')&&(loci[j][i]=='1')&&(compareto=='1')){
+		index = 1;
+	}else{
+		index = 0;
+	}
 
+	Nrecom = absdouble((double)loci[j][i]-(double)compareto);
+	return MendelM[j+ADJ][Nrecom][index];
 }
 
 double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,int ADJ,int start){
 	//Compares loci[j][i] versus loci[j+1][i]
 	//OR if JorC is set to 1 loci[j][i] versus compareto
 	//Specify an ADJ to adjust loci[j][i] to a specific location in the r[j+ADJ]
-	
+	//Rprintf("Prob called: values:\n(i,j,ADJ)=(%d,%d,%d)\nR[j+ADJ] value: %f Loci[j][i]=%c\n",i,j,ADJ,r[j+ADJ],loci[j][i]);	
 	double calc_i=0.0;
 	double Nrecom;
 	char compareto;
@@ -70,8 +115,7 @@ double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,
 		case 'F':
 				if(start){
 					return (loci[j][i]=='1' ? 0.5 : 0.25);
-				}
-				//Rprintf("before Nrecom\n",j);				
+				}			
 				Nrecom= absdouble((double)loci[j][i]-(double)compareto);
 				if ((loci[j][i]=='1')&&(compareto=='1')){
 					//Rprintf("SCase %c <-> %c:\n",compareto,loci[j][i]);

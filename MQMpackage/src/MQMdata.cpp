@@ -574,6 +574,18 @@ matrix newmatrix(int rows, int cols){
     return m;
 }
 
+Mmatrix newMmatrix(int rows, int cols,int depth){
+    Mmatrix m;
+    m = (double ***)Calloc(rows, double**);
+    if (m==NULL) { 
+        warning("Not enough memory for new double matrix");
+    }
+    for (int i=0; i<rows; i++){
+		m[i]= newmatrix(cols,depth);
+	}
+    return m;
+}
+
 void printmatrix(matrix m, int rows, int cols){
       
 	for (int r=0; r<rows; r++){
