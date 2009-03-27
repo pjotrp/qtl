@@ -87,7 +87,7 @@ void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno)
 void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo, 
 			 double **Dist, double **Pheno, int **Cofactors, int Backwards, int RMLorML,double Alfa,int Emiter,
 			 double Windowsize,double Steps,
-			 double Stepmi,double Stepma,int NRUN,int out_Naug,int **INDlist, double **QTL, int re_estimate,int crosstype,int domi){
+			 double Stepmi,double Stepma,int NRUN,int out_Naug,int **INDlist, double **QTL, int re_estimate,int crosstype,int domi,int verbose){
 	
 	ivector f1genotype;
 	cmatrix markers;
@@ -132,7 +132,7 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	char cross = determin_cross(&Nmark,&Nind,Geno,&crosstype);
 	//set dominance accordingly
 	if(cross != 'F'){
-		Rprintf("INFO: Dominance setting ignored (dominance=0)\n");   
+		if(verbose==1){Rprintf("INFO: Dominance setting ignored (dominance=0)\n");}
 		domi = 0;
 	}else{
 		domi= domi;
@@ -141,17 +141,19 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	char dominance='n';
 	if(domi != 0){
 		dominance='y';
-	}	
-	Rprintf("INFO: All the needed information, so lets start with the MQM\n");
-	analyseF2(Nind, Nmark, &cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,cross,dominance);
+	}
+	
+	//WE HAVE EVERYTHING START WITH MAIN SCANNING FUNCTION
+	analyseF2(Nind, Nmark, &cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,cross,dominance,verbose);
+	
 	if(re_estimate){
-		Rprintf("INFO: Sending back the reestimated map used during analysis\n");
+		if(verbose==1){Rprintf("INFO: Sending back the reestimated map used during analysis\n");}
 		for(int i=0; i< Nmark; i++){
 			Dist[0][i]=mapdistance[i];
 		}
 	}
 	if(Backwards){
-		Rprintf("INFO: Sending back the model\n");
+		if(verbose==1){Rprintf("INFO: Sending back the model\n");}
 		for(int i=0; i< Nmark; i++){
 			Cofactors[0][i]=cofactor[i];
 		}
@@ -161,7 +163,7 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	Free(f1genotype);
 	Free(cofactor);
 	Free(mapdistance);
-	Rprintf("INFO: All done in C returning to R\n");
+	if(verbose==1){Rprintf("INFO: All done in C returning to R\n");}
 	 #ifndef ALONE
 	 R_CheckUserInterrupt(); /* check for ^C */
 	 R_ProcessEvents(); /*  Try not to crash windows etc*/
@@ -182,7 +184,7 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
 			   int *geno,int *chromo, double *dist, double *pheno, 
 			   int *cofactors, int *backwards, int *RMLorML,double *alfa,int *emiter,
 			   double *windowsize,double *steps,
-			   double *stepmi,double *stepma, int *nRun,int *out_Naug,int *indlist,  double *qtl,int *reestimate,int *crosstype,int *domi){
+			   double *stepmi,double *stepma, int *nRun,int *out_Naug,int *indlist,  double *qtl,int *reestimate,int *crosstype,int *domi,int *verbose){
    int **Geno;
    int **Chromo;
    double **Dist;  
@@ -202,7 +204,7 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
    reorg_int(*out_Naug,1,indlist,&INDlist);  
    //Done with reorganising lets start executing
    
-   scanMQM(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,*crosstype,*domi);
+   scanMQM(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,*crosstype,*domi,*verbose);
 } /* end of function R_scanMQM */
 
 int count_lines(char *file){
@@ -357,7 +359,7 @@ int main(){
 	Rprintf("INFO: Cofactors %d\n",sum);
 	Rprintf("INFO: Starting C-part of the MQM analysis\n");
 	//ALL information is read in or calculated, so we gonna start MQM, however Rprintf crashes MQM
-   	analyseF2(nInd, nMark, &cofactor, markers, pheno_value, f1genotype, backwards,QTL, &mapdistance,&chr,0,0,windowsize,stepsize,stepmin,stepmax,alpha,maxIter,nInd,&INDlist,estmap,'F',0);
+   	analyseF2(nInd, nMark, &cofactor, markers, pheno_value, f1genotype, backwards,QTL, &mapdistance,&chr,0,0,windowsize,stepsize,stepmin,stepmax,alpha,maxIter,nInd,&INDlist,estmap,'F',0,1);
 	return 1;
 }
 

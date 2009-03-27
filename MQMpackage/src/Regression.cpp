@@ -415,7 +415,7 @@ double betai(double a, double b, double x)
       else return 1.0-bt*betacf(b,a,1.0-x)/b;
 }
 
-double inverseF(int df1, int df2, double alfa)
+double inverseF(int df1, int df2, double alfa,int verbose)
 {      double prob=0.0, minF=0.0, maxF=100.0, halfway=50.0, absdiff=1.0;
        int count=0;
        while ((absdiff>0.001)&&(count<100))
@@ -428,7 +428,7 @@ double inverseF(int df1, int df2, double alfa)
              else minF= halfway;
              absdiff= fabs(prob-alfa);
        }
-       Rprintf("INFO: Prob=%f Alfa=%f\n",prob,alfa);
+       if(verbose==1){Rprintf("INFO: Prob=%f Alfa=%f\n",prob,alfa);}
        return halfway;
 }
 

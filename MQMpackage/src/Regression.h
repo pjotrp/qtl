@@ -32,6 +32,6 @@ void lusolve(matrix lu, int dim, ivector ndx, vector b);
 double gammln(double xx);
 double betai(double a, double b, double x);
 double betacf(double a, double b, double x);
-double inverseF(int df1, int df2, double alfa);
+double inverseF(int df1, int df2, double alfa,int verbose);
 
 /* end of MQMsupport.h */

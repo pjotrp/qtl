@@ -30,7 +30,7 @@
     ignorance of unlikely genotypes*/
 double rmixture(cmatrix marker, vector weight, vector r,
               cvector position, ivector ind,
-              int Nind, int Naug, int Nmark,vector *mapdistance, char reestimate,char crosstype, Mmatrix MendelM){   
+              int Nind, int Naug, int Nmark,vector *mapdistance, char reestimate,char crosstype, Mmatrix MendelM,int verbose){   
 	int i,j;
     int iem= 0;
     double Nrecom, oldr=0.0, newr, rdelta=1.0;
@@ -42,9 +42,9 @@ double rmixture(cmatrix marker, vector weight, vector r,
     distance= newvector(Nmark+1);
 
     if (reestimate=='n'){
-		Rprintf("INFO: recombination parameters are not re-estimated\n");
+		if(verbose==1){Rprintf("INFO: recombination parameters are not re-estimated\n");}
     }else{
-		Rprintf("INFO: recombination parameters are re-estimated\n");
+		if(verbose==1){Rprintf("INFO: recombination parameters are re-estimated\n");}
 	//Reestimation of map now works
     while ((iem<1000)&&(rdelta>0.0001)){
 		iem+=1;
@@ -114,7 +114,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
 			//Rprintf("r(%d)= %f -> %f\n",j,r[j],(*mapdistance)[j]);
 		}
 	}
-	Rprintf("INFO: Re-estimation of the genetic map took %d iterations, to reach a rdelta of %f\n",iem,rdelta);
+	if(verbose==1){Rprintf("INFO: Re-estimation of the genetic map took %d iterations, to reach a rdelta of %f\n",iem,rdelta);}
 	Free(indweight);
 	return maximum;
 }
@@ -125,8 +125,8 @@ double rmixture(cmatrix marker, vector weight, vector r,
 double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
               vector y, ivector ind, int Nind, int Naug,
               int Nloci,
-              double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance,char crosstype,Mmatrix MendelM){
-	//Rprintf("QTLmixture called\n");
+              double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance,char crosstype,Mmatrix MendelM,int verbose){
+	if(verbose==1){Rprintf("QTLmixture called\n");}
     int iem= 0, newNaug, i, j;
     char varknown, biasadj='n';
 	double oldlogL=-10000, delta=1.0, calc_i, logP=0.0, Pscale=1.75;

@@ -193,7 +193,8 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 				QTL=as.double(rep(0,2*n.chr*qtlAchromo)),
 				as.integer(est.map),
 				as.integer(ctype),
-				as.integer(dominance)
+				as.integer(dominance),
+				as.integer(verbose)
 			    )
 		# initialize output object
 		qtl <- NULL
