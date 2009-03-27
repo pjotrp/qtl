@@ -292,7 +292,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 				plot.MQMone(qtl)
 			}else{
 				plot(qtl,lwd=1)
-				grid(max(gtl$chr),5)
+				grid(max(qtl$chr),5)
 				labels <- paste("QTL",colnames(cross$pheno)[pheno.col])
 				legend("topright", labels,col=c("black"),lty=c(1))
 			}

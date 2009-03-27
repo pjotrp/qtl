@@ -17,7 +17,7 @@
 #
 ######################################################################
 
-ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresultsTest",Trait_num=0,DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox",Fupdate=0){
+ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresultsTest",Trait_num=0,DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox",Fupdate=0,verbose=TRUE){
 	library("RCurl")
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
 		stop("ERROR: Please install the package RCurl from bioconductor to use the molgenis interface\n")
@@ -55,18 +55,18 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresultsTest",Trait_nu
 		num_pheno <- length(intervalQTLmap)
 	}
 	investi <- find.investigation()
-	cat("INFO: Found",dim(investi)[1],"investigations in the current database\n")
+	ourcat("INFO: Found",dim(investi)[1],"investigations in the current database\n",a=verbose)
 	if("MQMQTL" %in% investi$name){
-		cat("INFO: Found MQMQTL investigation in the current database\n")
+		ourcat("INFO: Found MQMQTL investigation in the current database\n",a=verbose)
 		num <- find.investigation(name="MQMQTL")
 	}else{
-		cat("INFO: Created a new instance of an MQMQTL investigation in the current database\n")
+		ourcat("INFO: Created a new instance of an MQMQTL investigation in the current database\n",a=verbose)
 		num <- add.investigation(name="MQMQTL")
 	}
 	
 	#Get all the markers
 	markers <- find.marker()
-	cat("INFO: Found",dim(markers)[1],"markers in the current database\n")
+	ourcat("INFO: Found",dim(markers)[1],"markers in the current database\n",a=verbose)
 	cnt <- 0
 	if(num_pheno == 1){	
 		intervalQTLmap = list(intervalQTLmap)
@@ -79,7 +79,7 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresultsTest",Trait_nu
 			}
 		}
 	}
-	cat("INFO: Added",cnt,"markers to the current database\n")	
+	ourcat("INFO: Added",cnt,"markers to the current database\n",a=verbose)	
 	#Markers are inside molgenis, now we need to get the QTL's in
 	
 	aaa <- find.data(name=name)
@@ -87,11 +87,11 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresultsTest",Trait_nu
 	trait_name <- find.trait(name=substr(colnam,5,nchar(colnames(intervalQTLmap[[1]])[3])))
 	if(!dim(aaa)[1]){
 		#No find, so we'll create one
-		cat("INFO: Not matrix named",name,"found in the current database\n")
-		cat("INFO: Creating:",name,"in the current database\n")
+		ourcat("INFO: Not matrix named",name,"found in the current database\n",a=verbose)
+		ourcat("INFO: Creating:",name,"in the current database\n",a=verbose)
 		aaa <- add.data(name = name,investigation_id=num$id,rowtype="Marker",coltype=trait_name$type,totalrows=1,totalcols=1,valuetype="Decimal")
 	}else{
-		cat("INFO: Matrix named",name,"found in the current database\n")
+		ourcat("INFO: Matrix named",name,"found in the current database\n",a=verbose)
 	}
 
 	for(j in 1:num_pheno){
@@ -109,9 +109,9 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresultsTest",Trait_nu
 			values <- c(values,intervalQTLmap[[j]][i,3])
 			rowindex <- c(rowindex,i-1)
 		}
-		cat("INFO: Trying to upload a trait to column:",colindex,"\n")  
+		ourcat("INFO: Trying to upload a trait to column:",colindex,"\n",a=verbose)  
 		add.decimaldataelement(data_id=aaa$id, col_name=colnam, row_name=names, rowindex=rowindex, colindex=colindex, value=values)
-		cat("INFO: Uploaded",length(values)," QTL estimates\n")
+		ourcat("INFO: Uploaded",length(values)," QTL estimates\n",a=verbose)
 	}
 }
 
