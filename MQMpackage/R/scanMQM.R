@@ -27,7 +27,7 @@
 	
 scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=TRUE,forceRIL=0){
+					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=TRUE,forceRIL=0,verbose=TRUE){
     library(qtl)
 	n.run=0
 	if(is.null(cross)){
@@ -44,11 +44,11 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 			ctype = 3
 		#	stop("Somethings still wrong in the algorithm, please analyse RIL as BC.")
 		}
-		cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
+		ourcat("INFO: Received a valid cross file type:",class(cross)[1],".\n",a=verbose)
 		n.ind <- nind(cross)
 		n.chr <- nchr(cross)
-		cat("INFO: Number of individuals: ",n.ind,"\n")
-		cat("INFO: Number of chromosomes: ",n.chr,"\n")
+		ourcat("INFO: Number of individuals: ",n.ind,"\n",a=verbose)
+		ourcat("INFO: Number of chromosomes: ",n.chr,"\n",a=verbose)
 		geno <- NULL
 		chr <- NULL
 		dist <- NULL
@@ -66,8 +66,8 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 			stop("ERROR: For multiple phenotype analysis use the function: 'scanMQMall'.\n")	
 		}
 		if(pheno.col != 1){
-			cat("INFO: Selected phenotype ",pheno.col,".\n")
-			cat("INFO: Number of phenotypes in object ",nphe(cross),".\n")
+			ourcat("INFO: Selected phenotype ",pheno.col,".\n",a=verbose)
+			ourcat("INFO: Number of phenotypes in object ",nphe(cross),".\n",a=verbose)
 			if(nphe(cross) < pheno.col || pheno.col < 1){
 				stop("ERROR: No such phenotype in cross object.\n")
 			}			
@@ -75,7 +75,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		pheno <- cross$pheno[[pheno.col]]
 		if(var(pheno,na.rm = TRUE)> 1000){
 			if(doLOG == 0){
-				cat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"variation:",var(pheno,na.rm = TRUE),".\n")
+				ourcat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"variation:",var(pheno,na.rm = TRUE),".\n",a=verbose)
 				warning("INFO: Perhaps we should LOG-transform this phenotype, please set parameter: doLOG=1 to correct this error")
 			}
 		}
@@ -85,7 +85,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 				pheno <- cross$pheno[[pheno.col]]
 		}
 		n.mark <- ncol(geno)
-		cat("INFO: Number of markers:",n.mark,"\n")
+		ourcat("INFO: Number of markers:",n.mark,"\n",a=verbose)
 		Fril.replaced <- 0
 
 		for(i in 1:n.ind) {
@@ -104,13 +104,13 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 			}
 		}
 		if(forceRIL==1 && Fril.replaced > 0){
-			 cat("INFO: Changed ",Fril.replaced," AB markers into BB markers.\n")
+			 ourcat("INFO: Changed ",Fril.replaced," AB markers into BB markers.\n",a=verbose)
 		}
 		#check for missing phenotypes
 		dropped <- NULL
 		for(i in 1:length(pheno)) {
 			if(is.na(pheno[i])){
-			  cat("INFO: Dropped individual ",i," with missing phenotype.\n")
+			  ourcat("INFO: Dropped individual ",i," with missing phenotype.\n",a=verbose)
 			  dropped <- c(dropped,i) 
 			  n.ind = n.ind-1
 			}
@@ -123,10 +123,10 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		
 		#CHECK for previously augmented dataset
 		if(!is.null(cross$extra)){
-			cat("INFO: previously augmented dataset.\n")			
-			cat("INFO: Individuals before augmentation",cross$extra$Nind,".\n")
+			ourcat("INFO: previously augmented dataset.\n",a=verbose)			
+			ourcat("INFO: Individuals before augmentation",cross$extra$Nind,".\n",a=verbose)
 			extra1 <- cross$extra$Nind
-			cat("INFO: Individuals after augmentation",cross$extra$augIND,".\n")
+			ourcat("INFO: Individuals after augmentation",cross$extra$augIND,".\n",a=verbose)
 			extra2 <- cross$extra$augIND
 		}else{
 			#No augmentation so just set extra1 to be Nind (Naug internally of scanMQM)
@@ -137,15 +137,15 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		#CHECK if we have cofactors, so we can do backward elimination
 		backward <- 0;
 		if(is.null(cofactors)){
-			cat("INFO: No cofactors, setting cofactors to 0\n")
+			ourcat("INFO: No cofactors, setting cofactors to 0\n",a=verbose)
 			cofactors = rep(0,n.mark)
 		}else{
 			if(length(cofactors) != n.mark){
-				cat("ERROR: # Cofactors != # Markers\n")		
+				ourcat("ERROR: # Cofactors != # Markers\n",a=verbose)		
 			}else{
-				cat("INFO:",length(cofactors),"Cofactors received to be analyzed\n")
+				ourcat("INFO:",length(cofactors),"Cofactors received to be analyzed\n",a=verbose)
 				if(sum(cofactors) > 0){
-					cat("INFO: Doing backward elimination of selected cofactors.\n")
+					ourcat("INFO: Doing backward elimination of selected cofactors.\n",a=verbose)
 					backward <- 1;
 					n.run <- 0;
 				}else{
@@ -169,7 +169,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 				stop("ERROR: Markers outside of the mapping at ",max_cm_on_map," Cm, please set parameter step.max larger than this value.")		
 		}
 		qtlAchromo <- length(seq(step.min,step.max,step.size))
-		cat("INFO: Number of locations per chromosome: ",qtlAchromo, "\n")
+		ourcat("INFO: Number of locations per chromosome: ",qtlAchromo, "\n",a=verbose)
 		result <- .C("R_scanMQM",
 				as.integer(n.ind),
                 as.integer(n.mark),
@@ -226,7 +226,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 						sum <- sum+1
 					}
 				}
-				cat("INFO: Viewing the user supplied map versus genetic map used during analysis.\n")
+				ourcat("INFO: Viewing the user supplied map versus genetic map used during analysis.\n",a=verbose)
 				plot.map(pull.map(cross), new_map,main="Supplied map versus re-estimated map")
 			}
 			if(backward){
@@ -243,7 +243,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 					for(j in 1:aa[[i]]) {
 						#cat("INFO ",sum," ResultCOF:",result$COF[sum],"\n")
 						if(result$COF[sum] != 48){
-							cat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new_map)[sum])," Cm\n")
+							ourcat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new_map)[sum])," Cm\n",a=verbose)
 							qc <- c(qc, as.character(names(cross$geno)[i]))
 							qp <- c(qp, as.double(unlist(new_map)[sum]))
 							qn <- c(qn, substr(names(unlist(new_map))[sum],3,nchar(names(unlist(new_map))[sum])))
@@ -268,7 +268,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		#Convert to data/frame and scan.one object so we can use the standard plotting routines
 		qtl <- as.data.frame(qtl)
 		class(qtl) <- c("scanone",class(qtl)) 
-		cat("INFO: Saving output to file: ",file, "\n")
+		ourcat("INFO: Saving output to file: ",file, "\n",a=verbose)
 		write.table(qtl,file)
 		#Reset plotting and return the results
 		if(plot){

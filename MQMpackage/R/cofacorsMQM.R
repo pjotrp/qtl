@@ -22,7 +22,7 @@
 #dyn.load("scanMQM.dll")
 #cross <- read.cross("csv","","Test.csv")
 
-MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
+MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL,verbose=TRUE){
 	if(is.null(cross)){
       stop("ERROR: No cross file. Please supply a valid cross object.")
 	  return 
@@ -36,8 +36,8 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
 	geno <- NULL
 	cofactorlist <- NULL
 	individuals <- nind(cross)
-	cat("INFO: Found",individuals,"individuals in the cross object.\n")
-	cat("INFO: Mamimum amount of cofactors",(individuals-5),"leaves 5 Degrees of Freedom.\n")
+	ourcat("INFO: Found",individuals,"individuals in the cross object.\n",a=verbose)
+	ourcat("INFO: Mamimum amount of cofactors",(individuals-5),"leaves 5 Degrees of Freedom.\n",a=verbose)
 	for(i in 1:n.chr) {
       geno <- cbind(geno,cross$geno[[i]]$data)
 	}
@@ -82,7 +82,7 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL){
     cofactorlist
 }
 
-MQMCofactorsEach <- function(cross = NULL,each = 3){
+MQMCofactorsEach <- function(cross = NULL,each = 3,verbose=TRUE){
 	if(is.null(cross)){
       stop("ERROR: No cross file. Please supply a valid cross object.")
 	  return 
@@ -98,8 +98,8 @@ MQMCofactorsEach <- function(cross = NULL,each = 3){
 	}
 	n.mark <- ncol(geno)
 	
-	cat("INFO: Found",individuals,"individuals in the cross object.\n")
-	cat("INFO: Mamimum amount of cofactors",(individuals-10)," (each =",ceiling(sum(n.mark)/(individuals-10)),") leaves 10 Degrees of Freedom.\n")
+	ourcat("INFO: Found",individuals,"individuals in the cross object.\n",a=verbose)
+	ourcat("INFO: Mamimum amount of cofactors",(individuals-10)," (each =",ceiling(sum(n.mark)/(individuals-10)),") leaves 10 Degrees of Freedom.\n",a=verbose)
 
 
 	if(each > n.mark){

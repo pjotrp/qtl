@@ -24,3 +24,11 @@ MQMwindow <- function(text){
     close(outConn)
     file.show(outFile, delete.file = TRUE)
 }
+
+ourcat <- function(...,a=TRUE){
+	if(a){
+		cat(...)
+	}else{
+		return
+	}
+}

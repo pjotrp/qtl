@@ -24,7 +24,7 @@
 #cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
 #data(listeria)
 
-MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10){
+MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10,verbose=TRUE){
 	library(qtl)
 	if(is.null(cross)){
 		stop("ERROR: No cross file. Please supply a valid cross object.")
@@ -41,12 +41,12 @@ MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10
 			ctype = 3
 		#	stop("Somethings still wrong in the algorithm, please analyse RIL as BC.")
 		}
-		cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
+		ourcat("INFO: Received a valid cross file type:",class(cross)[1],".\n",a=verbose)
 		n.ind <- nind(cross)
 		n.chr <- nchr(cross)
 		n.aug <- maxaug
-		cat("INFO: Number of individuals:",n.ind,".\n")
-		cat("INFO: Number of chr:",n.chr,".\n")
+		ourcat("INFO: Number of individuals:",n.ind,".\n",a=verbose)
+		ourcat("INFO: Number of chr:",n.chr,".\n",a=verbose)
 		phenonaam <- colnames(cross$pheno)[pheno.col]
 		geno <- NULL
 		chr <- NULL
@@ -59,7 +59,7 @@ MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10
 		}
 		pheno <- cross$pheno
 		n.mark <- ncol(geno)
-		cat("INFO: Number of markers:",n.mark,".\n")
+		ourcat("INFO: Number of markers:",n.mark,".\n",a=verbose)
 		#Check for na genotypes and replace them with a 9
 		for(i in 1:n.ind) {
 			for(j in 1:n.mark) {
@@ -72,7 +72,7 @@ MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10
 		dropped <- NULL
 		for(i in 1:dim(pheno)[1]) {
 			if(is.na(pheno[i,pheno.col])){
-				cat("INFO: Dropped individual ",i ," with missing phenotype.\n")
+				ourcat("INFO: Dropped individual ",i ," with missing phenotype.\n",a=verbose)
 				dropped <- c(dropped,i) 
 				n.ind = n.ind-1
 			}
@@ -84,8 +84,8 @@ MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10
 		}
 		if(pheno.col != 1){
 			
-			cat("INFO: Selected phenotype ",pheno.col," -> ",phenonaam,".\n")
-			cat("INFO: # of phenotypes in object ",nphe(cross),".\n")
+			ourcat("INFO: Selected phenotype ",pheno.col," -> ",phenonaam,".\n",a=verbose)
+			ourcat("INFO: # of phenotypes in object ",nphe(cross),".\n",a=verbose)
 			if(nphe(cross) < pheno.col || pheno.col < 1){
 				stop("ERROR: No such phenotype in cross object.\n")
 			}			

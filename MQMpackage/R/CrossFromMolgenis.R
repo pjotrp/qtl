@@ -17,7 +17,7 @@
 #
 ######################################################################
 
-CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,trait=0,DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox"){
+CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,trait=0,DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox",verbose=T){
 	library("RCurl")
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
 		stop("ERROR: Please install the package RCurl from bioconductor to use the molgenis interface\n")
@@ -93,25 +93,25 @@ CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,trait=0,DBpath="http:
 		#cat("INFO: Flipping traitset\n")
 		trait_data <- t(trait_data)
 	}
-	cat("INFO: Number of individuals in Marker set:",dim(marker_data)[2],"\n")
-	cat("INFO: Number of individuals in Phenotype set:",dim(trait_data)[2],"\n")
+	ourcat("INFO: Number of individuals in Marker set:",dim(marker_data)[2],"\n",a=verbose)
+	ourcat("INFO: Number of individuals in Phenotype set:",dim(trait_data)[2],"\n",a=verbose)
 	
 	#We assume that if we have IND in markers = IND in trait that individuals match
 	if(dim(marker_data)[2] > dim(trait_data)[2]){
-		cat("INFO: Scaling down the markerset\n")
+		ourcat("INFO: Scaling down the markerset\n",a=verbose)
 		matchV <- na.omit(match(colnames(trait_data),colnames(marker_data)))
 		marker_data <- marker_data[,matchV]
 		matchV <- na.omit(match(colnames(marker_data),colnames(trait_data)))
 		trait_data <- trait_data[,matchV]
 	}else{
-		cat("INFO: Scaling down the traitset\n")	
+		ourcat("INFO: Scaling down the traitset\n",a=verbose)	
 		matchV <- na.omit(match(colnames(marker_data),colnames(trait_data)))
 		trait_data <- trait_data[,matchV]
 		matchV <- na.omit(match(colnames(trait_data),colnames(marker_data)))
 		marker_data <- marker_data[,matchV]
 	}
-	cat("INFO: Number of individuals in Marker set:",dim(marker_data)[2],"\n")
-	cat("INFO: Number of individuals in Phenotype set:",dim(trait_data)[2],"\n")
+	ourcat("INFO: Number of individuals in Marker set:",dim(marker_data)[2],"\n",a=verbose)
+	ourcat("INFO: Number of individuals in Phenotype set:",dim(trait_data)[2],"\n",a=verbose)
 	
 	#Parse data towards the R/QTL format we need to convert all AA/AB/BB etc to 1,2,3
 	for(i in 1:dim(marker_data)[1]) {
@@ -150,7 +150,7 @@ CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,trait=0,DBpath="http:
 	remFromChr <- NULL
 	for(i in 1:length(chr)) {
 		if(is.na(chr[i])){
-			cat("INFO: Gonna remove marker #",i,"Which is prob:",names(marker_data[,1])[i],"\n")
+			ourcat("INFO: Gonna remove marker #",i,"Which is prob:",names(marker_data[,1])[i],"\n",a=verbose)
 			remFromChr <- c(remFromChr,i)
 
 		}
