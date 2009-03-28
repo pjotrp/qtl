@@ -28,7 +28,8 @@
 scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
 					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=TRUE,forceRIL=0,verbose=TRUE){
-    library(qtl)
+    start <- proc.time()
+	library(qtl)
 	n.run=0
 	if(is.null(cross)){
 		stop("ERROR: No cross file. Please supply a valid cross object.") 
@@ -170,6 +171,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		}
 		qtlAchromo <- length(seq(step.min,step.max,step.size))
 		ourcat("INFO: Number of locations per chromosome: ",qtlAchromo, "\n",a=verbose)
+		end_1 <- proc.time()
 		result <- .C("R_scanMQM",
 				as.integer(n.ind),
                 as.integer(n.mark),
@@ -196,6 +198,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 				as.integer(dominance),
 				as.integer(verbose)
 			    )
+		end_2 <- proc.time()				
 		# initialize output object
 		qtl <- NULL
 		info <- NULL
@@ -301,6 +304,8 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		if(plot){
 		  op <- par(mfrow = c(1,1))
 		}
+		end_3 <- proc.time()
+		ourcat("INFO: Calculation time (R->C,C,C-R): (",(end_1-start)[3], ",",(end_2-end_1)[3],",",(end_3-end_2)[3],") (in seconds)\n",a=verbose)
 		qtl
 	}else{
 		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
