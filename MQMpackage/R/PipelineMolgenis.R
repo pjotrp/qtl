@@ -17,39 +17,43 @@
 #
 ######################################################################
 
-PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,...){
+PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,each=0,...){
 	cat("------------------------------------------------------------------\n")
 	cat("Starting Molgenis <-> MQM <-> Molgenis automated pipeline\n")
-	cat("INFO:Server:",DBpath,"\n")
-	cat("INFO:Genotype info-tableID:",DBmarkerID," (DBmarkerID)\n")
-	cat("INFO:Phenotype values-tableID:",DBtraitID," (DBtraitID)\n")
-	cat("INFO:Results will be stored in a table named:",name,"\n")	
+	cat("INFO: Molgenisserver:",DBpath,"\n")
+	cat("INFO: Genotype info-tableID:",DBmarkerID," (DBmarkerID)\n")
+	cat("INFO: Phenotype values-tableID:",DBtraitID," (DBtraitID)\n")
+	cat("INFO: Results will be stored in a table named:",name,"\n")	
 	cat("------------------------------------------------------------------\n")
-	cat("Starting data retrieval.\n")	
-	cat("Please be patient while all data is retrieved.\n")	
+	cat("INFO: Starting data retrieval.\n")	
+	cat("INFO: Please be patient while all data is retrieved.\n")	
 	cat("------------------------------------------------------------------\n")
 	start <- proc.time()
 	all_data <- CrossFromMolgenis(DBmarkerID,DBtraitID,trait=0,DBpath,verbose=F)
 	all_data <- fill.geno(all_data)
 	num_traits <- nphe(all_data)
-	end <- proc.time()		
+	end <- proc.time()
 	cat("------------------------------------------------------------------\n")
-	cat("INFO data retrieval finished in ",round((end-start)[3], digits = 3)," seconds\n")
+	cat("INFO: Data retrieval finished in",round((end-start)[3], digits = 3),"seconds\n")
 	cat("------------------------------------------------------------------\n")
+	PRE <- (end-start)[3]
 	SUM <- 0
 	AVG <- 0
 	LEFT <- 0
 	for(x in 1:num_traits){
 		start <- proc.time()
 		cat("\n\n------------------------------------------------------------------\n")
-		cat("Trait",x,"/",num_traits,":",names(all_data$pheno)[x],"\n")
+		cat("INFO: Starting analysis of trait (",x,"/",num_traits,")",names(all_data$pheno)[x],"\n")
 		cat("------------------------------------------------------------------\n")
-		cat("INFO:Starting Stage1: scanning for QTL's\n")
+		cat("INFO: Scanning for QTL's\n")
 		cat("------------------------------------------------------------------\n")
-			result <- scanMQM(all_data,pheno.col=x,plot=T,verbose=F,...)
+			if(each>1){
+				cof <- MQMCofactorsEach(all_data,each)
+			}
+			result <- scanMQM(all_data,cof,pheno.col=x,plot=T,verbose=F,...)
 		cat("------------------------------------------------------------------\n")			
-		cat("INFO:Finished with Stage1\n")	
-		cat("INFO:Stage2: Storing calculated QTL's to Molgenis\n")
+		cat("INFO: Finished scanning for QTL's\n")	
+		cat("INFO: Uploading calculated QTL's to Molgenis\n")
 		cat("------------------------------------------------------------------\n")
 			ResultsToMolgenis(result, name,(x-1),DBpath, Fupdate,verbose=F)
 		end <- proc.time()		
@@ -57,11 +61,12 @@ PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,...){
 		AVG <- SUM/x
 		LEFT <- AVG*(num_traits-x)
 		cat("------------------------------------------------------------------\n")
-		cat("INFO:Finished with Stage\n")
-		cat("INFO:Calculation of trait ",x," took: ",round((end-start)[3], digits=3)," seconds\n")
-		cat("INFO:Elapsed time:",round(SUM, digits=3),"seconds\n")
-		cat("INFO:Average time per trait:",round(AVG, digits=3),"seconds\n")
-		cat("INFO:estimated time left:",round(LEFT, digits=3),"seconds\n")
+		cat("INFO: Finished uploading of QTL's\n")
+		cat("------------------------------------------------------------------\n")
+		cat("INFO: Calculation of trait",x,"took:",round((end-start)[3], digits=3),"seconds\n")
+		cat("INFO: Elapsed time:",round(SUM+PRE, digits=3),"seconds (",round(PRE, digits=3),",",round(SUM, digits=3),")\n")
+		cat("INFO: Average time per trait:",round(AVG, digits=3),"seconds\n")
+		cat("INFO: Estimated time left:",LEFT%/%3600,":",LEFT%/%60,":",round(LEFT%%60,digits=0),"(HH:MM;SS)\n")
 		cat("------------------------------------------------------------------\n")	
 	}
 }
