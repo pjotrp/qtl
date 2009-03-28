@@ -66,7 +66,7 @@ PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,each=
 		cat("INFO: Calculation of trait",x,"took:",round((end-start)[3], digits=3),"seconds\n")
 		cat("INFO: Elapsed time:",round(SUM+PRE, digits=3),"seconds (",round(PRE, digits=3),",",round(SUM, digits=3),")\n")
 		cat("INFO: Average time per trait:",round(AVG, digits=3),"seconds\n")
-		cat("INFO: Estimated time left:",LEFT%/%3600,":",LEFT%/%60,":",round(LEFT%%60,digits=0),"(HH:MM;SS)\n")
+		cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%2600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
 		cat("------------------------------------------------------------------\n")	
 	}
 }
