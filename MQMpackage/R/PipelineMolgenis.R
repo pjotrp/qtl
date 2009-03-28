@@ -20,17 +20,21 @@
 PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,...){
 	cat("------------------------------------------------------------------\n")
 	cat("Starting Molgenis <-> MQM <-> Molgenis automated pipeline\n")
-	cat("Please be patient while all data is retrieved.\n")
 	cat("INFO:Server:",DBpath,"\n")
 	cat("INFO:Genotype info-tableID:",DBmarkerID," (DBmarkerID)\n")
 	cat("INFO:Phenotype values-tableID:",DBtraitID," (DBtraitID)\n")
 	cat("INFO:Results will be stored in a table named:",name,"\n")	
 	cat("------------------------------------------------------------------\n")
+	cat("Starting data retrieval.\n")	
+	cat("Please be patient while all data is retrieved.\n")	
+	cat("------------------------------------------------------------------\n")
+	start <- proc.time()
 	all_data <- CrossFromMolgenis(DBmarkerID,DBtraitID,trait=0,DBpath,verbose=F)
 	all_data <- fill.geno(all_data)
 	num_traits <- nphe(all_data)
+	end <- proc.time()		
 	cat("------------------------------------------------------------------\n")
-	cat("INFO data retrieval finished\n")
+	cat("INFO data retrieval finished in ",(end-start)[3]," seconds\n")
 	cat("------------------------------------------------------------------\n")
 	SUM <- 0
 	AVG <- 0
