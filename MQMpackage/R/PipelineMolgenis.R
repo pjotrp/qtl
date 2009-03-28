@@ -34,7 +34,7 @@ PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,...){
 	num_traits <- nphe(all_data)
 	end <- proc.time()		
 	cat("------------------------------------------------------------------\n")
-	cat("INFO data retrieval finished in ",(end-start)[3]," seconds\n")
+	cat("INFO data retrieval finished in ",round((end-start)[3], digits = 3)," seconds\n")
 	cat("------------------------------------------------------------------\n")
 	SUM <- 0
 	AVG <- 0
@@ -58,10 +58,10 @@ PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,...){
 		LEFT <- AVG*(num_traits-x)
 		cat("------------------------------------------------------------------\n")
 		cat("INFO:Finished with Stage\n")
-		cat("INFO:Calculation of trait ",x," took: ",(end-start)[3]," seconds\n")
-		cat("INFO:Elapsed time:",SUM,"seconds\n")
-		cat("INFO:Average time per trait:",AVG,"seconds\n")
-		cat("INFO:estimated time left:",LEFT,"seconds\n")
+		cat("INFO:Calculation of trait ",x," took: ",round((end-start)[3], digits=3)," seconds\n")
+		cat("INFO:Elapsed time:",round(SUM, digits=3),"seconds\n")
+		cat("INFO:Average time per trait:",round(AVG, digits=3),"seconds\n")
+		cat("INFO:estimated time left:",round(LEFT, digits=3),"seconds\n")
 		cat("------------------------------------------------------------------\n")	
 	}
 }

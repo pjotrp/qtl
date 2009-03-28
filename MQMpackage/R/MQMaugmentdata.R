@@ -25,6 +25,7 @@
 #data(listeria)
 
 MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10,verbose=TRUE){
+	start <- proc.time()
 	library(qtl)
 	if(is.null(cross)){
 		stop("ERROR: No cross file. Please supply a valid cross object.")
@@ -142,13 +143,15 @@ MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10
 			markdone <- (markdone+markONchr)  
 		}
 		#RETURN THE RESULTS
+		end <- proc.time()
+		cat("INFO: DATA-Augmentation took: ",round((end-start)[3], digits=3)," seconds\n")		
 		cross
 	}else{
 		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			
 }
 
-MQMlogPheno <- function(cross= NULL,pheno.col=NULL){
+MQMlogPheno <- function(cross= NULL,pheno.col=NULL,verbose=TRUE){
 	#Helperfunction to logtransform a specific phenotype specified by the Phenot parameter
 	library(qtl)
 	if(is.null(cross)){
@@ -162,18 +165,18 @@ MQMlogPheno <- function(cross= NULL,pheno.col=NULL){
 			pheno <- cross$pheno[[pheno.col]]
 			logpheno <- log(pheno)
 			cross$pheno[[pheno.col]] <- logpheno
-			cat("INFO: Phenotype:",pheno.col,".\n")
-			cat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"Variation:",var(pheno,na.rm = TRUE),".\n")
-			cat("INFO: After LOG transformation Mean:",mean(logpheno,na.rm = TRUE),"Variation:",var(logpheno,na.rm = TRUE),".\n")
+			ourcat("INFO: Phenotype:",names(cross$pheno)[pheno.col],".\n",a=verbose)
+			ourcat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"Variation:",var(pheno,na.rm = TRUE),".\n",a=verbose)
+			ourcat("INFO: After LOG transformation Mean:",mean(logpheno,na.rm = TRUE),"Variation:",var(logpheno,na.rm = TRUE),".\n",a=verbose)
 		}else{
 			n.pheno <- nphe(cross)
 			for(i in 1:n.pheno) {
 				pheno <- cross$pheno[[i]]
 				logpheno <- log(pheno)
 				cross$pheno[[i]] <- logpheno
-				cat("INFO: Phenotype:",i,".\n")
-				cat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"Variation:",var(pheno,na.rm = TRUE),".\n")
-				cat("INFO: After LOG transformation Mean:",mean(logpheno,na.rm = TRUE),"Variation:",var(logpheno,na.rm = TRUE),".\n")				
+				ourcat("INFO: Phenotype:",names(cross$pheno)[i],".\n",a=verbose)
+				ourcat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"Variation:",var(pheno,na.rm = TRUE),".\n",a=verbose)
+				ourcat("INFO: After LOG transformation Mean:",mean(logpheno,na.rm = TRUE),"Variation:",var(logpheno,na.rm = TRUE),".\n",a=verbose)				
 			}
 		}
 		cross

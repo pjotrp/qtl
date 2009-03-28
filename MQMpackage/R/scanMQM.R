@@ -82,7 +82,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		}
 		if(doLOG != 0){
 				#transform the cross file
-				cross <- MQMlogPheno(cross,pheno.col)
+				cross <- MQMlogPheno(cross,pheno.col,verbose=verbose)
 				pheno <- cross$pheno[[pheno.col]]
 		}
 		n.mark <- ncol(geno)
@@ -305,7 +305,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		  op <- par(mfrow = c(1,1))
 		}
 		end_3 <- proc.time()
-		ourcat("INFO: Calculation time (R->C,C,C-R): (",(end_1-start)[3], ",",(end_2-end_1)[3],",",(end_3-end_2)[3],") (in seconds)\n",a=verbose)
+		ourcat("INFO: Calculation time (R->C,C,C-R): (",round((end_1-start)[3], digits=3), ",",round((end_2-end_1)[3], digits=3),",",round((end_3-end_2)[3], digits=3),") (in seconds)\n",a=verbose)
 		qtl
 	}else{
 		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
