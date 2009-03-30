@@ -17,11 +17,16 @@
 #
 ######################################################################
 
-CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,trait=0,DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox",verbose=T){
+CrossFromMolgenis <- function(DBmarkerID=0,DBtraitID=0,trait=0,DBpath=NULL,verbose=T){
 	library("RCurl")
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
 		ourstop("Please install the package RCurl from bioconductor to use the molgenis interface\n")
 	}
+
+	if(DBmarkerID==0 || DBtraitID==0){
+		ourstop("Please provide valid ID's for DBmarker and DBtrait\n")
+	}
+
 	if(is.null(DBpath)){
 		ourstop("Please provide a valid DBpath\n")
 	}else{
@@ -38,10 +43,10 @@ CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,trait=0,DBpath="http:
 	#marker_data <- find.datamatrix(id=DBmarkerID) #Markerdata
 	#trait_data <- find.datamatrix(id=DBtraitID) #Traitdata
 	#prepare data for the cross object (we should match which matches which)
-	marker_row <- find.data(id=DBmarkerID,.verbose=F)["rowtype"]
-	marker_col <- find.data(id=DBmarkerID,.verbose=F)["coltype"]
-	trait_row <- find.data(id=DBtraitID,.verbose=F)["rowtype"]
-	trait_col <- find.data(id=DBtraitID,.verbose=F)["coltype"]
+	marker_row <- find.data(id=DBmarkerID,.verbose=verbose)["rowtype"]
+	marker_col <- find.data(id=DBmarkerID,.verbose=verbose)["coltype"]
+	trait_row <- find.data(id=DBtraitID,.verbose=verbose)["rowtype"]
+	trait_col <- find.data(id=DBtraitID,.verbose=verbose)["coltype"]
 	#Checks
 	if(trait_row != "Individual" && trait_col != "Individual"){
 		ourstop("No Individuals found in DBtraitID")
@@ -66,7 +71,7 @@ CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,trait=0,DBpath="http:
 	}
 	#cat(t_data_url,"\n")	
 	trait_data <- read.table(t_data_url,sep="\t")
-	marker_info <- find.marker(.verbose=F)
+	marker_info <- find.marker(.verbose=verbose)
 	marker_info_reduced <- marker_info[,c(1,2,10)]
 	
 	if(marker_row != "Marker"){

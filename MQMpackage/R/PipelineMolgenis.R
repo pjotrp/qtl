@@ -67,7 +67,7 @@ PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,each=
 			cat("INFO: Finished scanning for QTL's\n")	
 			cat("INFO: Uploading calculated QTL's to Molgenis\n")
 			cat("------------------------------------------------------------------\n")
-				ResultsToMolgenis(result, name,(x-1),DBpath, Fupdate,verbose=F)
+				ResultsToMolgenis(result, name,(x-1),DBpath, verbose=F)
 			end <- proc.time()		
 			SUM <- SUM + (end-start)[3]
 			AVG <- SUM/x
@@ -103,7 +103,7 @@ snowCore <- function(x,each,all_data,name,DBpath,...){
 	cat("INFO: Finished scanning for QTL's\n")	
 	cat("INFO: Uploading calculated QTL's to Molgenis\n")
 	cat("------------------------------------------------------------------\n")	
-	ResultsToMolgenis(result, name,(x-1),DBpath, Fupdate,verbose=F)
+	ResultsToMolgenis(result, name,(x-1),DBpath, verbose=F)
 	cat("------------------------------------------------------------------\n")
 	cat("INFO: Finished uploading of QTL's\n")
 	cat("------------------------------------------------------------------\n")

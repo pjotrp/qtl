@@ -17,7 +17,7 @@
 #
 ######################################################################
 
-ResultsFromMolgenis <- function(DBqtlName=NULL,DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox"){
+ResultsFromMolgenis <- function(DBqtlName=NULL,DBpath=NULL,verbose=TRUE){
 	library("RCurl")
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
 		ourstop("Please install the package RCurl from bioconductor to use the molgenis interface\n")
@@ -38,11 +38,11 @@ ResultsFromMolgenis <- function(DBqtlName=NULL,DBpath="http://celtic.service.rug
 	if(is.null(DBqtlName)){
 		ourstop("Please supply either a qtl DB name or a qtl DB identifier\n")
 	}else{
-		dataM <- find.data(name=DBqtlName)
+		dataM <- find.data(name=DBqtlName,.verbose=verbose)
 		returnObj <- NULL
 		tempObj <- NULL
-		data <- find.datamatrix(id=dataM$id)
-		marker_info <- find.marker()
+		data <- find.datamatrix(id=dataM$id,.verbose=verbose)
+		marker_info <- find.marker(.verbose=verbose)
 		matchV <- match(rownames(data),marker_info$name)
 		marker_info <- marker_info[matchV,]
 		
