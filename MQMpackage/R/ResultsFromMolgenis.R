@@ -20,10 +20,10 @@
 ResultsFromMolgenis <- function(DBqtlName=NULL,DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox"){
 	library("RCurl")
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
-		stop("ERROR: Please install the package RCurl from bioconductor to use the molgenis interface\n")
+		ourstop("Please install the package RCurl from bioconductor to use the molgenis interface\n")
 	}
 	if(is.null(DBpath)){
-		stop("ERROR: Please provide a valid DBpath\n")
+		ourstop("Please provide a valid DBpath\n")
 	}else{
 		#Set the path to molgenis
 		molgenispath <- paste(DBpath,"/api/R/",sep="")
@@ -36,7 +36,7 @@ ResultsFromMolgenis <- function(DBqtlName=NULL,DBpath="http://celtic.service.rug
 	
 	#get data from server
 	if(is.null(DBqtlName)){
-		stop("ERROR: Please supply either a qtl DB name or a qtl DB identifier\n")
+		ourstop("Please supply either a qtl DB name or a qtl DB identifier\n")
 	}else{
 		dataM <- find.data(name=DBqtlName)
 		returnObj <- NULL

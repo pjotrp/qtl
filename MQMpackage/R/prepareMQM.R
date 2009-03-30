@@ -325,7 +325,7 @@ loadMOUSE <- function(pheno=c(1:10),gr1=NULL,gr2=NULL){
 	setwd("D:/test/Illumina")
 	library(MQMpackage)
 	if(gr1==gr2){
-		stop("ERROR: cannot compare groups with themselves.\n")
+		ourstop("Cannot compare groups with themselves.\n")
 	}
 	selected <- NULL
 	#We select from a ordered file, the first cols (1:19) are stemcells, the progenitor, RED and White

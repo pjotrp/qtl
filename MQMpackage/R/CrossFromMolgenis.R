@@ -20,10 +20,10 @@
 CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,trait=0,DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox",verbose=T){
 	library("RCurl")
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
-		stop("ERROR: Please install the package RCurl from bioconductor to use the molgenis interface\n")
+		ourstop("Please install the package RCurl from bioconductor to use the molgenis interface\n")
 	}
 	if(is.null(DBpath)){
-		stop("ERROR: Please provide a valid DBpath\n")
+		ourstop("Please provide a valid DBpath\n")
 	}else{
 		#Set the path to molgenis
 		molgenispath <- paste(DBpath,"/api/R/",sep="")
@@ -44,10 +44,10 @@ CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,trait=0,DBpath="http:
 	trait_col <- find.data(id=DBtraitID,.verbose=F)["coltype"]
 	#Checks
 	if(trait_row != "Individual" && trait_col != "Individual"){
-		stop("ERROR: No Individual in DBtraitID")
+		ourstop("No Individuals found in DBtraitID")
 	}
 	if(marker_row != "Marker" && marker_col != "Marker"){
-		stop("No markers in DBmarkerID")
+		ourstop("No markers found in DBmarkerID")
 	}	
 	
 	m_data_url <- paste(DBpath,"/find.datamatrix?id=",DBmarkerID,"&download=all",sep="")

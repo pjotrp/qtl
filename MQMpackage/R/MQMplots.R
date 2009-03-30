@@ -145,7 +145,7 @@ plot.MQMall <- function(result = NULL, type="C", theta=30, phi=15,...){
 			}
 		}
 	}else{
-		stop("ERROR: Wrong type of result file, please supply a valid MQMmulti object.") 
+		ourstop("Wrong type of result file, please supply a valid MQMmulti object.") 
 	}
 }
 
@@ -175,7 +175,7 @@ plot.MQMboot <- function(result = NULL,...){
 		#Because bootstrap only has 2 rows of data we can use black n blue
 		polyplot(matrix,col=c(rgb(0,0,0,1),rgb(0,0,1,0.35)),...)
 	}else{
-		stop("ERROR: Wrong type of result file, please supply a valid MQMmulti object.") 
+		ourstop("Wrong type of result file, please supply a valid MQMmulti object.") 
 	}	
 }
 
@@ -208,7 +208,7 @@ plot.MQMnice <- function(result = NULL,...){
 	rownames(matrix) <- names
 	polyplot(matrix,...)
 	}else{
-		stop("ERROR: Wrong type of result file, please supply a valid MQMmulti object.") 
+		ourstop("Wrong type of result file, please supply a valid MQMmulti object.") 
 	}
 }
 
@@ -240,7 +240,7 @@ plot.MQMone <- function(result = NULL,result2 = NULL, extended=0,...){
 			}
 		}
 	}else{
-		stop("ERROR: Wrong type of result file, please supply a valid scanone (from MQM) object.") 
+		ourstop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
 	}
 }
 

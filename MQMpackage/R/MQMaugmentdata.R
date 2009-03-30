@@ -28,7 +28,7 @@ MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10
 	start <- proc.time()
 	library(qtl)
 	if(is.null(cross)){
-		stop("ERROR: No cross file. Please supply a valid cross object.")
+		ourstop("No cross file. Please supply a valid cross object.")
 		return 
 	}
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
@@ -88,7 +88,7 @@ MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10
 			ourcat("INFO: Selected phenotype ",pheno.col," -> ",phenonaam,".\n",a=verbose)
 			ourcat("INFO: # of phenotypes in object ",nphe(cross),".\n",a=verbose)
 			if(nphe(cross) < pheno.col || pheno.col < 1){
-				stop("ERROR: No such phenotype in cross object.\n")
+				ourstop("No such phenotype at column index:",pheno.col,"in cross object.\n")
 			}			
 		}
 		result <- .C("R_augdata",
@@ -155,7 +155,7 @@ MQMlogPheno <- function(cross= NULL,pheno.col=NULL,verbose=TRUE){
 	#Helperfunction to logtransform a specific phenotype specified by the Phenot parameter
 	library(qtl)
 	if(is.null(cross)){
-		stop("ERROR: No cross file. Please supply a valid cross object.")
+		ourstop("ERROR: No cross file. Please supply a valid cross object.")
 		return 
 	}
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
@@ -181,7 +181,7 @@ MQMlogPheno <- function(cross= NULL,pheno.col=NULL,verbose=TRUE){
 		}
 		cross
 	}else{
-		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+		ourstop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			
 }
 

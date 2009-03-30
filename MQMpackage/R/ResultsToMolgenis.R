@@ -20,10 +20,10 @@
 ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresultsTest",Trait_num=0,DBpath="http://celtic.service.rug.nl:8080/molgenis4rsandbox",Fupdate=0,verbose=TRUE){
 	library("RCurl")
 	if(!("RCurl" %in% names( getLoadedDLLs()))){
-		stop("ERROR: Please install the package RCurl from bioconductor to use the molgenis interface\n")
+		ourstop("Please install the package RCurl from bioconductor to use the molgenis interface\n")
 	}
 	if(is.null(DBpath)){
-		stop("ERROR: Please provide a valid DBpath\n")
+		ourstop("Please provide a valid DBpath\n")
 	}else{
 		#Set the path to molgenis
 		molgenispath <- paste(DBpath,"/api/R/",sep="")
@@ -36,7 +36,7 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresultsTest",Trait_nu
 
 	#get data from server
 	if(is.null(intervalQTLmap)){
-		stop("ERROR: Please supply a QTL interval map\n")
+		ourstop("Please supply a QTL interval map\n")
 	}
 	if(any(class(intervalQTLmap) == "scanone")){
 		#cat("INFO: Valid object from scanone, containing 1 phenotype\n")
