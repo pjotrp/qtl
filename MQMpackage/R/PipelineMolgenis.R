@@ -49,8 +49,10 @@ PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,each=
 		cat("------------------------------------------------------------------\n")
 			if(each>1){
 				cof <- MQMCofactorsEach(all_data,each)
+				result <- scanMQM(all_data,cof,pheno.col=x,plot=T,verbose=F,...)
+			}else{
+				result <- scanMQM(all_data,pheno.col=x,plot=T,verbose=F,...)
 			}
-			result <- scanMQM(all_data,cof,pheno.col=x,plot=T,verbose=F,...)
 		cat("------------------------------------------------------------------\n")			
 		cat("INFO: Finished scanning for QTL's\n")	
 		cat("INFO: Uploading calculated QTL's to Molgenis\n")
