@@ -38,10 +38,10 @@ CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,trait=0,DBpath="http:
 	#marker_data <- find.datamatrix(id=DBmarkerID) #Markerdata
 	#trait_data <- find.datamatrix(id=DBtraitID) #Traitdata
 	#prepare data for the cross object (we should match which matches which)
-	marker_row <- find.data(id=DBmarkerID)["rowtype"]
-	marker_col <- find.data(id=DBmarkerID)["coltype"]
-	trait_row <- find.data(id=DBtraitID)["rowtype"]
-	trait_col <- find.data(id=DBtraitID)["coltype"]
+	marker_row <- find.data(id=DBmarkerID,.verbose=F)["rowtype"]
+	marker_col <- find.data(id=DBmarkerID,.verbose=F)["coltype"]
+	trait_row <- find.data(id=DBtraitID,.verbose=F)["rowtype"]
+	trait_col <- find.data(id=DBtraitID,.verbose=F)["coltype"]
 	#Checks
 	if(trait_row != "Individual" && trait_col != "Individual"){
 		stop("ERROR: No Individual in DBtraitID")
@@ -66,14 +66,14 @@ CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,trait=0,DBpath="http:
 	}
 	#cat(t_data_url,"\n")	
 	trait_data <- read.table(t_data_url,sep="\t")
-	marker_info <- find.marker()
+	marker_info <- find.marker(.verbose=F)
 	marker_info_reduced <- marker_info[,c(1,2,10)]
 	
 	#prepare data for the cross object (we should match which matches which)
-	marker_row <- find.data(id=DBmarkerID)["rowtype"]
-	marker_col <- find.data(id=DBmarkerID)["coltype"]
-	trait_row <- find.data(id=DBtraitID)["rowtype"]
-	trait_col <- find.data(id=DBtraitID)["coltype"]
+	marker_row <- find.data(id=DBmarkerID,.verbose=F)["rowtype"]
+	marker_col <- find.data(id=DBmarkerID,.verbose=F)["coltype"]
+	trait_row <- find.data(id=DBtraitID,.verbose=F)["rowtype"]
+	trait_col <- find.data(id=DBtraitID,.verbose=F)["coltype"]
 	
 
 	if(marker_row != "Marker"){

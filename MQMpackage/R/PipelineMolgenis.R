@@ -17,8 +17,8 @@
 #
 ######################################################################
 
-PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,each=0,...){
-	cat("------------------------------------------------------------------\n")
+PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,each=0,n.clusters=2,...){
+	cat("--------------------------------------------------------------------------------------------\n")
 	cat("Starting Molgenis <-> MQM <-> Molgenis automated pipeline\n")
 	cat("INFO: Molgenisserver:",DBpath,"\n")
 	cat("INFO: Genotype info-tableID:",DBmarkerID," (DBmarkerID)\n")
@@ -40,35 +40,75 @@ PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,each=
 	SUM <- 0
 	AVG <- 0
 	LEFT <- 0
-	for(x in 1:num_traits){
-		start <- proc.time()
-		cat("\n\n------------------------------------------------------------------\n")
-		cat("INFO: Starting analysis of trait (",x,"/",num_traits,")",names(all_data$pheno)[x],"\n")
-		cat("------------------------------------------------------------------\n")
-		cat("INFO: Scanning for QTL's\n")
-		cat("------------------------------------------------------------------\n")
+	#TEST FOR SNOW CAPABILITIES
+	if(!("snow" %in% installed.packages()[1:dim(installed.packages())[1]])){
+		cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
+		#library(snow)
+		#cl <- makeCluster(n.clusters)
+		#clusterEvalQ(cl, library(MQMpackage))
+		lapply(1:num_traits, snowCore,each=each,all_data=all_data,name=name,DBpath=DBpath)
+		#stopCluster(cl)
+	}else{
+		for(x in 1:num_traits){
+			start <- proc.time()
+			cat("\n\n------------------------------------------------------------------\n")
+			cat("INFO: Starting analysis of trait (",x,"/",num_traits,")",names(all_data$pheno)[x],"\n")
+			cat("------------------------------------------------------------------\n")
+			cat("INFO: Scanning for QTL's\n")
+			cat("------------------------------------------------------------------\n")
 			if(each>1){
 				cof <- MQMCofactorsEach(all_data,each)
 				result <- scanMQM(all_data,cof,pheno.col=x,plot=T,verbose=F,...)
 			}else{
 				result <- scanMQM(all_data,pheno.col=x,plot=T,verbose=F,...)
 			}
-		cat("------------------------------------------------------------------\n")			
-		cat("INFO: Finished scanning for QTL's\n")	
-		cat("INFO: Uploading calculated QTL's to Molgenis\n")
-		cat("------------------------------------------------------------------\n")
-			ResultsToMolgenis(result, name,(x-1),DBpath, Fupdate,verbose=F)
-		end <- proc.time()		
-		SUM <- SUM + (end-start)[3]
-		AVG <- SUM/x
-		LEFT <- AVG*(num_traits-x)
-		cat("------------------------------------------------------------------\n")
-		cat("INFO: Finished uploading of QTL's\n")
-		cat("------------------------------------------------------------------\n")
-		cat("INFO: Calculation of trait",x,"took:",round((end-start)[3], digits=3),"seconds\n")
-		cat("INFO: Elapsed time:",round(SUM+PRE, digits=3),"seconds (",round(PRE, digits=3),",",round(SUM, digits=3),")\n")
-		cat("INFO: Average time per trait:",round(AVG, digits=3),"seconds\n")
-		cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%2600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
-		cat("------------------------------------------------------------------\n")	
+			cat("------------------------------------------------------------------\n")			
+			cat("INFO: Finished scanning for QTL's\n")	
+			cat("INFO: Uploading calculated QTL's to Molgenis\n")
+			cat("------------------------------------------------------------------\n")
+				ResultsToMolgenis(result, name,(x-1),DBpath, Fupdate,verbose=F)
+			end <- proc.time()		
+			SUM <- SUM + (end-start)[3]
+			AVG <- SUM/x
+			LEFT <- AVG*(num_traits-x)
+			cat("------------------------------------------------------------------\n")
+			cat("INFO: Finished uploading of QTL's\n")
+			cat("------------------------------------------------------------------\n")
+			cat("INFO: Calculation of trait",x,"took:",round((end-start)[3], digits=3),"seconds\n")
+			cat("INFO: Elapsed time:",round(SUM+PRE, digits=3),"seconds (",round(PRE, digits=3),",",round(SUM, digits=3),")\n")
+			cat("INFO: Average time per trait:",round(AVG, digits=3),"seconds\n")
+			cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%2600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
+			cat("------------------------------------------------------------------\n")	
+		}
 	}
 }
+
+snowCore <- function(x,each,all_data,name,DBpath,...){
+	num_traits <- nphe(all_data)
+	setwd("d:/")
+	cat("\n\n------------------------------------------------------------------\n")
+	cat("INFO: Starting analysis of trait (",x,"/",num_traits,")\n")
+	cat("------------------------------------------------------------------\n")
+	cat("INFO: Scanning for QTL's\n")
+	cat("------------------------------------------------------------------\n")
+	if(each>1){
+		cof <- MQMCofactorsEach(all_data,each)
+		result <- scanMQM(all_data,cof,pheno.col=x,plot=T,verbose=F,...)
+	}else{
+		capture.output(scanMQM(all_data,pheno.col=x,plot=T,verbose=T,...),file=paste("T",x,".TXT",sep=""))
+		result <- scanMQM(all_data,pheno.col=x,plot=T,verbose=F,...)
+	}
+	cat("------------------------------------------------------------------\n")			
+	cat("INFO: Finished scanning for QTL's\n")	
+	cat("INFO: Uploading calculated QTL's to Molgenis\n")
+	cat("------------------------------------------------------------------\n")	
+	ResultsToMolgenis(result, name,(x-1),DBpath, Fupdate,verbose=F)
+	cat("------------------------------------------------------------------\n")
+	cat("INFO: Finished uploading of QTL's\n")
+	cat("------------------------------------------------------------------\n")
+}
+
+#x=1:num_traits
+#paste("script_",x,".R",sep="")
+
+
