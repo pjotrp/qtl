@@ -32,6 +32,7 @@ PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,each=
 	all_data <- CrossFromMolgenis(DBmarkerID,DBtraitID,trait=0,DBpath,verbose=F)
 	all_data <- fill.geno(all_data)
 	num_traits <- nphe(all_data)
+	summary(all_data)
 	end <- proc.time()
 	cat("------------------------------------------------------------------\n")
 	cat("INFO: Data retrieval finished in",round((end-start)[3], digits = 3),"seconds\n")

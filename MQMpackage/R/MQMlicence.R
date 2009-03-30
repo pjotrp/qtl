@@ -34,6 +34,7 @@ ourcat <- function(...,a=TRUE){
 }
 
 ourstop <- function(...){
+	library(tools)
 	parents <- sys.calls()
 	ourline()
 	cat("ERROR: Detected in function: '",as.character(as.call(parents[[1]])),"'\n",sep="")	
@@ -42,7 +43,7 @@ ourstop <- function(...){
 	db <- lapply(db, function(txt) Rd_parse(text = txt))
 	data <- lapply(db, "[[", "data")
 	p_Rd <- paste(as.character(parents[[1]]),".Rd",sep="")
-	cat(p_Rd,"\n")
+	#cat(p_Rd,"\n")
 	if(!is.null(data[[p_Rd]]$tags) && "examples" %in% data[[p_Rd]]$tags){
 		ourline()
 		cat("ERROR: Some examples on how-to use this function from the helpfiles\n")
@@ -52,7 +53,7 @@ ourstop <- function(...){
 		cat(data[[p_Rd]]$vals[[aa]])
 		ourline()
 	}
-	parents
+	stop()
 }
 
 ourline <- function(){

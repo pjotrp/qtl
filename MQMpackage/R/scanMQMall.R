@@ -23,7 +23,7 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 
 	
 	if(is.null(cross)){
-		stop("ERROR: No cross file. Please supply a valid cross object.") 
+		ourstop("No cross file. Please supply a valid cross object.") 
 	}
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
 		cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
@@ -36,13 +36,13 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,REMLorML=0,
 		}
 		#Some tests from scanMQM repeated here so they are not hidden when using snow
 		if((step.min+step.size) > step.max){
-				stop("ERROR: current Step setting would crash the algorithm")
+				ourstop("Surrent Step settings (step.min/step.max) would crash the algorithm")
 		}
 		if(step.min>0){
-				stop("ERROR: step.min needs to be smaller than 0")
+				ourstop("Step.min needs to be smaller than 0")
 		}		
 		if(step.size < 1){
-				stop("ERROR: Step.size needs to be larger than 1")
+				ourstop("Step.size needs to be larger than 1")
 		}
 		#TEST FOR SNOW CAPABILITIES
 		if("snow" %in% installed.packages()[1:dim(installed.packages())[1]]){

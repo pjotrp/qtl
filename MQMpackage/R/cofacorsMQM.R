@@ -24,12 +24,10 @@
 
 MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL,verbose=TRUE){
 	if(is.null(cross)){
-      stop("ERROR: No cross file. Please supply a valid cross object.")
-	  return 
+		ourstop("No cross file. Please supply a valid cross object.")
 	}
 	if(is.null(cofactors)){
-      stop("ERROR: Cofactors to set. Please supply a list of markers to serve as cofactors.")
-	  return 
+		ourstop("Cofactors to set. Please supply a list of markers to serve as cofactors.")
 	}
 		
 	n.chr <- nchr(cross)
@@ -45,25 +43,20 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL,verbose=TR
 	n.mark <- ncol(geno)
 
 	if(max(cofactors) > n.mark){
-      stop("ERROR: Trying to set a non-existent marker as a cofactor.")
-	  return 	  
+		ourstop("Trying to set a non-existent marker as a cofactor.")	  
 	}
 
 	if(min(cofactors) <= 0){
-      stop("ERROR: Trying to set a non-existent marker as a cofactor.")
-	  return 	  
+		ourstop("Trying to set a non-existent marker as a cofactor.")	  
 	}
 	
 	if(!is.null(sexfactors)){
-	if(max(sexfactors) > n.mark){
-      stop("ERROR: Trying to set a non-existent marker as a sexfactor.")
-	  return 	  
-	}
-	
-	if(min(sexfactors) <= 0){
-      stop("ERROR: Trying to set a non-existent marker as a sexfactor.")
-	  return 	  
-	}
+		if(max(sexfactors) > n.mark){
+			ourstop("Trying to set a non-existent marker as a sexfactor.")
+		}
+		if(min(sexfactors) <= 0){
+			ourstop("Trying to set a non-existent marker as a sexfactor.")
+		}
 	}	
 
     cofactorlist <- rep(0,n.mark)
@@ -76,7 +69,7 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL,verbose=TR
 	  }
 	}
     if(sum(cofactorlist) > (individuals-10)){
-		stop("ERROR: Trying to set: ",sum(cofactorlist)," markers as cofactor. This leaves less than 10 Degrees of Freedom.\n")
+		ourstop("Trying to set: ",sum(cofactorlist)," markers as cofactor. This leaves less than 10 Degrees of Freedom.\n")
 		return
 	}
     cofactorlist
@@ -84,7 +77,7 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL,verbose=TR
 
 MQMCofactorsEach <- function(cross = NULL,each = 3,verbose=TRUE){
 	if(is.null(cross)){
-      stop("ERROR: No cross file. Please supply a valid cross object.")
+      ourstop("No cross file. Please supply a valid cross object.")
 	  return 
 	}
 
@@ -103,7 +96,7 @@ MQMCofactorsEach <- function(cross = NULL,each = 3,verbose=TRUE){
 
 
 	if(each > n.mark){
-      stop("ERROR: Not enough markers to place cofactors at.")
+      ourstop("Not enough markers to place cofactors at.")
 	  return 
 	}	
 	
@@ -114,7 +107,7 @@ MQMCofactorsEach <- function(cross = NULL,each = 3,verbose=TRUE){
 		}
 	}
     if(sum(cofactorlist) > (individuals-10)){
-		stop("ERROR: Trying to set: ",ceiling(sum(n.mark)/each)," markers as cofactor. This leaves less than 10 Degrees of Freedom.\n")
+		ourstop("Trying to set: ",ceiling(sum(n.mark)/each)," markers as cofactor. This leaves less than 10 Degrees of Freedom.\n")
 		return
 	}
 	cofactorlist

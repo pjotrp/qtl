@@ -32,7 +32,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 	library(qtl)
 	n.run=0
 	if(is.null(cross)){
-		stop("ERROR: No cross file. Please supply a valid cross object.") 
+		ourstop("No cross file. Please supply a valid cross object.") 
 	}
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
 		if(class(cross)[1] == "f2"){
@@ -60,17 +60,17 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 			dist <- c(dist,cross$geno[[i]]$map)
 		}
 		if(alfa <=0 || alfa >= 1){
-			stop("ERROR: Alfa must be between 0 and 1.\n")
+			ourstop("Alfa must be between 0 and 1.\n")
 		}
 		#CHECK if the phenotype exists
 		if (length(pheno.col) > 1){
-			stop("ERROR: For multiple phenotype analysis use the function: 'scanMQMall'.\n")	
+			ourstop("For multiple phenotype analysis use the function: 'scanMQMall'.\n")	
 		}
 		if(pheno.col != 1){
 			ourcat("INFO: Selected phenotype ",pheno.col,".\n",a=verbose)
 			ourcat("INFO: Number of phenotypes in object ",nphe(cross),".\n",a=verbose)
 			if(nphe(cross) < pheno.col || pheno.col < 1){
-				stop("ERROR: No such phenotype in cross object.\n")
+				ourstop("No such phenotype in cross object.\n")
 			}			
 		}
 		pheno <- cross$pheno[[pheno.col]]
@@ -92,7 +92,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		for(i in 1:n.ind) {
 			for(j in 1:n.mark) {
 				if(is.na(geno[i,j])){
-					stop("ERROR: Missing genotype information, please estimate unknown data, before running scanMQM.\n")
+					ourstop("Missing genotype information, please estimate unknown data, before running scanMQM.\n")
 					geno[i,j] <- 9
 				}else{
 					if(forceRIL && geno[i,j]==2){
@@ -151,23 +151,23 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 					n.run <- 0;
 				}else{
 					backward <- 0;
-					stop("ERROR: Are u trying to give an empty cofactor list ???")
+					ourstop("Are u trying to give an empty cofactor list ???")
 				}
 			}
 		}
 
 		if((step.min+step.size) > step.max){
-				stop("ERROR: Current Step setting would crash the algorithm")
+			ourstop("Current Step setting would crash the algorithm")
 		}
 		if(step.min>0){
-				stop("ERROR: step.min needs to be smaller than 0")
+			ourstop("step.min needs to be smaller than 0")
 		}		
 		if(step.size < 1){
-				stop("ERROR: Step.size needs to be larger than 1")
+			ourstop("Step.size needs to be larger than 1")
 		}
 		max_cm_on_map <- max(unlist(pull.map(cross)))
 		if(step.max < max_cm_on_map){
-				stop("ERROR: Markers outside of the mapping at ",max_cm_on_map," Cm, please set parameter step.max larger than this value.")		
+				ourstop("Markers outside of the mapping at ",max_cm_on_map," Cm, please set parameter step.max larger than this value.")		
 		}
 		qtlAchromo <- length(seq(step.min,step.max,step.size))
 		ourcat("INFO: Number of locations per chromosome: ",qtlAchromo, "\n",a=verbose)
@@ -308,7 +308,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		ourcat("INFO: Calculation time (R->C,C,C-R): (",round((end_1-start)[3], digits=3), ",",round((end_2-end_1)[3], digits=3),",",round((end_3-end_2)[3], digits=3),") (in seconds)\n",a=verbose)
 		qtl
 	}else{
-		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+		ourstop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			
 }
 

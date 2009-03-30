@@ -147,7 +147,7 @@ MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10
 		cat("INFO: DATA-Augmentation took: ",round((end-start)[3], digits=3)," seconds\n")		
 		cross
 	}else{
-		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+		ourstop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			
 }
 

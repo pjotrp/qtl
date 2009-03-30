@@ -28,7 +28,7 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 {
 	
 	if(is.null(cross)){
-		stop("ERROR: No cross file. Please supply a valid cross object.") 
+		ourstop("No cross file. Please supply a valid cross object.") 
 	}
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
 		#Echo back the cross type
@@ -63,13 +63,13 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		}
 		#Some tests from scanMQM repeated here so they are not hidden when using snow
 		if((step.min+step.size) > step.max){
-				stop("ERROR: current Step setting would crash the algorithm")
+				ourstop("Current Step setting would crash the algorithm")
 		}
 		if(step.min>0){
-				stop("ERROR: step.min needs to be smaller than 0")
+				ourstop("Step.min needs to be smaller than 0")
 		}		
 		if(step.size < 1){
-				stop("ERROR: Step.size needs to be larger than 1")
+				ourstop("Step.size needs to be larger than 1")
 		}
 		#TEST FOR SNOW CAPABILITIES
 		if("snow" %in% installed.packages()[1:dim(installed.packages())[1]]){
@@ -92,7 +92,7 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		#Return the results	
 		res
 	}else{
-		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+		ourstop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}
 }
 
@@ -110,7 +110,7 @@ MQMpermObject <- function(MQMbootresult = NULL){
 		class(result) <- c("scanoneperm",class(result))
 		result
 	}else{
-		stop("Invalid object.")
+		ourstop("PLease supply a valid resultobject (MQMmulti).")
 	}
 }
 

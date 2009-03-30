@@ -69,13 +69,6 @@ CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,trait=0,DBpath="http:
 	marker_info <- find.marker(.verbose=F)
 	marker_info_reduced <- marker_info[,c(1,2,10)]
 	
-	#prepare data for the cross object (we should match which matches which)
-	marker_row <- find.data(id=DBmarkerID,.verbose=F)["rowtype"]
-	marker_col <- find.data(id=DBmarkerID,.verbose=F)["coltype"]
-	trait_row <- find.data(id=DBtraitID,.verbose=F)["rowtype"]
-	trait_col <- find.data(id=DBtraitID,.verbose=F)["coltype"]
-	
-
 	if(marker_row != "Marker"){
 		#cat("INFO: Flipping markerset\n")
 		marker_data <- t(marker_data)
@@ -113,6 +106,7 @@ CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,trait=0,DBpath="http:
 				marker_data[i,j] <- NA
 				repl <- TRUE
 			}
+			#RIL
 			if(!repl && as.character(marker_data[i,j]) == 'A'){
 				marker_data[i,j] <- 1
 				repl <- TRUE
@@ -121,6 +115,25 @@ CrossFromMolgenis <- function(DBmarkerID=298,DBtraitID=181,trait=0,DBpath="http:
 				marker_data[i,j] <- 2
 				repl <- TRUE
 			}
+			#BC
+			if(!repl && as.character(marker_data[i,j]) == 'AA'){
+				marker_data[i,j] <- 1
+				repl <- TRUE
+			}
+			if(!repl && as.character(marker_data[i,j]) == 'AB'){
+				marker_data[i,j] <- 2
+				repl <- TRUE
+			}
+			#F2 intercross
+			if(!repl && as.character(marker_data[i,j]) == 'AA'){
+				marker_data[i,j] <- 1
+				repl <- TRUE
+			}
+			if(!repl && as.character(marker_data[i,j]) == 'AB'){
+				marker_data[i,j] <- 2
+				repl <- TRUE
+			}
+			
 			if(!repl && as.character(marker_data[i,j]) == 'BB'){
 				marker_data[i,j] <- 3
 				repl <- TRUE
