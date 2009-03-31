@@ -42,13 +42,13 @@ PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,each=
 	AVG <- 0
 	LEFT <- 0
 	#TEST FOR SNOW CAPABILITIES
-	if(!("snow" %in% installed.packages()[1:dim(installed.packages())[1]])){
+	if(("snow" %in% installed.packages()[1:dim(installed.packages())[1]])){
 		cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
-		#library(snow)
-		#cl <- makeCluster(n.clusters)
-		#clusterEvalQ(cl, library(MQMpackage))
-		lapply(1:num_traits, snowCore,each=each,all_data=all_data,name=name,DBpath=DBpath)
-		#stopCluster(cl)
+		library(snow)
+		cl <- makeCluster(n.clusters)
+		clusterEvalQ(cl, library(MQMpackage))
+		outcome <- parLapply(cl,1:num_traits, snowCore,each=each,all_data=all_data,name=name,DBpath=DBpath)
+		stopCluster(cl)
 	}else{
 		for(x in 1:num_traits){
 			start <- proc.time()
@@ -94,6 +94,7 @@ snowCore <- function(x,each,all_data,name,DBpath,...){
 	cat("------------------------------------------------------------------\n")
 	if(each>1){
 		cof <- MQMCofactorsEach(all_data,each)
+		capture.output(scanMQM(all_data,pheno.col=x,plot=T,verbose=T,...),file=paste("T",x,".TXT",sep=""))
 		result <- scanMQM(all_data,cof,pheno.col=x,plot=T,verbose=F,...)
 	}else{
 		capture.output(scanMQM(all_data,pheno.col=x,plot=T,verbose=T,...),file=paste("T",x,".TXT",sep=""))
