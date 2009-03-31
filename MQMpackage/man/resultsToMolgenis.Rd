@@ -1,6 +1,6 @@
 \name{ResultsToMolgenis}
 \alias{ResultsToMolgenis}
-%- Also NEED an '\alias' for EACH other topic documented here.
+
 \title{ ResultsToMolgenis - Helperfunction to store results from a MQM-qtl run into a molgenis database }
 \description{
   Helperfunction to store results from a MQM-qtl run into a a molgenis database
@@ -11,8 +11,9 @@ ResultsToMolgenis(intervalQTLmap = NULL, name = NULL, DBpath = NULL, Fupdate = 0
 \arguments{
   \item{intervalQTLmap}{ Results from either scanone, scanMQM or scanMQMall }
   \item{name}{ Name of the table to store the results in }
+  \item{Trait_num}{ Analysis is stored in this column in the database. This parameter is used for \link{PipelineMolgenis} }
   \item{DBpath}{ Path to the molgenis database }
-  \item{Fupdate}{ Force update of values in the database ? (0= don't update / 1= update) }
+  \item{verbose}{ Print to screen (DEFAULT: TRUE) }
 }
 \details{
  The library RCurl from bioconductor should be installed to use a molgenis interface.
@@ -36,8 +37,8 @@ If u find anything wrong with the algorithm please notify me at: \email{Danny.Ar
 \seealso{ 
 \itemize{
 	\item \code{\link{scanMQM}} - Function called to do single trait analysis
-	\item \code{\link{scanMQMall}} - Function called to do single trait analysis
 	\item \code{\link{CrossFromMolgenis}} - Function called to store results to a molgenis database
+	\item \code{\link{PipelineMolgenis}} - Automatic MQM-QTL analysis for Molgenis database systems		
 }
 }
 \examples{

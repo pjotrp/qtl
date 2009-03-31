@@ -42,3 +42,4 @@ plot.MQMnice(result = NULL,\dots)
 \keyword{ QTL }
 \keyword{ Mapping }
 \keyword{ Selection }
+\keyword{ hplot }

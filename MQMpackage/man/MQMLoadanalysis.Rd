@@ -2,7 +2,7 @@
 \alias{MQMLoadanalysis}
 
 \title{ 
-	MQMLoadanalysis : Enables loading of previous MQM analysis from file 
+	MQMLoadanalysis - Enables loading of previous MQM analysis from file 
 }
 \description{
   Enables loading of previous MQM analysis from file
@@ -18,7 +18,7 @@ MQMLoadanalysis(file = "MQM_output.txt")
 	Not available yet
 }
 \value{
-	Returns a matrix with QTLscores for each location on the chromosome, which can be plotted using the plot.scanone function of R/QTL.
+	Returns a matrix with QTLscores for each location on the chromosome, which can be plotted using the \link[qtl]{plot.scanone} function of R/QTL.
 }
 \references{ Danny Arends \email{Danny.Arends@gmail.com} }
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }

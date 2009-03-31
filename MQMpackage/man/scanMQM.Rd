@@ -64,6 +64,8 @@ The phenotype under consideration is specified by the pheno.col argument of the 
 	\item \code{\link{MQMCofactors}} - Learn how to set Cofactors for the MQM algorithm
 	\item \code{\link{scanMQMall}} - Function called to do single trait analysis
 	\item \code{\link{bootstrapMQM}} - Function called to estimate confidence interfalls for MQM
+	\item \link[qtl]{scanone} - R/QTL main scanning function
+	\item \link[qtl]{cim} - Composite interval mapping in R/QTL
 }
 }
 \examples{
@@ -73,6 +75,7 @@ f2qtl <- c(3,15,3,7)					# QTL at chromosome 3
 data(map10)						# Mouse genome
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
 f2result <- scanMQM(f2cross)				# Do a MQM scan of the genome
+lodint(f2result,chr=3)					# LOD interval of the QTL on chr 3
 
 #Simulated BC Population
 library(MQMpackage)

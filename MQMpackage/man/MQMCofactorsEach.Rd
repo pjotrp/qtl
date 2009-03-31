@@ -11,7 +11,7 @@
 MQMCofactorsEach(cross = NULL, each = 3)
 }
 \arguments{
-  \item{cross}{ Cross object from R/QTL }
+  \item{cross}{ Cross object, an object of class \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
   \item{each}{ Every 'each' marker will be used as a cofactor }
 }
 \details{

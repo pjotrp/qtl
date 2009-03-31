@@ -2,7 +2,7 @@
 \alias{bootstrapMQM}
 \alias{permutateMQM}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ bootstrapMQM / permutateMQM - Bootstrapping approach to obtain estimates of QTL LOD score significance }
+\title{ bootstrapMQM - Bootstrapping approach to obtain estimates of QTL LOD score significance }
 \description{
    Bootstrapping approach to obtain estimates of QTL significance
 }

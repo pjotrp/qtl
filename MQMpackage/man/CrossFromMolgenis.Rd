@@ -38,6 +38,7 @@ If u find anything wrong with the algorithm please notify me at: \email{Danny.Ar
 	\item \code{\link{scanMQM}} - Function called to do single trait analysis
 	\item \code{\link{scanMQMall}} - Function called to do single trait analysis
 	\item \code{\link{ResultsToMolgenis}} - Function called to store results to a molgenis database
+	\item \code{\link{PipelineMolgenis}} - Automatic MQM-QTL analysis for Molgenis database systems	
 }
 }
 \examples{

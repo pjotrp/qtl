@@ -48,3 +48,4 @@ plot.MQMone(result = NULL, result2=NULL, extended = 0,\dots)
 \keyword{ QTL }
 \keyword{ Mapping }
 \keyword{ Selection }
+\keyword{ hplot }

@@ -1,6 +1,5 @@
-bootstrapMQM            bootstrapMQM / permutateMQM - Bootstrapping
-                        approach to obtain estimates of QTL LOD score
-                        significance
+bootstrapMQM            bootstrapMQM - Bootstrapping approach to obtain
+                        estimates of QTL LOD score significance
 CrossFromMolgenis       CrossFromMolgenis - Helperfunction to create a
                         cross-object from a molgenis database
 MQMaugment              MQMaugment - Missing data augmentation routine
@@ -11,15 +10,17 @@ MQMCofactorsEach        MQMCofactorsEach - Helper function to create
                         cofactors to be used with scanMQM
 MQMfind.marker          Find the genetic markers significant after
                         bootstrapping/permutation of the data
-MQMLoadanalysis         MQMLoadanalysis : Enables loading of previous
+MQMLoadanalysis         MQMLoadanalysis - Enables loading of previous
                         MQM analysis from file
 MQMlogPheno             MQMlogPheno - Helper function to logtransform
                         phenotypesin R/QTL cross objects
-MQMpackage              Tool for analyzing QTL experiments
+MQMpackage              Tool for analyzing QTLs in experimental crosses
 MQMpermObject           MQMpermObject - Function to convert MQMmulti
                         objects into a scanoneperm object from R/QTL
 multitrait              Example Cross object from R/QTL with multiple
                         traits.
+PipelineMolgenis        PipelineMolgenis - Automatic MQM-QTL analysis
+                        for Molgenis database systems
 plot.MQMall             plot.MQMall - Plotting routine to display the
                         results from a scanMQMall / bootstrapMQM scan
 plot.MQMboot            plot.MQMboot - Plotting routine to display the

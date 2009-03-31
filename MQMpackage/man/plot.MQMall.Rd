@@ -33,11 +33,12 @@ plot.MQMall(result = NULL, type = "C")
 }
 }
 \examples{
-	library(MQMpackage)
+	library(MQMpackage)			#load the MQM library
 	data(multitrait)
 	result <- scanMQMall(multitrait)
 	plot.MQMall(result,"P")
 	plot.MQMall(result,"C")
+	
 }
 \references{
 \itemize{
@@ -47,4 +48,4 @@ plot.MQMall(result = NULL, type = "C")
 \keyword{ QTL }
 \keyword{ Mapping }
 \keyword{ Selection }
-
+\keyword{ hplot }
