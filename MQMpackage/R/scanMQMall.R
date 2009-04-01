@@ -18,7 +18,7 @@
 ######################################################################
 
 scanMQMall <- function(cross= NULL,cofactors = NULL,step.size=5.0,
-					step.min=-20.0,step.max=220.0,n.clusters=2,b_size=10,FF=0,plot=FALSE,verbose=TRUE,...){
+					step.min=-20.0,step.max=220.0,n.clusters=2,b_size=10,FF=0,plot=TRUE,verbose=TRUE,...){
 
 	
 	if(is.null(cross)){
@@ -87,7 +87,7 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,step.size=5.0,
 				cat("INFO: Done with batch",x,"/",batches,"\n")	
 				cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
 				cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-				cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% 5), digits=3),"seconds\n")
+				cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b_size), digits=3),"seconds\n")
 				cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
 				ourline()
 			}
@@ -116,7 +116,7 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,step.size=5.0,
 				cat("INFO: Done with batch",x,"/",batches,"\n")	
 				cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
 				cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-				cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% 5), digits=3),"seconds\n")
+				cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b_size), digits=3),"seconds\n")
 				cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
 				ourline()
 			}

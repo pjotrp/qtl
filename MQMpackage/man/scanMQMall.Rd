@@ -29,6 +29,7 @@
   \item{FF}{ Print an output file at the end of scanning in Frank.Format (file="frank.out") (DEFAULT 0 = no | 1 = yes) }  
   \item{forceRIL}{ Should we force the cross as a RIL, this option removed AB genotypes and replaces them with BB ? ( 0= NO  (DEFAULT)/ 1= YES) }  
   \item{n.clusters}{ Number of child processes to split the job into }
+  \item{b_size}{ Batch size. The entire set is split in jobs. Each job contains b_size # of traits per job }
 }
 
 \details{
@@ -58,7 +59,9 @@
 	#Doing a multitrait analysis
 	library(MQMpackage)
 	data(multitrait)
-	result <- scanMQMall(multitrait,doLOG=1)
+	cof <- MQMCofactorsEach(multitrait,3)
+	result <- scanMQMall(multitrait,cofactors=cof,doLOG=1,b_size=3)
+
 }
 \references{
 	\itemize{

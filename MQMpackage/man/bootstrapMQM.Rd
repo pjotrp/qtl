@@ -26,7 +26,8 @@ bootstrapMQM(cross = NULL, cofactors = NULL, Phenot = 1, REMLorML = 0, alfa = 0.
   \item{doLOG}{ Indicate if the algorithm can LOG transform traits with variation > 10.000 (DEFAULT 0 = off | 1 = on) }
   \item{est.map}{ Reestimation of the genetic map (est.rf in R/QTL) }
   \item{dominance}{ Should dominance be taken into account ( 0= Additive  (DEFAULT)/ 1= Dominance) }
-  \item{n.clusters}{ When SNOW is installed use this to allocate more core's }
+  \item{n.clusters}{ Number of child processes to split the job into }
+  \item{b_size}{ Batch size. The entire set is split in jobs. Each job contains b_size # of traits per job }
   
 }
 \details{
@@ -51,14 +52,14 @@ bootstrapMQM(cross = NULL, cofactors = NULL, Phenot = 1, REMLorML = 0, alfa = 0.
 \examples{
 #Simulated F2 Population
 library(MQMpackage)
-f2qtl <- c(3,15,3,7)					# QTL at chromosome 3
-data(map10)						# Mouse genome
-f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
-f2result <- bootstrapMQM(f2cross)			# Do a MQM scan of the genome
+data(multitrait)
+cof <- MQMCofactorsEach(multitrait,3)
+f2result <- bootstrapMQM(multitrait,cofactors=cof,pheno.col=7,n.run=200,b_size=20,doLOG=1)	# Bootstrap 200 runs in batches of 20
+
+#EXTRA
 f2perm <- MQMpermObject(f2result)			#Create a permutation object
-numresults <- dim(f2result[[1]])[1]
-lines(x=1:numresults,y=rep(summary(f2perm)[1,1],numresults),col="green",lwd=2,lty=2)	#Green line for A=0.05
-lines(x=1:numresults,y=rep(summary(f2perm)[2,1],numresults),col="blue",lwd=2,lty=2)		#Blue line for A=0.10
+summary(f2perm)						#Get Significant LOD thresholds
+
 }
 \references{
 	\itemize{

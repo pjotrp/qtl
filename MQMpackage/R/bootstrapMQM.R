@@ -107,7 +107,7 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,step.size=5.0,
 				cat("INFO: Done with batch",x,"/",batches,"\n")	
 				cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
 				cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-				cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% 5), digits=3),"seconds\n")
+				cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b_size), digits=3),"seconds\n")
 				cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
 				ourline()
 			}
@@ -137,7 +137,7 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,step.size=5.0,
 				cat("INFO: Done with batch",x,"/",batches,"\n")	
 				cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
 				cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-				cat("INFO: Average time per batch:",round((AVG), digits=3),",per run:",round((AVG %/% 5), digits=3),"seconds\n")
+				cat("INFO: Average time per batch:",round((AVG), digits=3),",per run:",round((AVG %/% b_size), digits=3),"seconds\n")
 				cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")				
 				ourline()
 			}

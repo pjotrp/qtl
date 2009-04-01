@@ -42,7 +42,7 @@ PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,each=
 	AVG <- 0
 	LEFT <- 0
 	#TEST FOR SNOW CAPABILITIES
-	if(FALSE && ("snow" %in% installed.packages()[1:dim(installed.packages())[1]])){
+	if(("snow" %in% installed.packages()[1:dim(installed.packages())[1]])){
 		start <- proc.time()
 		cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 		outcome <- NULL
@@ -54,7 +54,6 @@ PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,each=
 		end <- proc.time()
 		SUM <- SUM + (end-start)[3]
 		AVG <- SUM/num_traits
-		cat(outcome)
 		cat("------------------------------------------------------------------\n")		
 		cat("INFO: Elapsed time:",(SUM+PRE%/%3600),":",(SUM+PRE%%3600)%/%60,":",round(SUM+PRE%%60, digits=0),"(Hour:Min:Sec) (",round(PRE, digits=3),",",round(SUM, digits=3),")\n")		
 		cat("INFO: Average time per trait:",round(AVG, digits=3),"seconds\n")
