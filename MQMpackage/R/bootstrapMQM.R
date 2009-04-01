@@ -73,7 +73,6 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,step.size=5.0,
 		if(last.batch.num > 0){
 			batches = batches+1
 		}
-		batch <- 1
 		SUM <- 0
 		AVG <- 0
 		LEFT <- 0
@@ -81,7 +80,7 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,step.size=5.0,
 		if(("snow" %in% installed.packages()[1:dim(installed.packages())[1]])){
 			cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 			library(snow)			
-			for(x in batch:(batches)){
+			for(x in 1:(batches)){
 				start <- proc.time()
 				ourline()
 				cat("INFO: Starting with batch",x,"/",batches,"\n")				
