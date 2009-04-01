@@ -18,7 +18,7 @@
 ######################################################################
 
 scanMQMall <- function(cross= NULL,cofactors = NULL,step.size=5.0,
-					step.min=-20.0,step.max=220.0,n.clusters=2,b_size=10,FF=0,plot=TRUE,verbose=TRUE,...){
+					step.min=-20.0,step.max=220.0,n.clusters=2,b_size=10,FF=0,plot=FALSE,verbose=TRUE,...){
 
 	
 	if(is.null(cross)){
@@ -132,9 +132,6 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,step.size=5.0,
 		#Return the results
 		class(res) <- c(class(res),"MQMmulti")
 		#All done now plot the results
-		if(plot){
-			plot.MQMnice(res)
-		}
 		end <- proc.time()
 		SUM <- (end-start)[3]
 		AVG <- SUM/n.pheno	
@@ -154,7 +151,7 @@ snowCoreALL <- function(x,all_data,cofactors,...){
 	cat("------------------------------------------------------------------\n")
 	cat("INFO: Starting analysis of trait (",x,"/",num_traits,")\n")
 	cat("------------------------------------------------------------------\n")
-	result <- scanMQM(all_data,cofactors=cofactors,pheno.col=x,plot=F,verbose=T,...)
+	result <- scanMQM(all_data,cofactors=cofactors,pheno.col=x,plot=F,verbose=F,...)
 	e <- proc.time()
 	cat("------------------------------------------------------------------\n")
 	cat("INFO: Done with the analysis of trait (",x,"/",num_traits,")\n")	
