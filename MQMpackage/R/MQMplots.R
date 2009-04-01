@@ -171,9 +171,16 @@ plot.MQMboot <- function(result = NULL,...){
 			names(row2) <- rep(j,(length( result )-1))
 			matrix <- cbind(matrix,rbind(row1,row2))
 		}
-		rownames(matrix) <- c("QTL trait","Bootstrap")
+
+		rownames(matrix) <- c("QTL trait",paste("# of bootstraps:",length(result)-1))
+		
 		#Because bootstrap only has 2 rows of data we can use black n blue
 		polyplot(matrix,col=c(rgb(0,0,0,1),rgb(0,0,1,0.35)),...)
+		#PLot some lines so we know what is significant
+		perm_temp <- MQMpermObject(result)			#Create a permutation object
+		numresults <- dim(result[[1]])[1]
+		lines(x=1:numresults,y=rep(summary(perm_temp)[1,1],numresults),col="green",lwd=2,lty=2)
+		lines(x=1:numresults,y=rep(summary(perm_temp)[2,1],numresults),col="blue",lwd=2,lty=2)			
 	}else{
 		ourstop("Wrong type of result file, please supply a valid MQMmulti object.") 
 	}	
