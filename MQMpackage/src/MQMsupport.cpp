@@ -55,7 +55,6 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 	
 	chr= newivector(Nmark);
 	if(verbose==1){
-		Rprintf("INFO: Starting C-part of the MQM analysis\n");
 		Rprintf("INFO: Receiving the chromosome matrix from R\n");
 	}
 	for(int i=0; i< Nmark; i++){

@@ -42,7 +42,7 @@ If u find anything wrong with the algorithm please notify me at: Danny.Arends@gm
 	cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
 	cross_good <- MQMaugment(cross)						# Augmentation of the data
 	result <- scanMQM(cross_good)						# Do a MQM scan of the genome
-	plot(result)								# Plot the results of the genome scan
+	
 }
 \references{
 	\itemize{

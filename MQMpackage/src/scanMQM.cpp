@@ -356,8 +356,7 @@ int main(){
     backwards = 0;       
     }
     setstr.close();	
-	Rprintf("INFO: Cofactors %d\n",sum);
-	Rprintf("INFO: Starting C-part of the MQM analysis\n");
+	//Rprintf("INFO: Cofactors %d\n",sum);
 	//ALL information is read in or calculated, so we gonna start MQM, however Rprintf crashes MQM
    	analyseF2(nInd, nMark, &cofactor, markers, pheno_value, f1genotype, backwards,QTL, &mapdistance,&chr,0,0,windowsize,stepsize,stepmin,stepmax,alpha,maxIter,nInd,&INDlist,estmap,'F',0,1);
 	return 1;

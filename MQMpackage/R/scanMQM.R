@@ -124,10 +124,10 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		
 		#CHECK for previously augmented dataset
 		if(!is.null(cross$extra)){
-			ourcat("INFO: previously augmented dataset.\n",a=verbose)			
-			ourcat("INFO: Individuals before augmentation",cross$extra$Nind,".\n",a=verbose)
+		#	ourcat("INFO: previously augmented dataset.\n",a=verbose)			
+		#	ourcat("INFO: Individuals before augmentation",cross$extra$Nind,".\n",a=verbose)
 			extra1 <- cross$extra$Nind
-			ourcat("INFO: Individuals after augmentation",cross$extra$augIND,".\n",a=verbose)
+		#	ourcat("INFO: Individuals after augmentation",cross$extra$augIND,".\n",a=verbose)
 			extra2 <- cross$extra$augIND
 		}else{
 			#No augmentation so just set extra1 to be Nind (Naug internally of scanMQM)

@@ -32,9 +32,10 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,step.size=5.0,
 		cat("Number of phenotypes:",n.pheno,"\n")
 		cat("Batchsize:",b_size," & n.clusters:",n.clusters,"\n")
 		cat("------------------------------------------------------------------\n")		
-
-		SUM <- NULL
-		AVG <- NULL
+		
+		result <- NULL	 	#BATCH result variable
+		res <- NULL			#GLOBAL result variable
+		
 		all_data <- fill.geno(cross)
 		#Some tests from scanMQM repeated here so they are not hidden when using snow
 		if((step.min+step.size) > step.max){
@@ -73,13 +74,14 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,step.size=5.0,
 				}	
 				cl <- makeCluster(n.clusters)
 				clusterEvalQ(cl, library(MQMpackage))
-				res <- parLapply(cl,boots, snowCoreALL,all_data=all_data,cofactors=cofactors,...)
+				result <- parLapply(cl,boots, snowCoreALL,all_data=all_data,cofactors=cofactors,...)
 				stopCluster(cl)
 				if(plot){
-					temp <- res
+					temp <- result
 					class(temp) <- c(class(temp),"MQMmulti")
 					plot.MQMnice(temp)
 				}
+				res <- c(res,result)
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]
 				AVG <- SUM/x
@@ -103,12 +105,13 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,step.size=5.0,
 				}else{
 					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
 				}	
-				res <- lapply(cl,boots, snowCoreALL,all_data=all_data,cofactors=cofactors,...)
+				result <- lapply(cl,boots, snowCoreALL,all_data=all_data,cofactors=cofactors,...)
 				if(plot){
-					temp <- res
+					temp <- result
 					class(temp) <- c(class(temp),"MQMmulti")
 					plot.MQMnice(temp)
 				}
+				res <- c(res,result)				
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]
 				AVG <- SUM/x

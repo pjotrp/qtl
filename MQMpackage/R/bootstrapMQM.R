@@ -3,11 +3,13 @@
 # bootstrapMQM.R
 #
 # copyright (c) 2009, Danny Arends
-# last modified Apr, 2009
+# last modified Mrt, 2009
 # first written Feb, 2009
 # 
 # Part of the R/qtl package
-# Contains: scanMQM
+# Contains: bootstrapMQM - Main function for bootstrap analysis
+# Contains: MQMpermObject - Helperfunction to create permObjects (R/QTL format)
+# Contains: snowCoreBOOT - Helperfunction to execute bootstrapping on a R-Term
 #
 ######################################################################
 
