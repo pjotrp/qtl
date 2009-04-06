@@ -26,6 +26,7 @@ extern "C"
 #include <math.h>
 #include "MQMdata.h"
 #include "MQMsupport.h"
+#include "interfaces.h"   /*Testing */
 #include "reDefine.h"
 
 double Lnormal(double residual, double variance)

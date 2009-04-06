@@ -15,6 +15,7 @@
 
 #include <R.h>
 #include <math.h>
+#include <Rmath.h>
 #include <R_ext/PrtUtil.h>
 #include <R_ext/RS.h> /* for Calloc, Realloc */
 #include <R_ext/Utils.h>
@@ -364,66 +365,18 @@ void lusolve(matrix lu, int dim, ivector ndx, vector b)
  
  
  
-/* functions gammln, betacf, betai necessary to calculate F(P,df1,df2) */
-double gammln(double xx)
-{     double x,tmp,ser;
-      static double cof[6]={76.18009173, -86.50532033, 24.01409822,
-                           -1.231739516, 0.120858003e-2, -0.536382e-5};
-      // if (xx<1) cout << "warning: full accuracy only for xx>1; xx= " << xx << endl;
-      x=xx-1.0;
-      tmp=x+5.5;
-      tmp-= (x+0.5)*log(tmp);
-      ser=1.0;
-      for (int j=0; j<=5; j++) { x+=1.0; ser += cof[j]/x; }
-      // delete[] cof;
-      return -tmp+log(2.50662827465*ser);
-}
-
-double betacf(double a, double b, double x)
-{     double qap,qam,qab,em,tem,d,bz,bm=1.0,bp,bpp,az=1.0,am=1.0,ap,app,aold;
-      int m;
-      qab=a+b;
-      qap=a+1.0;
-      qam=a-1.0;
-      bz=1.0-qab*x/qap;
-      for (m=1; m<=100; m++)
-      {   em=(double)m;
-          tem=em+em;
-          d=em*(b-em)*x/((qam+tem)*(a+tem));
-          ap=az+d*am;
-          bp=bz+d*bm;
-          d= -(a+em)*(qab+em)*x/((qap+tem)*(a+tem));
-          app=ap+d*az;
-          bpp=bp+d*bz;
-          aold=az;
-          am=ap/bpp;
-          bm=bp/bpp;
-          az=app/bpp;
-          bz=1.0;
-          if ( absdouble((az-aold)/az)  < 3.0e-7) return az;
-      }
-      Rprintf("a or b too big or max number of iterations too small\n");
-      return 0.0;
-}
-
-double betai(double a, double b, double x)
-{     double bt;
-      if (x<0.0 || x>1.0) { Rprintf("x not between 0 and 1\n");}
-      if (x==0.0 || x==1.0) bt=0.0;
-      else bt=exp(gammln(a+b)-gammln(a)-gammln(b)+a*log(x)+b*log(1.0-x));
-      if (x<(a+1.0)/(a+b+2.0)) return bt*betacf(a,b,x)/a;
-      else return 1.0-bt*betacf(b,a,1.0-x)/b;
-}
-
 double inverseF(int df1, int df2, double alfa,int verbose)
-{      double prob=0.0, minF=0.0, maxF=100.0, halfway=50.0, absdiff=1.0;
+{      double prob=0.0,prob2=0.0, minF=0.0, maxF=100.0, halfway=50.0, absdiff=1.0;
        int count=0;
        while ((absdiff>0.001)&&(count<100))
        {     
              //Rprintf("INFO df1:%d df2:%d alpha:%f\n",df1,df2,alfa);
              count++;
              halfway= (maxF+minF)/2.0;
-             prob= betai(df2/2.0,df1/2.0,df2/(df2+df1*halfway));
+             //prob= betai(df2/2.0,df1/2.0,df2/(df2+df1*halfway));
+			 //USE R FUNCTIONALITY TO REPLACE OLD C ROUTINES
+			 prob = pbeta(df2/(df2+df1*halfway),df2/2.0,df1/2.0,1,0);
+			 //Rprintf("->(%f,%f,%f) %f %f\n",df2/(df2+df1*halfway),df2/2.0,df1/2.0,prob,prob2);
              if (prob<alfa) maxF= halfway;
              else minF= halfway;
              absdiff= fabs(prob-alfa);
