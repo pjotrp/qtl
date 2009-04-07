@@ -1,0 +1,1 @@
+void R_Lnorm(double *a,double* b);
