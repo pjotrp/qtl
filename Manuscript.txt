@@ -1,0 +1,39 @@
+MQM: An extension of the R/qtl package
+
+Abstract
+  Background
+  Results
+  Conclussions
+
+Background
+  R/qtl
+  MQM
+
+Methods
+  QTL mapping
+  MQM
+    Model selection
+    QTL mapping
+  Multitrait analysis using SNOW
+  Datastructuring and storage via: XGAP and Molgenis
+
+Conclusion
+  why use MQM?
+  
+
+Availability & Requirements
+  Availability
+Distributed as an integral part of r/qtl package for R
+  Requirements
+Operating system(s): 	platform independant
+Programming languages:	R, C++
+Programs:		R 2.8.0
+Published using:		GNU 2 licence
+
+Authors contributions
+
+References
+
+Figures
+
+Additional files
