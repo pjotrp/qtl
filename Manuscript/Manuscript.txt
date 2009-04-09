@@ -1,39 +1,73 @@
-MQM: An extension of the R/qtl package
+\documentclass[11pt]{article}
+\setlength{\topmargin}{-.5in}
+\setlength{\textheight}{9in}
+\setlength{\oddsidemargin}{.125in}
+\setlength{\textwidth}{6.25in}
+\usepackage{graphicx}
+\begin{document}
+\title{MQM: An extension of the R/qtl package}
+\author{Danny Arends\\
+GBIC - Groningen, The Netherlands}
+\renewcommand{\today}{April 9, 2009}
+\maketitle
 
-Abstract
-  Background
-  Results
-  Conclussions
+\section {Abstract}
+  \subsection{Background}
+  \subsection{Results}
+  \subsection{Conclussions}
 
-Background
-  R/qtl
-  MQM
+\section{Background}
+   \subsection{R/qtl}
+   \subsection{MQM}
 
-Methods
-  QTL mapping
-  MQM
-    Model selection
-    QTL mapping
-  Multitrait analysis using SNOW
-  Datastructuring and storage via: XGAP and Molgenis
+\section{Methods}
+  \subsection{QTL mapping}
+  \subsection{MQM}
+    \subsubsection{Model selection}
+    \subsubsection{QTL mapping}
+  \subsection{Multitrait analysis using SNOW}
+  \subsection{Datastructuring and storage via: XGAP and Molgenis}
 
-Conclusion
-  why use MQM?
+\section{Results}
+
+
+\section{Conclusion}
+  \subsection{why use MQM?}
   
 
-Availability & Requirements
-  Availability
+\section{Availability \& Requirements}
+  \subsection{Availability}
 Distributed as an integral part of r/qtl package for R
-  Requirements
-Operating system(s): 	platform independant
-Programming languages:	R, C++
-Programs:		R 2.8.0
-Published using:		GNU 2 licence
+  \subsection{Requirements}
+	\begin{tabular}{lr}
+	  Operating system(s):&platform independant\\
+	  Programming languages:&R, C++\\
+	  Programs:&R 2.8.0\\
+	  Published using:&GNU 2 licence\\
+	\end{tabular}
+\section{Authors contributions}
 
-Authors contributions
+\section{References}
 
-References
+\section{Figures}
+  \begin{figure}
+  \includegraphics[height=2.5in,width=4.0in]{DatasetHyper.eps}
+  \caption{MQM in comparison with other QTLmapping methods}
+  \label{fig:FigureHyper}
+  \end{figure}
 
-Figures
+  \begin{figure}
+  \includegraphics[height=2.5in,width=4.0in]{DatasetListeria.eps}
+  \caption{MQM in comparison with other QTLmapping methods}
+  \label{fig:FigureListeria}
+  \end{figure}
 
-Additional files
+  \begin{figure}
+  \includegraphics[height=2.0in,width=4.0in]{DatasetBristle3.eps}
+  \caption{MQM in comparison with other QTLmapping methods}
+  \label{fig:FigureBristle_1}
+  \end{figure}
+  
+\section{Additional files}
+
+\end{document}
